@@ -42,7 +42,7 @@ const Navbar = () => {
           <a href="#" className="text-brand-primary hover:text-brand-secondary transition-colors">Contact</a>
         </div>
         <div className="flex items-center gap-6">
-          <button className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest uppercase font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
+          <button className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest  font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
             <span className="relative z-10">Let's Talk</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img 
@@ -333,17 +333,17 @@ const Specialisms = () => {
 const CaseStudy = () => (
   <section className="py-32 bg-brand-surface-mid">
     <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-      <div className="flex justify-between items-end mb-16">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0 mb-12 md:mb-16">
         <div>
           <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Case Study</span>
           <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">The Obsidian Gala</h2>
         </div>
-        <a href="#" className="text-[0.6rem] tracking-widest uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high">
+        <a href="#" className="text-[0.6rem] tracking-widest uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap">
           See All Projects
         </a>
       </div>
-      <div className="relative group overflow-hidden">
-        <div className="aspect-[21/9] w-full bg-brand-dark overflow-hidden">
+      <div className="relative group flex flex-col md:block">
+        <div className="aspect-[4/3] md:aspect-[21/9] w-full bg-brand-dark overflow-hidden">
           <img 
             src="https://picsum.photos/seed/gala/1600/800" 
             alt="The Obsidian Gala" 
@@ -351,12 +351,12 @@ const CaseStudy = () => (
             referrerPolicy="no-referrer"
           />
         </div>
-        <div className="absolute bottom-0 right-0 p-12 bg-brand-bg max-w-lg editorial-shadow">
+        <div className="relative md:absolute bottom-0 right-0 p-8 md:p-12 bg-brand-bg w-[90%] self-end md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0">
           <h4 className="text-2xl font-serif mb-4">A study in contrast and intimacy.</h4>
           <p className="text-brand-primary/70 font-light mb-6">A private launch event for a luxury automotive brand, focusing on sensory immersion and architectural lighting.</p>
-          <div className="flex gap-4">
-            <span className="text-[0.5rem] uppercase tracking-widest bg-brand-surface-low px-3 py-1 text-brand-secondary font-bold">Creative Direction</span>
-            <span className="text-[0.5rem] uppercase tracking-widest bg-brand-surface-low px-3 py-1 text-brand-secondary font-bold">Event Production</span>
+          <div className="flex flex-wrap gap-4">
+            <span className="text-[0.5rem] uppercase tracking-widest bg-brand-surface-low px-3 py-2 md:py-1 text-brand-secondary font-bold">Creative Direction</span>
+            <span className="text-[0.5rem] uppercase tracking-widest bg-brand-surface-low px-3 py-2 md:py-1 text-brand-secondary font-bold">Event Production</span>
           </div>
         </div>
       </div>
@@ -385,7 +385,7 @@ const Workshops = () => {
                 <img 
                   src={`https://picsum.photos/seed/workshop${idx}/800/800`} 
                   alt={item.title} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 text-[0.6rem] uppercase tracking-widest font-bold text-brand-secondary">
