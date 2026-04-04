@@ -346,7 +346,7 @@ const Specialisms = () => {
           {services.map((service, idx) => (
             <div 
               key={idx} 
-              className={`spec-card ${idx < 2 ? 'md:col-span-3' : 'md:col-span-2'} bg-brand-surface-low p-12 flex flex-col justify-between group hover:bg-brand-secondary transition-all duration-500 cursor-default`}
+              className={`spec-card ${idx < 2 ? 'md:col-span-3' : 'md:col-span-2'} bg-brand-surface-low p-12 flex flex-col justify-between group hover:bg-brand-secondary transition-all duration-500 cursor-pointer`}
             >
               <div>
                 <div className="spec-icon inline-block p-4 bg-brand-surface-high/50 rounded-full mb-8 group-hover:bg-white/10 transition-colors">
