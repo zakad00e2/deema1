@@ -467,7 +467,7 @@ const Workshops = () => {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         <div className="workshops-header mb-16">
           <h2 className="text-4xl font-serif text-brand-primary mb-2">Upcoming Workshops</h2>
-          <p className="text-brand-primary/70 font-light">Join us for intimate sessions exploring the art of the 'Athr'.</p>
+          <p className="text-brand-primary/70 font-light">Join us for intimate Sessions exploring the art of the 'Athr'.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {items.map((item, idx) => (
