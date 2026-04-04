@@ -266,27 +266,65 @@ const Specialisms = () => {
   const sectionRef = useRef(null);
 
   useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 75%",
-      }
+    let mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+        }
+      });
+
+      tl.fromTo(".spec-title > *",
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power2.out" }
+      )
+      .fromTo(".spec-card",
+        { opacity: 0, y: 80, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15, ease: "back.out(1.4)" },
+        "-=0.4"
+      )
+      .fromTo(".spec-icon", 
+        { opacity: 0, scale: 0, rotation: -45 }, 
+        { opacity: 1, scale: 1, rotation: 0, duration: 0.6, stagger: 0.1, ease: "back.out(2)" }, 
+        "-=0.8"
+      );
     });
 
-    tl.fromTo(".spec-title > *",
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power2.out" }
-    )
-    .fromTo(".spec-card",
-      { opacity: 0, y: 80, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15, ease: "back.out(1.4)" },
-      "-=0.4"
-    )
-    .fromTo(".spec-icon", 
-      { opacity: 0, scale: 0, rotation: -45 }, 
-      { opacity: 1, scale: 1, rotation: 0, duration: 0.6, stagger: 0.1, ease: "back.out(2)" }, 
-      "-=0.8"
-    );
+    mm.add("(max-width: 767px)", () => {
+      gsap.fromTo(".spec-title > *",
+        { opacity: 0, y: 40 },
+        { 
+          opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+          }
+        }
+      );
+
+      const cards = gsap.utils.toArray(".spec-card");
+      cards.forEach((card: any) => {
+        const icon = card.querySelector(".spec-icon");
+        
+        const tlCard = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+          }
+        });
+
+        tlCard.fromTo(card,
+          { opacity: 0, y: 60, scale: 0.95 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.2)" }
+        ).fromTo(icon,
+          { opacity: 0, scale: 0, rotation: -45 }, 
+          { opacity: 1, scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2)" },
+          "-=0.4"
+        );
+      });
+    });
   }, { scope: sectionRef });
 
   const services = [
@@ -330,57 +368,110 @@ const Specialisms = () => {
   );
 };
 
-const CaseStudy = () => (
-  <section className="py-32 bg-brand-surface-mid">
-    <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0 mb-12 md:mb-16">
-        <div>
-          <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Case Study</span>
-          <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">The Obsidian Gala</h2>
+const CaseStudy = () => {
+  const sectionRef = useRef(null);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 80%",
+      }
+    });
+
+    tl.fromTo(".case-header-content",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" }
+    )
+    .fromTo(".case-header-link",
+      { opacity: 0, x: -20 },
+      { opacity: 1, x: 0, duration: 0.6, ease: "power2.out" },
+      "-=0.4"
+    )
+    .fromTo(".case-media",
+      { opacity: 0, scale: 0.95, y: 40 },
+      { opacity: 1, scale: 1, y: 0, duration: 1, ease: "power3.out" },
+      "-=0.4"
+    )
+    .fromTo(".case-content",
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      "-=0.6"
+    );
+  }, { scope: sectionRef });
+
+  return (
+    <section ref={sectionRef} className="py-32 bg-brand-surface-mid">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0 mb-12 md:mb-16">
+          <div className="case-header-content">
+            <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Case Study</span>
+            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">The Obsidian Gala</h2>
+          </div>
+          <a href="#" className="case-header-link text-[0.6rem] tracking-widest uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap">
+            See All Projects
+          </a>
         </div>
-        <a href="#" className="text-[0.6rem] tracking-widest uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap">
-          See All Projects
-        </a>
-      </div>
-      <div className="relative group flex flex-col md:block">
-        <div className="aspect-[4/3] md:aspect-[21/9] w-full bg-brand-dark overflow-hidden">
-          <img 
-            src="https://picsum.photos/seed/gala/1600/800" 
-            alt="The Obsidian Gala" 
-            className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[2s]"
-            referrerPolicy="no-referrer"
-          />
-        </div>
-        <div className="relative md:absolute bottom-0 right-0 p-8 md:p-12 bg-brand-bg w-[90%] self-end md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0">
-          <h4 className="text-2xl font-serif mb-4">A study in contrast and intimacy.</h4>
-          <p className="text-brand-primary/70 font-light mb-6">A private launch event for a luxury automotive brand, focusing on sensory immersion and architectural lighting.</p>
-          <div className="flex flex-wrap gap-4">
-            <span className="text-[0.5rem] uppercase tracking-widest bg-brand-surface-low px-3 py-2 md:py-1 text-brand-secondary font-bold">Creative Direction</span>
-            <span className="text-[0.5rem] uppercase tracking-widest bg-brand-surface-low px-3 py-2 md:py-1 text-brand-secondary font-bold">Event Production</span>
+        <div className="relative group">
+          <div className="case-media aspect-square sm:aspect-[4/3] md:aspect-[21/9] w-full bg-brand-dark overflow-hidden">
+            <img 
+              src="https://picsum.photos/seed/gala/1600/800" 
+              alt="The Obsidian Gala" 
+              className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[2s]"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="case-content md:absolute relative md:bottom-0 md:right-0 p-8 md:p-12 bg-brand-surface-low md:bg-brand-bg w-[85%] sm:w-[75%] md:w-full md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0 mx-auto md:mx-0 border border-white/5 md:border-none">
+            <h4 className="text-xl sm:text-2xl font-serif mb-4">A study in contrast and intimacy.</h4>
+            <p className="text-brand-primary/70 font-sm md:font-light leading-relaxed mb-6">A private launch event for a luxury automotive brand, focusing on sensory immersion and architectural lighting.</p>
+            <div className="flex flex-wrap gap-3">
+              <span className="text-[0.5rem] uppercase tracking-widest bg-brand-bg px-3 py-2 text-brand-secondary font-bold">Creative Direction</span>
+              <span className="text-[0.5rem] uppercase tracking-widest bg-brand-bg px-3 py-2 text-brand-secondary font-bold">Event Production</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Workshops = () => {
+  const sectionRef = useRef(null);
   const items = [
     { date: "DEC 12", title: "The Art of Presence", desc: "Exploring spatial psychology and how environment shapes brand memory." },
     { date: "JAN 08", title: "Tactile Strategy", desc: "Moving beyond digital: Why physical touch remains the ultimate marketing tool." },
     { date: "FEB 20", title: "Minimalist Impact", desc: "How to create high-impact experiences using the power of restraint." }
   ];
 
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 80%",
+      }
+    });
+
+    tl.fromTo(".workshops-header > *",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power2.out" }
+    )
+    .fromTo(".workshop-item",
+      { opacity: 0, y: 60 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.2)" },
+      "-=0.4"
+    );
+  }, { scope: sectionRef });
+
   return (
-    <section className="py-32 bg-brand-bg">
+    <section ref={sectionRef} className="py-32 bg-brand-bg">
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-        <div className="mb-16">
+        <div className="workshops-header mb-16">
           <h2 className="text-4xl font-serif text-brand-primary mb-2">Upcoming Workshops</h2>
           <p className="text-brand-primary/70 font-light">Join us for intimate sessions exploring the art of the 'Athr'.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {items.map((item, idx) => (
-            <div key={idx} className="group cursor-pointer">
+            <div key={idx} className="workshop-item group cursor-pointer">
               <div className="aspect-square bg-brand-surface-low mb-6 overflow-hidden relative">
                 <img 
                   src={`https://picsum.photos/seed/workshop${idx}/800/800`} 
@@ -414,8 +505,8 @@ const Product = () => (
         <div className="lg:col-span-5 order-2 lg:order-1">
           <div className="max-w-md">
             <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Limited Edition</span>
-            <h2 className="text-5xl md:text-6xl font-serif text-brand-primary mb-6 leading-tight">The Athr Planner</h2>
-            <p className="text-lg font-serif italic text-brand-primary/70 mb-10">Plan, create, leave an Athr</p>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-primary mb-4 leading-tight whitespace-nowrap">The Athr Planner</h2>
+            <p className="text-lg font-serif italic text-brand-primary/70 mb-6">Plan, create, leave an Athr</p>
             <p className="text-brand-primary/80 font-light leading-relaxed mb-12">
               Designed for the visionary mind, this physical companion bridges the gap between ambitious ideation and tactile execution. A signature piece of our methodology, now available for your personal ritual.
             </p>
@@ -428,7 +519,7 @@ const Product = () => (
           <div className="relative group">
             <div className="aspect-square bg-brand-surface-low overflow-hidden editorial-shadow">
               <img 
-                src="https://picsum.photos/seed/planner/1000/1000" 
+                src="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=1000&q=80" 
                 alt="The Athr Planner" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                 referrerPolicy="no-referrer"
@@ -447,7 +538,7 @@ const Footer = () => (
   <footer className="bg-brand-surface-low py-24 border-t border-brand-surface-high/30">
     <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-start gap-12">
       <div className="max-w-sm">
-        <div className="text-2xl font-serif text-brand-primary mb-6">Athr</div>
+        <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-16 mb-6" />
         <p className="text-brand-primary/60 text-sm font-light leading-relaxed mb-8">
           An editorial marketing and event agency dedicated to the craft of enduring experiences.
         </p>
