@@ -142,7 +142,7 @@ const Hero = () => {
             Leave an <span className="font-light text-brand-secondary">Athr</span>
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl text-brand-primary/80 font-light max-w-2xl leading-relaxed mb-12">
-            Crafting enduring marketing legacies and bespoke event experiences that resonate through time and space.
+We turn ideas into creative campaigns, brand experiences, and exceptional events that leave a lasting impression.
           </p>
           <div className="flex flex-wrap items-center gap-8">
             <button className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden">
