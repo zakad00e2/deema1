@@ -61,7 +61,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`fixed top-0 left-0 w-full h-screen bg-brand-bg z-100 flex flex-col px-6 py-6 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed top-0 left-0 w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between items-center mb-16">
           <img src="/logo.png" alt="Athr Logo" className="h-12" />
           <X 

@@ -76,7 +76,7 @@ export function WorksNavbar({ active = "work" }: { active?: "home" | "work" }) {
       </div>
 
       <div
-        className={`fixed top-0 left-0 w-full h-screen bg-brand-bg z-[100] flex flex-col px-6 py-6 transition-transform duration-500 ease-in-out md:hidden ${
+        className={`fixed top-0 left-0 w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${
           isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
