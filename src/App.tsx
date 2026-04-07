@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import WorkCaseStudyPage from "./WorkCaseStudyPage";
+import WorksPage from "./WorksPage";
+import SharedFooter from "./SharedFooter";
 import { 
   ArrowRight, 
   Menu, 
@@ -10,9 +13,7 @@ import {
   Megaphone, 
   PenTool, 
   Share2, 
-  Sparkles,
-  Instagram,
-  Linkedin
+  Sparkles
 } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -31,15 +32,15 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${isScrolled ? "bg-brand-bg/80 backdrop-blur-md border-brand-surface-high/30" : "bg-transparent border-transparent"}`}>
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
+      <div className="max-w-360 mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-14" />
         </div>
         <div className="hidden md:flex items-center space-x-12 font-serif text-base tracking-tight">
-          <a href="#" className="text-brand-dark border-b border-brand-secondary pb-1">Home</a>
-          <a href="#" className="text-brand-primary hover:text-brand-secondary transition-colors">Work</a>
-          <a href="#" className="text-brand-primary hover:text-brand-secondary transition-colors">Workshops</a>
-          <a href="#" className="text-brand-primary hover:text-brand-secondary transition-colors">Contact</a>
+          <a href="/" className="text-brand-dark border-b border-brand-secondary pb-1">Home</a>
+          <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors">Portfolio</a>
+          <a href="/#workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">Workshops</a>
+          <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors">Contact</a>
         </div>
         <div className="flex items-center gap-6">
           <button className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest  font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
@@ -60,7 +61,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`fixed top-0 left-0 w-full h-screen bg-brand-bg z-[100] flex flex-col px-6 py-6 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed top-0 left-0 w-full h-screen bg-brand-bg z-100 flex flex-col px-6 py-6 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between items-center mb-16">
           <img src="/logo.png" alt="Athr Logo" className="h-12" />
           <X 
@@ -68,11 +69,11 @@ const Navbar = () => {
             onClick={() => setIsMobileMenuOpen(false)}
           />
         </div>
-        <div className="flex flex-col space-y-8 font-serif text-2xl text-center flex-grow justify-center pb-20">
-          <a href="#" className="text-brand-dark hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
-          <a href="#" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Work</a>
-          <a href="#" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Workshops</a>
-          <a href="#" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
+        <div className="flex flex-col space-y-8 font-serif text-2xl text-center grow justify-center pb-20">
+          <a href="/" className="text-brand-dark hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
+          <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Portfolio</a>
+          <a href="/#workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Workshops</a>
+          <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
           <button className="w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden">
@@ -136,7 +137,7 @@ const Hero = () => {
           referrerPolicy="no-referrer"
         />
       </div>
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-4 lg:gap-8 items-center relative z-10 w-full">
+      <div className="max-w-360 mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-4 lg:gap-8 items-center relative z-10 w-full">
         <div className="md:col-span-7 lg:col-span-7 hero-text">
           <h1 className="text-5xl md:text-7xl lg:text-8xl leading-[1.1] text-brand-primary font-serif tracking-tighter mb-8">
             Leave an <span className="font-light text-brand-secondary">Athr</span>
@@ -155,7 +156,7 @@ We turn ideas into creative campaigns, brand experiences, and exceptional events
                 />
               </div>
             </button>
-            <a href="#" className="group flex items-center gap-3 text-brand-secondary tracking-widest uppercase text-xs font-semibold">
+            <a href="/work" className="group flex items-center gap-3 text-brand-secondary tracking-widest uppercase text-xs font-semibold">
               Our work <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
@@ -223,13 +224,13 @@ const About = () => {
 
   return (
     <section ref={sectionRef} className="py-32 bg-brand-surface-low overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+      <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
           <div className="order-2 md:order-1 relative">
             <img 
               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" 
               alt="Deema - Professional portrait" 
-              className="about-img w-full h-[600px] object-cover editorial-shadow"
+              className="about-img w-full h-150 object-cover editorial-shadow"
               referrerPolicy="no-referrer"
             />
             <div className="about-badge absolute -bottom-8 -left-8 hidden md:block w-64 bg-white/40 backdrop-blur-md p-8 editorial-shadow border border-white/20">
@@ -428,7 +429,7 @@ const Specialisms = () => {
 
   return (
     <section ref={sectionRef} className="py-32 bg-brand-bg overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+      <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="mb-20 text-center max-w-2xl mx-auto spec-title">
           <h2 className="text-4xl font-serif text-brand-primary mb-6">Our Specialisms</h2>
           <p className="text-brand-primary/70 font-light">Comprehensive solutions designed for those who value substance over spectacle.</p>
@@ -493,7 +494,7 @@ const CaseStudy = () => {
 
   return (
     <section ref={sectionRef} className="py-32 bg-brand-surface-mid">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+      <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0 mb-12 md:mb-16">
           <div className="case-header-content">
             <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Case Study</span>
@@ -504,7 +505,7 @@ const CaseStudy = () => {
           </a>
         </div>
         <div className="relative group">
-          <div className="case-media aspect-square sm:aspect-[4/3] md:aspect-[21/9] w-full bg-brand-dark overflow-hidden">
+          <div className="case-media aspect-square sm:aspect-4/3 md:aspect-21/9 w-full bg-brand-dark overflow-hidden">
             <img 
               src="https://picsum.photos/seed/gala/1600/800" 
               alt="The Obsidian Gala" 
@@ -554,8 +555,8 @@ const Workshops = () => {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} className="py-32 bg-brand-bg">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+    <section id="workshops" ref={sectionRef} className="py-32 bg-brand-bg">
+      <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="workshops-header mb-16">
           <h2 className="text-4xl font-serif text-brand-primary mb-2">Upcoming Workshops</h2>
           <p className="text-brand-primary/70 font-light">Join us for intimate Sessions exploring the art of the 'Athr'.</p>
@@ -591,7 +592,7 @@ const CTA = () => null;
 
 const Product = () => (
   <section className="py-32 bg-brand-surface-high">
-    <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+    <div className="max-w-360 mx-auto px-6 md:px-12">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         <div className="lg:col-span-5 order-2 lg:order-1">
           <div className="max-w-md">
@@ -625,43 +626,9 @@ const Product = () => (
   </section>
 );
 
-const Footer = () => (
-  <footer className="bg-brand-surface-low py-24 border-t border-brand-surface-high/30">
-    <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-start gap-12">
-      <div className="max-w-sm">
-        <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-16 mb-6" />
-        <p className="text-brand-primary/60 text-sm font-light leading-relaxed mb-8">
-          An editorial marketing and event agency dedicated to the craft of enduring experiences.
-        </p>
-        <div className="flex gap-6">
-          <a href="#" className="text-brand-primary/40 hover:text-brand-secondary transition-colors"><Instagram className="w-5 h-5" /></a>
-          <a href="#" className="text-brand-primary/40 hover:text-brand-secondary transition-colors"><Linkedin className="w-5 h-5" /></a>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-24">
-        <div className="flex flex-col gap-4">
-          <p className="text-[0.6rem] tracking-widest uppercase text-brand-secondary font-bold mb-2">Explore</p>
-          <a href="#" className="text-brand-primary/60 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">Journal</a>
-          <a href="#" className="text-brand-primary/60 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">Workshops</a>
-          <a href="#" className="text-brand-primary/60 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">Archives</a>
-        </div>
-        <div className="flex flex-col gap-4">
-          <p className="text-[0.6rem] tracking-widest uppercase text-brand-secondary font-bold mb-2">Legal</p>
-          <a href="#" className="text-brand-primary/60 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">Privacy</a>
-          <a href="#" className="text-brand-primary/60 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">Terms</a>
-        </div>
-      </div>
-    </div>
-    <div className="max-w-[1440px] mx-auto px-6 md:px-12 mt-24 flex justify-between items-center text-[0.5rem] uppercase tracking-[0.4em] text-brand-primary/30">
-      <p>© 2024 Athr. All rights reserved.</p>
-      <p>Designed with Intent</p>
-    </div>
-  </footer>
-);
-
-export default function App() {
+function HomePage() {
   return (
-    <div className="min-h-screen">
+    <div id="top" className="min-h-screen">
       <Navbar />
       <Hero />
       <About />
@@ -670,7 +637,23 @@ export default function App() {
       <Workshops />
       <CTA />
       <Product />
-      <Footer />
+      <SharedFooter />
     </div>
   );
+}
+
+export default function App() {
+  const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  const isWorksPage = pathname === "/work";
+  const workSlug = pathname.startsWith("/work/") ? pathname.slice("/work/".length) : null;
+
+  if (isWorksPage) {
+    return <WorksPage />;
+  }
+
+  if (workSlug) {
+    return <WorkCaseStudyPage slug={workSlug} />;
+  }
+
+  return <HomePage />;
 }
