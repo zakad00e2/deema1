@@ -190,9 +190,9 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
               <div className="flex flex-col gap-24">
                 {/* Pre-Event */}
                 <div className="space-y-10 group">
-                  <div className="flex items-center gap-4">
-                    <span className="h-px w-10 bg-brand-secondary/40 transition-all duration-500 group-hover:w-20 group-hover:bg-brand-secondary"></span>
-                    <h3 className="font-serif text-3xl md:text-4xl text-brand-dark">Pre-Event Marketing</h3>
+                  <div className="flex items-center gap-3 sm:gap-4 overflow-hidden">
+                    <span className="h-px w-8 sm:w-10 shrink-0 bg-brand-secondary/40 transition-all duration-500 group-hover:w-16 sm:group-hover:w-20 group-hover:bg-brand-secondary"></span>
+                    <h3 className="font-serif text-[22px] min-[375px]:text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight whitespace-nowrap">Pre-Event Marketing</h3>
                   </div>
                   <div className="space-y-2">
                     {project.preEventMarketing.map((item, idx) => (
@@ -208,9 +208,9 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
 
                 {/* Post-Event */}
                 <div className="space-y-10 group">
-                  <div className="flex items-center gap-4">
-                    <span className="h-px w-10 bg-brand-secondary/40 transition-all duration-500 group-hover:w-20 group-hover:bg-brand-secondary"></span>
-                    <h3 className="font-serif text-3xl md:text-4xl text-brand-dark">Post-Event Marketing</h3>
+                  <div className="flex items-center gap-3 sm:gap-4 overflow-hidden">
+                    <span className="h-px w-8 sm:w-10 shrink-0 bg-brand-secondary/40 transition-all duration-500 group-hover:w-16 sm:group-hover:w-20 group-hover:bg-brand-secondary"></span>
+                    <h3 className="font-serif text-[22px] min-[375px]:text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight whitespace-nowrap">Post-Event Marketing</h3>
                   </div>
                   <div className="space-y-2">
                     {project.postEventMarketing.map((item, idx) => (
@@ -231,9 +231,9 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 <div className="space-y-10 group bg-brand-surface-low/50 p-8 md:p-12 rounded-3xl border border-brand-surface-high/60 shadow-[inset_0_0_40px_rgba(0,0,0,0.015)] relative">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary/5 rounded-bl-[100px] rounded-tr-3xl" />
                   
-                  <div className="flex items-center gap-4 relative">
-                    <span className="h-px w-10 bg-brand-secondary/40 transition-all duration-500 group-hover:w-20 group-hover:bg-brand-secondary"></span>
-                    <h3 className="font-serif text-3xl md:text-4xl text-brand-dark">Launch Event Experience</h3>
+                  <div className="flex items-center gap-3 sm:gap-4 relative overflow-hidden">
+                    <span className="h-px w-8 sm:w-10 shrink-0 bg-brand-secondary/40 transition-all duration-500 group-hover:w-16 sm:group-hover:w-20 group-hover:bg-brand-secondary"></span>
+                    <h3 className="font-serif text-[22px] min-[375px]:text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight whitespace-nowrap">Launch Event Experience</h3>
                   </div>
                   
                   <div className="space-y-5 relative">
@@ -250,9 +250,9 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
 
                 {/* Campaign Impact */}
                 <div className="space-y-10 group mt-10">
-                  <div className="flex items-center gap-4">
-                    <span className="h-px w-10 bg-brand-secondary/40 transition-all duration-500 group-hover:w-20 group-hover:bg-brand-secondary"></span>
-                    <h3 className="font-serif text-3xl md:text-4xl text-brand-dark">Campaign Impact</h3>
+                  <div className="flex items-center gap-3 sm:gap-4 overflow-hidden">
+                    <span className="h-px w-8 sm:w-10 shrink-0 bg-brand-secondary/40 transition-all duration-500 group-hover:w-16 sm:group-hover:w-20 group-hover:bg-brand-secondary"></span>
+                    <h3 className="font-serif text-[22px] min-[375px]:text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight whitespace-nowrap">Campaign Impact</h3>
                   </div>
                   <div className="flex flex-col gap-6">
                     {project.campaignImpact.map((item, idx) => (

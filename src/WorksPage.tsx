@@ -233,8 +233,8 @@ export default function WorksPage() {
           </div>
         </header>
 
-        <section className="mb-16 px-6 md:px-12">
-          <div className="mx-auto flex max-w-[1920px] flex-wrap gap-8 border-b border-brand-surface-high pb-6">
+        <section className="mb-16 px-4 md:px-12">
+          <div className="mx-auto flex max-w-[1920px] justify-between md:justify-start gap-1 md:gap-8 border-b border-brand-surface-high pb-6">
             {filters.map((filter) => {
               const isActive = filter.value === activeFilter;
               return (
@@ -242,7 +242,7 @@ export default function WorksPage() {
                   key={filter.value}
                   type="button"
                   onClick={() => setActiveFilter(filter.value)}
-                  className={`works-filter -mb-[1.65rem] border-b-2 pb-6 text-xs uppercase tracking-widest transition-all ${
+                  className={`works-filter -mb-[1.65rem] border-b-2 pb-6 text-[9.5px] min-[375px]:text-[10.5px] sm:text-xs md:text-xs uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${
                     isActive
                       ? "border-brand-secondary text-brand-dark"
                       : "border-transparent text-brand-primary hover:text-brand-dark"
