@@ -11,12 +11,43 @@ gsap.registerPlugin(ScrollTrigger);
 
 function ImageCarousel({ images, label }: { images: string[]; label: string }) {
   const [current, setCurrent] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const total = images.length;
 
   if (!total) return null;
 
+  const minSwipeDistance = 50;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setCurrent((p) => (p + 1) % total);
+    } else if (isRightSwipe) {
+      setCurrent((p) => (p - 1 + total) % total);
+    }
+  };
+
   return (
-    <div className="relative group/carousel">
+    <div
+      className="relative group/carousel touch-pan-y"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
         <div className="overflow-hidden rounded-xl bg-brand-surface-low shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
         <div
           className="flex transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -24,7 +55,7 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
         >
           {images.map((src, i) => (
             <div key={i} className="w-full shrink-0">
-              <div className="aspect-[16/10] overflow-hidden">
+              <div className="aspect-[4/3] md:aspect-[16/10] overflow-hidden">
                 <img
                   src={src}
                   alt={`${label} ${i + 1}`}
