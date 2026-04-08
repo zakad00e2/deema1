@@ -12,7 +12,8 @@ gsap.registerPlugin(ScrollTrigger);
 function ImageCarousel({ images, label }: { images: string[]; label: string }) {
   const [current, setCurrent] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState(false);
   const total = images.length;
 
   if (!total) return null;
@@ -20,38 +21,44 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
   const minSwipeDistance = 50;
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    setIsDragging(true);
+    setDragOffset(0);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    if (touchStart === null) return;
+    const currentTouch = e.targetTouches[0].clientX;
+    const diff = currentTouch - touchStart;
+    setDragOffset(diff);
   };
 
   const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
+    setIsDragging(false);
+    if (touchStart === null) return;
 
-    if (isLeftSwipe) {
+    if (dragOffset < -minSwipeDistance) {
       setCurrent((p) => (p + 1) % total);
-    } else if (isRightSwipe) {
+    } else if (dragOffset > minSwipeDistance) {
       setCurrent((p) => (p - 1 + total) % total);
     }
+
+    setDragOffset(0);
+    setTouchStart(null);
   };
 
   return (
     <div
-      className="relative group/carousel touch-pan-y"
+      className="relative group/carousel touch-pan-y select-none"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
     >
         <div className="overflow-hidden rounded-xl bg-brand-surface-low shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
         <div
-          className="flex transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-          style={{ transform: `translateX(-${current * 100}%)` }}
+          className={`flex ${isDragging ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"}`}
+          style={{ transform: `translateX(calc(-${current * 100}% + ${dragOffset}px))` }}
         >
           {images.map((src, i) => (
             <div key={i} className="w-full shrink-0">
@@ -203,7 +210,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
 
         {/* Hero Image */}
         <section className="mt-12 px-6 md:px-12">
-          <div className="hero-image mx-auto max-w-400 overflow-hidden bg-brand-surface-low editorial-shadow relative aspect-video">
+          <div className="hero-image mx-auto max-w-400 overflow-hidden bg-brand-surface-low editorial-shadow relative aspect-square sm:aspect-[4/3] md:aspect-video">
             <img
               src={project.desktopImage || project.image}
               alt={project.title}
