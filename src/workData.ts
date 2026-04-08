@@ -10,6 +10,7 @@ export type Project = {
   client: string;
   description: string;
   image: string;
+  desktopImage?: string;
   aspectClass: string;
   spanClass: string;
   badgeClassName?: string;
@@ -22,6 +23,8 @@ export type Project = {
   launchEventExperience: string[];
   postEventMarketing: string[];
   campaignImpact: string[];
+  preEventImages: string[];
+  postEventImages: string[];
   services: string[];
   metrics: Array<{ label: string; value: string }>;
   gallery: string[];
@@ -52,8 +55,8 @@ export const projects: Project[] = [
     client: "Besan Khalaily",
     description:
       "A complete marketing and event campaign to launch Besan Khalaily's Spring Collection, featuring visual storytelling and an immersive fashion event.",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
+    image: "/WhatsApp Image 2026-04-07 at 1.23.08 PM (1).jpeg",
+    desktopImage: "/cover.jpeg",
     aspectClass: "aspect-[16/9]",
     spanClass: "md:col-span-8",
     notes: ["Creative Campaigns & Concepts", "Event Concept & Production"],
@@ -72,17 +75,12 @@ export const projects: Project[] = [
       "Each step of the campaign was designed to showcase the collection visually, engage the audience, and create excitement leading up to the launch event.",
     ],
     launchEventExperience: [
-      "The event was designed as an immersive experience that reflected the vibrant, playful, and floral spirit of the Spring collection.",
-      "Every detail—from decor and music to food—was curated to match the collection's identity and create a memorable experience.",
-      "Collection reveal presented through a video on large screens introducing the dresses.",
-      "Magazine-style guide given to guests to explore the collection and read about each design.",
-      "\"Write a message to the designer\" booth, where guests could leave personal notes.",
-      "\"Choose your favorite dress\" activity to encourage interaction with the collection.",
-      "Floral styling activity inspired by the flower in the invitation, connecting the invitation concept with the event experience.",
-      "Food and beverage experience aligned with the elegant spring theme.",
-      "Music and atmosphere designed to enhance the overall mood of the event.",
-      "Speech from the designer, sharing the inspiration behind the collection.",
-      "The goal was to allow guests not only to see the collection but to fully experience its story and aesthetic.",
+      "An immersive event reflecting the vibrant, floral spirit of the Spring collection through curated decor, music, and food.",
+      "A cinematic collection reveal on large screens to formally introduce the new dresses.",
+      "A magazine-style guide providing guests with the detailed story behind each design.",
+      "Interactive guest experiences, including a personal message booth and a 'choose your favorite dress' activity.",
+      "A floral styling station linking the live event experience back to the initial invitation concept.",
+      "A personal speech from the designer detailing the collection's inspiration, bringing the story to life.",
     ],
     postEventMarketing: [
       "Event recap video highlighting the experience and key moments.",
@@ -97,6 +95,16 @@ export const projects: Project[] = [
       "High sales following the launch.",
       "Attracting new clients and potential collaborations.",
     ],
+    preEventImages: [
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.08%20PM%20(1).jpeg",
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.08%20PM%20(2).jpeg",
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.08%20PM.jpeg",
+    ],
+    postEventImages: [
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.08%20PM%20(3).jpeg",
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.12%20PM.jpeg",
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.08%20PM%20(1).jpeg",
+    ],
     services: ["Creative Campaigns & Concepts", "Event Concept & Production", "Influencer & Content Strategy"],
     metrics: [
       { label: "Photoshoots", value: "2" },
@@ -104,9 +112,9 @@ export const projects: Project[] = [
       { label: "Content Streams", value: "4" },
     ],
     gallery: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBIQAK6VpaL1ue17p0dAy5-yx4gXq-bl-1nr5NHi-Ggyb6MiSeOhvBniS1lF6HJgAeDqVdDkdS1ouPYNRNRMTN2LA4EaspybLndVkq2mM_2RVKRWnexkDmsch_oza5ztN9Gi-CbsPI5-n8x7AhlCqMOTBb99jQ3naatcCJrAroohpmB5fDQxveeWTv1pRT3jvYGL80UMMbX38fsIvVaQEs4USbHtyWu6cRZf7njDYE8SNvA9biQQXe6jI8k-FRFB85PNmQtltK8pXs",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuD9hWu1bmoUpRm2NlsP8kLPplcEC0VZdAwj2Xeg7LQBmZQays_4-88Q8hHOxuKA--G7iQiyhKzjDzRjTocSgEacVI4q6jkI_2a8wII2lqLSZck75UbPNWsaT5DHsjvfk3AwCqmviav63F0wRY-BP6iwwAVYhnfUEDG5gX1h0wS_b5Q7TAjyaRsaNRKEAUNCExjzIoIZ4A3W623zvqyHzTZTVxVmtYyrBhwS1Vo0S2ubiWbFaMvWro-DW2Sfbp0ZNI-o0MAMRWBtmYA",
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.08%20PM.jpeg",
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.08%20PM%20(2).jpeg",
+      "/WhatsApp%20Image%202026-04-07%20at%201.23.12%20PM.jpeg",
     ],
     nextProjectSlug: "silk-and-silence",
   },
@@ -148,6 +156,16 @@ export const projects: Project[] = [
       "Created a clear creative campaign territory for the brand.",
       "Unified launch thinking, spatial presentation, and content direction under one concept.",
       "Provided a visually distinctive proposal adaptable to multiple launch formats.",
+    ],
+    preEventImages: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDrzVtrUryKYMcHD7BZPDrVQc4oc3fMHPyrLmNFdnWTXTt9O5nSCTRMmjS2TbeGlZzUa4VUo2zsicXZP_KA-LDm4XmLIqgd4QNMQOSsdpKQREZNS3yqaRFn3UzQguQvJLYEY_tVntL2AetdDn2MrG3bMGP47gh22Sk6cJUd-3uVKI3doI6UmvyZ6F0UVvVRl0rzEoLBajWQV_Ut8Fy54lGA3jUyCxJf-BFr3gDHrR4L9T8BSI-7W9seCj6qLax1Fp3C4_MWyHjEoXU",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBIQAK6VpaL1ue17p0dAy5-yx4gXq-bl-1nr5NHi-Ggyb6MiSeOhvBniS1lF6HJgAeDqVdDkdS1ouPYNRNRMTN2LA4EaspybLndVkq2mM_2RVKRWnexkDmsch_oza5ztN9Gi-CbsPI5-n8x7AhlCqMOTBb99jQ3naatcCJrAroohpmB5fDQxveeWTv1pRT3jvYGL80UMMbX38fsIvVaQEs4USbHtyWu6cRZf7njDYE8SNvA9biQQXe6jI8k-FRFB85PNmQtltK8pXs",
+    ],
+    postEventImages: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBIQAK6VpaL1ue17p0dAy5-yx4gXq-bl-1nr5NHi-Ggyb6MiSeOhvBniS1lF6HJgAeDqVdDkdS1ouPYNRNRMTN2LA4EaspybLndVkq2mM_2RVKRWnexkDmsch_oza5ztN9Gi-CbsPI5-n8x7AhlCqMOTBb99jQ3naatcCJrAroohpmB5fDQxveeWTv1pRT3jvYGL80UMMbX38fsIvVaQEs4USbHtyWu6cRZf7njDYE8SNvA9biQQXe6jI8k-FRFB85PNmQtltK8pXs",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuD9hWu1bmoUpRm2NlsP8kLPplcEC0VZdAwj2Xeg7LQBmZQays_4-88Q8hHOxuKA--G7iQiyhKzjDzRjTocSgEacVI4q6jkI_2a8wII2lqLSZck75UbPNWsaT5DHsjvfk3AwCqmviav63F0wRY-BP6iwwAVYhnfUEDG5gX1h0wS_b5Q7TAjyaRsaNRKEAUNCExjzIoIZ4A3W623zvqyHzTZTVxVmtYyrBhwS1Vo0S2ubiWbFaMvWro-DW2Sfbp0ZNI-o0MAMRWBtmYA",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
     ],
     services: ["Creative Campaigns & Concepts", "Creative Direction & Consulting", "Brand Experience"],
     metrics: [
@@ -199,6 +217,16 @@ export const projects: Project[] = [
       "Clarified the future brand experience direction for the hospitality group.",
       "Created a reusable visual language across interiors, serviceware, and communication.",
       "Turned a hospitality idea into a coherent strategic concept.",
+    ],
+    preEventImages: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBIQAK6VpaL1ue17p0dAy5-yx4gXq-bl-1nr5NHi-Ggyb6MiSeOhvBniS1lF6HJgAeDqVdDkdS1ouPYNRNRMTN2LA4EaspybLndVkq2mM_2RVKRWnexkDmsch_oza5ztN9Gi-CbsPI5-n8x7AhlCqMOTBb99jQ3naatcCJrAroohpmB5fDQxveeWTv1pRT3jvYGL80UMMbX38fsIvVaQEs4USbHtyWu6cRZf7njDYE8SNvA9biQQXe6jI8k-FRFB85PNmQtltK8pXs",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDrzVtrUryKYMcHD7BZPDrVQc4oc3fMHPyrLmNFdnWTXTt9O5nSCTRMmjS2TbeGlZzUa4VUo2zsicXZP_KA-LDm4XmLIqgd4QNMQOSsdpKQREZNS3yqaRFn3UzQguQvJLYEY_tVntL2AetdDn2MrG3bMGP47gh22Sk6cJUd-3uVKI3doI6UmvyZ6F0UVvVRl0rzEoLBajWQV_Ut8Fy54lGA3jUyCxJf-BFr3gDHrR4L9T8BSI-7W9seCj6qLax1Fp3C4_MWyHjEoXU",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
+    ],
+    postEventImages: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuD9hWu1bmoUpRm2NlsP8kLPplcEC0VZdAwj2Xeg7LQBmZQays_4-88Q8hHOxuKA--G7iQiyhKzjDzRjTocSgEacVI4q6jkI_2a8wII2lqLSZck75UbPNWsaT5DHsjvfk3AwCqmviav63F0wRY-BP6iwwAVYhnfUEDG5gX1h0wS_b5Q7TAjyaRsaNRKEAUNCExjzIoIZ4A3W623zvqyHzTZTVxVmtYyrBhwS1Vo0S2ubiWbFaMvWro-DW2Sfbp0ZNI-o0MAMRWBtmYA",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDrzVtrUryKYMcHD7BZPDrVQc4oc3fMHPyrLmNFdnWTXTt9O5nSCTRMmjS2TbeGlZzUa4VUo2zsicXZP_KA-LDm4XmLIqgd4QNMQOSsdpKQREZNS3yqaRFn3UzQguQvJLYEY_tVntL2AetdDn2MrG3bMGP47gh22Sk6cJUd-3uVKI3doI6UmvyZ6F0UVvVRl0rzEoLBajWQV_Ut8Fy54lGA3jUyCxJf-BFr3gDHrR4L9T8BSI-7W9seCj6qLax1Fp3C4_MWyHjEoXU",
     ],
     services: ["Brand Experience", "Creative Direction & Consulting", "Event Concept & Production"],
     metrics: [
@@ -252,6 +280,16 @@ export const projects: Project[] = [
       "Delivered a strong bank of content assets from a single live activation.",
       "Extended the installation into a broader creative campaign and content strategy.",
       "Helped the commission reach audiences beyond the immediate event footprint.",
+    ],
+    preEventImages: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuD9hWu1bmoUpRm2NlsP8kLPplcEC0VZdAwj2Xeg7LQBmZQays_4-88Q8hHOxuKA--G7iQiyhKzjDzRjTocSgEacVI4q6jkI_2a8wII2lqLSZck75UbPNWsaT5DHsjvfk3AwCqmviav63F0wRY-BP6iwwAVYhnfUEDG5gX1h0wS_b5Q7TAjyaRsaNRKEAUNCExjzIoIZ4A3W623zvqyHzTZTVxVmtYyrBhwS1Vo0S2ubiWbFaMvWro-DW2Sfbp0ZNI-o0MAMRWBtmYA",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDrzVtrUryKYMcHD7BZPDrVQc4oc3fMHPyrLmNFdnWTXTt9O5nSCTRMmjS2TbeGlZzUa4VUo2zsicXZP_KA-LDm4XmLIqgd4QNMQOSsdpKQREZNS3yqaRFn3UzQguQvJLYEY_tVntL2AetdDn2MrG3bMGP47gh22Sk6cJUd-3uVKI3doI6UmvyZ6F0UVvVRl0rzEoLBajWQV_Ut8Fy54lGA3jUyCxJf-BFr3gDHrR4L9T8BSI-7W9seCj6qLax1Fp3C4_MWyHjEoXU",
+    ],
+    postEventImages: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDrzVtrUryKYMcHD7BZPDrVQc4oc3fMHPyrLmNFdnWTXTt9O5nSCTRMmjS2TbeGlZzUa4VUo2zsicXZP_KA-LDm4XmLIqgd4QNMQOSsdpKQREZNS3yqaRFn3UzQguQvJLYEY_tVntL2AetdDn2MrG3bMGP47gh22Sk6cJUd-3uVKI3doI6UmvyZ6F0UVvVRl0rzEoLBajWQV_Ut8Fy54lGA3jUyCxJf-BFr3gDHrR4L9T8BSI-7W9seCj6qLax1Fp3C4_MWyHjEoXU",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBIQAK6VpaL1ue17p0dAy5-yx4gXq-bl-1nr5NHi-Ggyb6MiSeOhvBniS1lF6HJgAeDqVdDkdS1ouPYNRNRMTN2LA4EaspybLndVkq2mM_2RVKRWnexkDmsch_oza5ztN9Gi-CbsPI5-n8x7AhlCqMOTBb99jQ3naatcCJrAroohpmB5fDQxveeWTv1pRT3jvYGL80UMMbX38fsIvVaQEs4USbHtyWu6cRZf7njDYE8SNvA9biQQXe6jI8k-FRFB85PNmQtltK8pXs",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAi49tyPLVV9M50zRv6Pc8a2HwpLZNG4XxgxAcmwLXr2XacjbBQvV0GOSieOlBEPS9eEz1y8hZdrA9FpZjY2N77lV4WT-JLSxQbyIh39RX-LJbxIX9Y1zXvM0xctN7ZA_h76yfPt6CgL_G_hjVxu9QDjKILj-P86YdbfJQRl3xt4n8yD_kRXNxcsmKDiK-2ZhcXoon0p-l6K3iRqHllFQglYz3C05H_SZv2T1ELZAd_b-ipHBtLByYK8etb8E8nDPL75H5LU_1DF2I",
     ],
     services: ["Influencer & Content Strategy", "Creative Campaigns & Concepts", "Event Concept & Production"],
     metrics: [
