@@ -11,9 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 function ImageCarousel({ images, label }: { images: string[]; label: string }) {
   const [current, setCurrent] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [dragOffset, setDragOffset] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<number | null>(null);
   const total = images.length;
 
   if (!total) return null;
@@ -21,30 +20,36 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
   const minSwipeDistance = 50;
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-    setIsDragging(true);
-    setDragOffset(0);
+    touchStartRef.current = e.targetTouches[0].clientX;
+    if (trackRef.current) {
+      trackRef.current.style.transition = 'none';
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
+    if (touchStartRef.current === null || !trackRef.current) return;
     const currentTouch = e.targetTouches[0].clientX;
-    const diff = currentTouch - touchStart;
-    setDragOffset(diff);
+    const diff = currentTouch - touchStartRef.current;
+    trackRef.current.style.transform = `translateX(calc(-${current * 100}% + ${diff}px))`;
   };
 
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    if (touchStart === null) return;
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartRef.current === null || !trackRef.current) return;
+    
+    // We get the final position from changedTouches 
+    const currentTouch = e.changedTouches[0].clientX;
+    const diff = currentTouch - touchStartRef.current;
+    
+    trackRef.current.style.transition = 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
+    trackRef.current.style.transform = ''; // Clear inline transform so state takes over
 
-    if (dragOffset < -minSwipeDistance) {
+    if (diff < -minSwipeDistance) {
       setCurrent((p) => (p + 1) % total);
-    } else if (dragOffset > minSwipeDistance) {
+    } else if (diff > minSwipeDistance) {
       setCurrent((p) => (p - 1 + total) % total);
     }
 
-    setDragOffset(0);
-    setTouchStart(null);
+    touchStartRef.current = null;
   };
 
   return (
@@ -55,14 +60,15 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
     >
-        <div className="overflow-hidden rounded-xl bg-brand-surface-low shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+        <div className="overflow-visible">
         <div
-          className={`flex ${isDragging ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"}`}
-          style={{ transform: `translateX(calc(-${current * 100}% + ${dragOffset}px))` }}
+          ref={trackRef}
+          className="flex transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{ transform: `translateX(-${current * 100}%)` }}
         >
           {images.map((src, i) => (
-            <div key={i} className="w-full shrink-0">
-              <div className="aspect-[4/3] md:aspect-[16/10] overflow-hidden">
+            <div key={i} className="w-full shrink-0 pr-4 sm:pr-6">
+              <div className="aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
                 <img
                   src={src}
                   alt={`${label} ${i + 1}`}
