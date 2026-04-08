@@ -44,9 +44,9 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
     trackRef.current.style.transform = ''; // Clear inline transform so state takes over
 
     if (diff < -minSwipeDistance) {
-      setCurrent((p) => (p + 1) % total);
+      setCurrent((p) => Math.min(p + 1, total - 1));
     } else if (diff > minSwipeDistance) {
-      setCurrent((p) => (p - 1 + total) % total);
+      setCurrent((p) => Math.max(p - 1, 0));
     }
 
     touchStartRef.current = null;
@@ -84,18 +84,22 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
       {total > 1 && (
         <>
           <button
-            onClick={() => setCurrent((p) => (p - 1 + total) % total)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-lg opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110"
+            onClick={() => setCurrent((p) => Math.max(p - 1, 0))}
+            className={`absolute left-4 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 ${
+              current === 0 ? "opacity-0 pointer-events-none" : "opacity-0 md:group-hover/carousel:opacity-100"
+            }`}
             aria-label="Previous image"
           >
-            <ChevronLeft className="h-5 w-5 text-brand-dark" />
+            <ArrowLeft className="h-5 w-5 text-brand-dark" strokeWidth={1.5} />
           </button>
           <button
-            onClick={() => setCurrent((p) => (p + 1) % total)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-lg opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110"
+            onClick={() => setCurrent((p) => Math.min(p + 1, total - 1))}
+            className={`absolute right-4 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 ${
+              current === total - 1 ? "opacity-0 pointer-events-none" : "opacity-0 md:group-hover/carousel:opacity-100"
+            }`}
             aria-label="Next image"
           >
-            <ChevronRight className="h-5 w-5 text-brand-dark" />
+            <ArrowRight className="h-5 w-5 text-brand-dark" strokeWidth={1.5} />
           </button>
         </>
       )}
@@ -157,6 +161,153 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
           scrollTrigger: { trigger: section, start: "top 85%" },
         }
       );
+    });
+
+    [
+      {
+        section: ".pre-event-section",
+        heading: ".pre-event-heading > *",
+        items: ".pre-event-item",
+        carousel: ".pre-event-carousel",
+      },
+      {
+        section: ".post-event-section",
+        heading: ".post-event-heading > *",
+        items: ".post-event-item",
+        carousel: ".post-event-carousel",
+      },
+    ].forEach(({ section, heading, items, carousel }) => {
+      gsap.fromTo(
+        heading,
+        { y: 44, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.1,
+          stagger: 0.1,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 76%",
+          },
+        }
+      );
+
+      gsap.utils.toArray<HTMLElement>(items).forEach((item) => {
+        const bullet = item.querySelector(".marketing-item-bullet");
+        const copy = item.querySelector(".marketing-item-copy");
+
+        gsap.set(item, { opacity: 0.35 });
+        if (bullet) gsap.set(bullet, { scale: 0.35, opacity: 0.3 });
+        if (copy) gsap.set(copy, { y: 28, opacity: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: "top 86%",
+            end: "top 60%",
+            scrub: 0.65,
+          },
+        });
+
+        tl.to(item, { opacity: 1, ease: "none" }, 0)
+          .to(bullet, { scale: 1, opacity: 1, ease: "power2.out" }, 0)
+          .to(copy, { y: 0, opacity: 1, ease: "power2.out" }, 0.02);
+      });
+
+      gsap.fromTo(
+        carousel,
+        { x: 80, y: 32, opacity: 0, scale: 0.96 },
+        {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1.4,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: carousel,
+            start: "top 82%",
+          },
+        }
+      );
+    });
+
+    const launchSteps = gsap.utils.toArray<HTMLElement>(".launch-step");
+    launchSteps.forEach((step) => {
+      const content = step.querySelector(".launch-step-copy");
+      const number = step.querySelector(".launch-step-number");
+      const dot = step.querySelector(".launch-step-dot");
+      const dotFill = step.querySelector(".launch-step-dot-fill");
+      const lineFill = step.querySelector(".launch-step-line-fill");
+
+      gsap.set(step, { opacity: 0.3 });
+      if (content) gsap.set(content, { y: 36, opacity: 0 });
+      if (number) gsap.set(number, { y: 18, opacity: 0.35 });
+      if (dot) gsap.set(dot, { scale: 0.72 });
+      if (dotFill) gsap.set(dotFill, { scale: 0, transformOrigin: "center center" });
+      if (lineFill) gsap.set(lineFill, { scaleY: 0, transformOrigin: "top center" });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: step,
+          start: "top 78%",
+          end: "top 46%",
+          scrub: 0.7,
+        },
+      });
+
+      tl.to(step, { opacity: 1, ease: "none" }, 0)
+        .to(content, { y: 0, opacity: 1, ease: "power2.out" }, 0)
+        .to(number, { y: 0, opacity: 1, ease: "power2.out" }, 0.02)
+        .to(dot, { scale: 1, ease: "back.out(1.8)" }, 0.04)
+        .to(dotFill, { scale: 1, ease: "power2.out" }, 0.08);
+
+      if (lineFill) {
+        tl.to(lineFill, { scaleY: 1, ease: "none" }, 0.12);
+      }
+    });
+
+    gsap.fromTo(
+      ".campaign-impact-heading > *",
+      { y: 48, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.12,
+        ease: "expo.out",
+        scrollTrigger: {
+          trigger: ".campaign-impact-section",
+          start: "top 72%",
+        },
+      }
+    );
+
+    const impactCards = gsap.utils.toArray<HTMLElement>(".impact-card");
+    impactCards.forEach((card) => {
+      const line = card.querySelector(".impact-card-line");
+      const number = card.querySelector(".impact-card-index");
+      const copy = card.querySelector(".impact-card-copy");
+
+      gsap.set(card, { opacity: 0.35 });
+      if (line) gsap.set(line, { width: 40 });
+      if (number) gsap.set(number, { y: 24, opacity: 0.02 });
+      if (copy) gsap.set(copy, { y: 46, opacity: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: card,
+          start: "top 82%",
+          end: "top 52%",
+          scrub: 0.75,
+        },
+      });
+
+      tl.to(card, { opacity: 1, backgroundColor: "rgba(255,255,255,0.04)", ease: "none" }, 0)
+        .to(line, { width: 64, ease: "none" }, 0.05)
+        .to(number, { y: 0, opacity: 0.08, ease: "power2.out" }, 0.08)
+        .to(copy, { y: 0, opacity: 1, ease: "power2.out" }, 0.02);
     });
   }, { scope: containerRef, dependencies: [project] });
 
@@ -266,11 +417,11 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
         </section>
 
         {/* Pre-Event Marketing — Carousel on Right */}
-        <section className="scroll-section px-6 pb-16 md:px-12 md:pb-24">
+        <section className="scroll-section pre-event-section px-6 pb-16 md:px-12 md:pb-24">
           <div className="mx-auto max-w-400">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 items-start">
               <div>
-                <div className="mb-8 flex items-center gap-4">
+                <div className="pre-event-heading mb-8 flex items-center gap-4">
                   <span className="h-px w-10 bg-brand-secondary/40" />
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight">
                     Pre-Event Marketing
@@ -278,14 +429,14 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 </div>
                 <div className="flex flex-col gap-3">
                   {project.preEventMarketing.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-secondary/50" />
-                      <p className="text-sm md:text-base font-light leading-relaxed text-brand-primary/80">{item}</p>
+                    <div key={idx} className="pre-event-item flex items-start gap-3">
+                      <span className="marketing-item-bullet mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-secondary/50" />
+                      <p className="marketing-item-copy text-sm md:text-base font-light leading-relaxed text-brand-primary/80">{item}</p>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="max-w-full overflow-hidden">
+              <div className="pre-event-carousel max-w-full overflow-hidden">
                 <ImageCarousel images={project.preEventImages} label="Pre-Event Marketing" />
               </div>
             </div>
@@ -293,11 +444,11 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
         </section>
 
         {/* Post-Event Marketing — Carousel on right */}
-        <section className="scroll-section px-6 py-16 md:px-12 md:py-24">
+        <section className="scroll-section post-event-section px-6 py-16 md:px-12 md:py-24">
           <div className="mx-auto max-w-400">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 items-start">
               <div>
-                <div className="mb-8 flex items-center gap-4">
+                <div className="post-event-heading mb-8 flex items-center gap-4">
                   <span className="h-px w-10 bg-brand-secondary/40" />
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight">
                     Post-Event Marketing
@@ -305,14 +456,14 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 </div>
                 <div className="flex flex-col gap-3">
                   {project.postEventMarketing.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-secondary/50" />
-                      <p className="text-sm md:text-base font-light leading-relaxed text-brand-primary/80">{item}</p>
+                    <div key={idx} className="post-event-item flex items-start gap-3">
+                      <span className="marketing-item-bullet mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-secondary/50" />
+                      <p className="marketing-item-copy text-sm md:text-base font-light leading-relaxed text-brand-primary/80">{item}</p>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="max-w-full overflow-hidden">
+              <div className="post-event-carousel max-w-full overflow-hidden">
                 <ImageCarousel images={project.postEventImages} label="Post-Event Marketing" />
               </div>
             </div>
@@ -320,7 +471,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
         </section>
 
         {/* Launch Event Experience — Editorial Split Layout */}
-        <section className="scroll-section px-6 py-20 md:px-12 md:py-28">
+        <section className="scroll-section launch-experience-section px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-400">
             <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_1fr] gap-12 lg:gap-24 items-start">
               <div className="lg:sticky lg:top-40">
@@ -338,17 +489,21 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 {project.launchEventExperience.map((item, idx) => {
                   const isLast = idx === project.launchEventExperience.length - 1;
                   return (
-                    <div key={idx} className="group flex gap-6 md:gap-8">
+                    <div key={idx} className="launch-step group flex gap-6 md:gap-8">
                       {/* Dot + Line column */}
                       <div className="flex flex-col items-center shrink-0">
-                        <span className="mt-1 h-3 w-3 shrink-0 rounded-full border-2 border-brand-secondary/40 bg-brand-bg group-hover:bg-brand-secondary group-hover:border-brand-secondary transition-all duration-500" />
+                        <span className="launch-step-dot relative mt-1 h-3 w-3 shrink-0 rounded-full border-2 border-brand-secondary/40 bg-brand-bg transition-transform duration-500">
+                          <span className="launch-step-dot-fill absolute inset-[2px] rounded-full bg-brand-secondary" />
+                        </span>
                         {!isLast && (
-                          <div className="mt-1 w-px flex-1 bg-brand-secondary/20" />
+                          <div className="mt-1 relative w-px flex-1 overflow-hidden bg-brand-secondary/20">
+                            <div className="launch-step-line-fill absolute inset-x-0 top-0 h-full bg-brand-secondary/45" />
+                          </div>
                         )}
                       </div>
                       {/* Content */}
-                      <div className={isLast ? "pb-0" : "pb-10"}>
-                        <span className="block text-[11px] uppercase tracking-[0.2em] text-brand-secondary/50 mb-2 font-medium">
+                      <div className={`launch-step-copy ${isLast ? "pb-0" : "pb-10"}`}>
+                        <span className="launch-step-number block text-[11px] uppercase tracking-[0.2em] text-brand-secondary/50 mb-2 font-medium">
                           {String(idx + 1).padStart(2, "0")}
                         </span>
                         <p className="text-base md:text-lg font-light leading-relaxed text-brand-primary/85">
@@ -364,9 +519,9 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
         </section>
 
         {/* Campaign Impact — Full-Bleed Dark Grid */}
-        <section className="scroll-section bg-brand-dark px-6 py-24 md:px-12 md:py-32">
+        <section className="scroll-section campaign-impact-section bg-brand-dark px-6 py-24 md:px-12 md:py-32">
           <div className="mx-auto max-w-400">
-            <div className="mb-20 max-w-xl">
+            <div className="campaign-impact-heading mb-20 max-w-xl">
               <p className="text-[11px] uppercase tracking-[0.3em] text-brand-secondary mb-5">Results</p>
               <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white tracking-tight leading-[1.1]">
                 Campaign Impact
@@ -378,13 +533,13 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
               {project.campaignImpact.map((item, idx) => (
                 <div
                   key={idx}
-                  className="group relative bg-brand-dark p-10 md:p-14 hover:bg-white/3 transition-colors duration-700"
+                  className="impact-card group relative bg-brand-dark p-10 md:p-14 hover:bg-white/3 transition-colors duration-700"
                 >
-                  <span className="absolute top-6 right-8 font-serif text-7xl md:text-8xl text-white/4 leading-none select-none group-hover:text-white/8 transition-colors duration-700">
+                  <span className="impact-card-index absolute top-6 right-8 font-serif text-7xl md:text-8xl text-white/4 leading-none select-none group-hover:text-white/8 transition-colors duration-700">
                     {String(idx + 1).padStart(2, "0")}
                   </span>
-                  <div className="relative">
-                    <div className="h-px w-10 bg-brand-secondary/50 mb-8 group-hover:w-16 transition-all duration-700" />
+                  <div className="impact-card-copy relative">
+                    <div className="impact-card-line h-px w-10 bg-brand-secondary/50 mb-8 group-hover:w-16 transition-all duration-700" />
                     <p className="text-lg md:text-xl font-light leading-relaxed text-white/75 group-hover:text-white/90 transition-colors duration-700">
                       {item}
                     </p>
