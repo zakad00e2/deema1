@@ -290,24 +290,24 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
       const number = card.querySelector(".impact-card-index");
       const copy = card.querySelector(".impact-card-copy");
 
-      gsap.set(card, { opacity: 0.35 });
-      if (line) gsap.set(line, { width: 40 });
-      if (number) gsap.set(number, { y: 24, opacity: 0.02 });
-      if (copy) gsap.set(copy, { y: 46, opacity: 0 });
+      gsap.set(card, { opacity: 0, x: -40 });
+      if (number) gsap.set(number, { opacity: 0, x: -20 });
+      if (line) gsap.set(line, { scaleY: 0, transformOrigin: "top center" });
+      if (copy) gsap.set(copy, { opacity: 0, x: 30 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: card,
-          start: "top 82%",
-          end: "top 52%",
-          scrub: 0.75,
+          start: "top 85%",
+          end: "top 60%",
+          scrub: 0.6,
         },
       });
 
-      tl.to(card, { opacity: 1, backgroundColor: "rgba(255,255,255,0.04)", ease: "none" }, 0)
-        .to(line, { width: 64, ease: "none" }, 0.05)
-        .to(number, { y: 0, opacity: 0.08, ease: "power2.out" }, 0.08)
-        .to(copy, { y: 0, opacity: 1, ease: "power2.out" }, 0.02);
+      tl.to(card, { opacity: 1, x: 0, ease: "power2.out" }, 0)
+        .to(number, { opacity: 1, x: 0, ease: "power2.out" }, 0.03)
+        .to(line, { scaleY: 1, ease: "power2.out" }, 0.05)
+        .to(copy, { opacity: 1, x: 0, ease: "power2.out" }, 0.08);
     });
   }, { scope: containerRef, dependencies: [project] });
 
@@ -332,6 +332,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
   }
 
   const nextProject = getProjectBySlug(project.nextProjectSlug) ?? projects[0];
+  const visibleServices = project.services.slice(0, 3);
 
   return (
     <div ref={containerRef} className="min-h-screen bg-brand-bg text-brand-dark antialiased">
@@ -367,7 +368,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
 
         {/* Hero Image */}
         <section className="mt-12 px-6 md:px-12">
-          <div className="hero-image mx-auto max-w-400 overflow-hidden bg-brand-surface-low editorial-shadow relative aspect-square sm:aspect-[4/3] md:aspect-video">
+          <div className="hero-image mx-auto max-w-400 overflow-hidden bg-brand-surface-low editorial-shadow relative aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/8] lg:aspect-[16/7]">
             <img
               src={project.desktopImage || project.image}
               alt={project.title}
@@ -382,30 +383,59 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 referrerPolicy="no-referrer"
               />
             )}
+            <div className="absolute inset-x-0 bottom-0 hidden h-2/3 bg-gradient-to-t from-brand-dark/82 via-brand-dark/30 to-transparent lg:block" />
+            <div className="absolute inset-x-0 bottom-0 z-10 hidden p-4 sm:p-6 md:p-8 lg:block">
+              <div className="flex flex-wrap items-start gap-x-6 gap-y-4 rounded-2xl border border-white/12 bg-black/12 p-4 text-white backdrop-blur-md sm:gap-x-8 md:p-6 lg:flex-nowrap lg:items-center">
+                <div>
+                  <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-white/60">Client</p>
+                  <p className="font-serif text-base text-white sm:text-lg">{project.client}</p>
+                </div>
+                <div className="hidden h-10 w-px bg-white/15 sm:block" />
+                <div>
+                  <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-white/60">Location</p>
+                  <p className="font-serif text-base text-white sm:text-lg">{project.location}</p>
+                </div>
+                <div className="hidden h-10 w-px bg-white/15 lg:block" />
+                <div className="max-w-2xl lg:flex lg:flex-1 lg:flex-col lg:items-start lg:gap-3 lg:max-w-none">
+                  <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-white/60 lg:mb-0">Services</p>
+                  <div className="flex w-full flex-wrap items-center gap-x-5 gap-y-2 lg:flex-nowrap">
+                    {visibleServices.map((service, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <span className="h-px w-3 bg-white/24" />
+                        <span className="text-[10px] uppercase tracking-[0.14em] text-white/90 xl:text-[11px]">
+                          {service}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Compact Metadata Strip */}
-        <section className="scroll-section px-6 py-14 md:px-12 md:py-20">
+
+        {/* Pre-Event Marketing — Carousel on Right */}
+        <section className="scroll-section px-6 py-14 md:px-12 md:py-20 lg:hidden">
           <div className="mx-auto max-w-400">
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4 border-b border-brand-surface-high pb-10">
               <div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-brand-secondary/60 mb-1">Client</p>
+                <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-brand-secondary/60">Client</p>
                 <p className="font-serif text-lg text-brand-dark">{project.client}</p>
               </div>
-              <div className="h-8 w-px bg-brand-surface-high hidden sm:block" />
+              <div className="hidden h-8 w-px bg-brand-surface-high sm:block" />
               <div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-brand-secondary/60 mb-1">Location</p>
+                <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-brand-secondary/60">Location</p>
                 <p className="font-serif text-lg text-brand-dark">{project.location}</p>
               </div>
-              <div className="h-8 w-px bg-brand-surface-high hidden sm:block" />
+              <div className="hidden h-8 w-px bg-brand-surface-high sm:block" />
               <div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-brand-secondary/60 mb-1">Services</p>
+                <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-brand-secondary/60">Services</p>
                 <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
                   {project.services.map((service, i) => (
                     <span
                       key={i}
-                      className="bg-brand-surface-high/30 px-2 py-0.5 text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-brand-dark/80 whitespace-nowrap"
+                      className="whitespace-nowrap bg-brand-surface-high/30 px-2 py-0.5 text-[9px] uppercase tracking-[0.15em] text-brand-dark/80 md:text-[10px]"
                     >
                       {service}
                     </span>
@@ -416,8 +446,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
           </div>
         </section>
 
-        {/* Pre-Event Marketing — Carousel on Right */}
-        <section className="scroll-section pre-event-section px-6 pb-16 md:px-12 md:pb-24">
+        <section className="scroll-section pre-event-section px-6 pb-16 lg:pt-20 md:px-12 md:pb-24">
           <div className="mx-auto max-w-400">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 items-start">
               <div>
@@ -518,34 +547,59 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
           </div>
         </section>
 
-        {/* Campaign Impact — Full-Bleed Dark Grid */}
-        <section className="scroll-section campaign-impact-section bg-brand-dark px-6 py-24 md:px-12 md:py-32">
-          <div className="mx-auto max-w-400">
-            <div className="campaign-impact-heading mb-20 max-w-xl">
+        {/* Campaign Impact — Editorial Horizontal Strips */}
+        <section className="scroll-section campaign-impact-section relative overflow-hidden bg-brand-bg px-6 py-24 md:px-12 md:py-32">
+          {/* Decorative background glows */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-brand-secondary/[0.06] blur-[140px]" />
+            <div className="absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full bg-brand-secondary/[0.04] blur-[100px]" />
+          </div>
+
+          <div className="mx-auto max-w-400 relative">
+            {/* Centered Heading */}
+            <div className="campaign-impact-heading mb-20 text-center">
               <p className="text-[11px] uppercase tracking-[0.3em] text-brand-secondary mb-5">Results</p>
-              <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white tracking-tight leading-[1.1]">
+              <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-brand-dark tracking-tight leading-[1.1]">
                 Campaign Impact
               </h3>
-              <div className="mt-8 h-px w-16 bg-brand-secondary/50" />
+              <div className="mt-8 mx-auto h-px w-28 bg-gradient-to-r from-transparent via-brand-secondary/50 to-transparent" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/6 border border-white/6 overflow-hidden">
-              {project.campaignImpact.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="impact-card group relative bg-brand-dark p-10 md:p-14 hover:bg-white/3 transition-colors duration-700"
-                >
-                  <span className="impact-card-index absolute top-6 right-8 font-serif text-7xl md:text-8xl text-white/4 leading-none select-none group-hover:text-white/8 transition-colors duration-700">
-                    {String(idx + 1).padStart(2, "0")}
-                  </span>
-                  <div className="impact-card-copy relative">
-                    <div className="impact-card-line h-px w-10 bg-brand-secondary/50 mb-8 group-hover:w-16 transition-all duration-700" />
-                    <p className="text-lg md:text-xl font-light leading-relaxed text-white/75 group-hover:text-white/90 transition-colors duration-700">
-                      {item}
-                    </p>
+            {/* Impact Strips */}
+            <div className="flex flex-col">
+              {project.campaignImpact.map((item, idx) => {
+                const isLast = idx === project.campaignImpact.length - 1;
+                return (
+                  <div
+                    key={idx}
+                    className={`impact-card group flex items-center gap-5 md:gap-10 py-7 md:py-9 ${
+                      !isLast ? "border-b border-brand-dark/[0.07]" : ""
+                    }`}
+                  >
+                    {/* Number */}
+                    <div className="impact-card-index shrink-0 w-14 md:w-24">
+                      <span className="font-serif text-3xl md:text-5xl lg:text-6xl text-brand-secondary/30 group-hover:text-brand-secondary/70 transition-colors duration-700 tabular-nums leading-none">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    {/* Vertical accent line */}
+                    <div className="impact-card-line shrink-0 h-10 md:h-14 w-px bg-gradient-to-b from-brand-secondary/10 via-brand-secondary/40 to-brand-secondary/10 group-hover:via-brand-secondary/70 transition-all duration-700" />
+
+                    {/* Text */}
+                    <div className="impact-card-copy flex-1 min-w-0">
+                      <p className="text-base md:text-xl lg:text-2xl font-light leading-relaxed text-brand-primary/55 group-hover:text-brand-dark transition-colors duration-700">
+                        {item}
+                      </p>
+                    </div>
+
+                    {/* Hover-reveal accent dot */}
+                    <div className="hidden md:flex shrink-0 items-center opacity-0 group-hover:opacity-100 transition-all duration-700 translate-x-3 group-hover:translate-x-0">
+                      <span className="h-2 w-2 rounded-full bg-brand-secondary/50" />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
