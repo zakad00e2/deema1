@@ -8,7 +8,7 @@ import { categoryLabel, filters, projects, type FilterValue, type Project } from
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-export function WorksNavbar({ active = "work" }: { active?: "home" | "work" }) {
+export function WorksNavbar({ active = "work" }: { active?: "home" | "work" | "workshops" }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -47,7 +47,10 @@ export function WorksNavbar({ active = "work" }: { active?: "home" | "work" }) {
           >
             Portfolio
           </a>
-          <a href="/#workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">
+          <a
+            href="/workshops"
+            className={active === "workshops" ? "text-brand-dark border-b border-brand-secondary pb-1" : "text-brand-primary hover:text-brand-secondary transition-colors"}
+          >
             Workshops
           </a>
           <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors">
@@ -94,7 +97,7 @@ export function WorksNavbar({ active = "work" }: { active?: "home" | "work" }) {
           <a href="/work" className={active === "work" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"} onClick={() => setIsMobileMenuOpen(false)}>
             Portfolio
           </a>
-          <a href="/#workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+          <a href="/workshops" className={active === "workshops" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"} onClick={() => setIsMobileMenuOpen(false)}>
             Workshops
           </a>
           <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>

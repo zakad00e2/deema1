@@ -24,7 +24,7 @@ export default function SharedFooter() {
             <a href="/work#journal" className="text-white/62 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">
               Journal
             </a>
-            <a href="/#workshops" className="text-white/62 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">
+            <a href="/workshops" className="text-white/62 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">
               Workshops
             </a>
             <a href="/work" className="text-white/62 hover:text-brand-secondary transition-colors text-xs tracking-widest uppercase">

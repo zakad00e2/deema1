@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import WorkCaseStudyPage from "./WorkCaseStudyPage";
 import WorksPage from "./WorksPage";
+import WorkshopsPage from "./WorkshopsPage";
 import SharedFooter from "./SharedFooter";
 import { 
   ArrowRight, 
@@ -39,7 +40,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-12 font-serif text-base tracking-tight">
           <a href="/" className="text-brand-dark border-b border-brand-secondary pb-1">Home</a>
           <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors">Portfolio</a>
-          <a href="/#workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">Workshops</a>
+          <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">Workshops</a>
           <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors">Contact</a>
         </div>
         <div className="flex items-center gap-6">
@@ -72,7 +73,7 @@ const Navbar = () => {
         <div className="flex flex-col space-y-8 font-serif text-2xl text-center grow justify-center pb-20">
           <a href="/" className="text-brand-dark hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
           <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Portfolio</a>
-          <a href="/#workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Workshops</a>
+          <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Workshops</a>
           <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
@@ -645,10 +646,15 @@ function HomePage() {
 export default function App() {
   const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
   const isWorksPage = pathname === "/work";
+  const isWorkshopsPage = pathname === "/workshops";
   const workSlug = pathname.startsWith("/work/") ? pathname.slice("/work/".length) : null;
 
   if (isWorksPage) {
     return <WorksPage />;
+  }
+
+  if (isWorkshopsPage) {
+    return <WorkshopsPage />;
   }
 
   if (workSlug) {
