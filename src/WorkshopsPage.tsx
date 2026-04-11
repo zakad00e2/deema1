@@ -475,7 +475,7 @@ export default function WorkshopsPage() {
                 </div>
 
                 <a
-                  href="/#contact"
+                  href="/contact#contact-form"
                   className="inline-block relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden"
                 >
                   <span className="relative z-10">Enquire Now</span>
@@ -568,7 +568,7 @@ export default function WorkshopsPage() {
                   </div>
 
                   <a
-                    href="/#contact"
+                    href="/contact#contact-form"
                     className="ws-group-link group/link inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-brand-secondary"
                   >
                     Register

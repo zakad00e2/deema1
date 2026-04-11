@@ -8,7 +8,11 @@ import { categoryLabel, filters, projects, type FilterValue, type Project } from
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-export function WorksNavbar({ active = "work" }: { active?: "home" | "work" | "workshops" }) {
+export function WorksNavbar({
+  active = "work",
+}: {
+  active?: "home" | "work" | "workshops" | "contact";
+}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -53,13 +57,20 @@ export function WorksNavbar({ active = "work" }: { active?: "home" | "work" | "w
           >
             Workshops
           </a>
-          <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors">
+          <a
+            href="/contact"
+            className={
+              active === "contact"
+                ? "text-brand-dark border-b border-brand-secondary pb-1"
+                : "text-brand-primary hover:text-brand-secondary transition-colors"
+            }
+          >
             Contact
           </a>
         </div>
         <div className="flex items-center gap-6">
           <a
-            href="/#contact"
+            href="/contact#contact-form"
             className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden"
           >
             <span className="relative z-10">Let's Talk</span>
@@ -100,13 +111,17 @@ export function WorksNavbar({ active = "work" }: { active?: "home" | "work" | "w
           <a href="/workshops" className={active === "workshops" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"} onClick={() => setIsMobileMenuOpen(false)}>
             Workshops
           </a>
-          <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+          <a
+            href="/contact"
+            className={active === "contact" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
             Contact
           </a>
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
           <a
-            href="/#contact"
+            href="/contact#contact-form"
             className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center"
           >
             <span className="relative z-10">Let's Talk</span>

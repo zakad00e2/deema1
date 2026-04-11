@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import WorkCaseStudyPage from "./WorkCaseStudyPage";
 import WorksPage from "./WorksPage";
 import WorkshopsPage from "./WorkshopsPage";
+import ContactPage from "./ContactPage";
 import SharedFooter from "./SharedFooter";
 import { 
   ArrowRight, 
@@ -41,10 +42,10 @@ const Navbar = () => {
           <a href="/" className="text-brand-dark border-b border-brand-secondary pb-1">Home</a>
           <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors">Portfolio</a>
           <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">Workshops</a>
-          <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors">Contact</a>
+          <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors">Contact</a>
         </div>
         <div className="flex items-center gap-6">
-          <button className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest  font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
+          <a href="/contact#contact-form" className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest  font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
             <span className="relative z-10">Let's Talk</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img 
@@ -53,7 +54,7 @@ const Navbar = () => {
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
               />
             </div>
-          </button>
+          </a>
           <Menu 
             className="md:hidden text-brand-secondary w-7 h-7 cursor-pointer" 
             onClick={() => setIsMobileMenuOpen(true)}
@@ -74,10 +75,10 @@ const Navbar = () => {
           <a href="/" className="text-brand-dark hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
           <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Portfolio</a>
           <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Workshops</a>
-          <a href="/#contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
+          <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
-          <button className="w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden">
+          <a href="/contact#contact-form" className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center">
             <span className="relative z-10">Let's Talk</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img 
@@ -86,7 +87,7 @@ const Navbar = () => {
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
               />
             </div>
-          </button>
+          </a>
         </div>
       </div>
     </nav>
@@ -147,7 +148,7 @@ const Hero = () => {
 We turn ideas into creative campaigns, brand experiences, and exceptional events that leave a lasting impression.
           </p>
           <div className="flex flex-wrap items-center gap-8">
-            <button className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden">
+            <a href="/contact#contact-form" className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden">
               <span className="relative z-10">Work with us</span>
               <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
                 <img 
@@ -156,7 +157,7 @@ We turn ideas into creative campaigns, brand experiences, and exceptional events
                   className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
                 />
               </div>
-            </button>
+            </a>
             <a href="/work" className="group flex items-center gap-3 text-brand-secondary tracking-widest uppercase text-xs font-semibold">
               Our work <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
@@ -647,6 +648,7 @@ export default function App() {
   const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
   const isWorksPage = pathname === "/work";
   const isWorkshopsPage = pathname === "/workshops";
+  const isContactPage = pathname === "/contact";
   const workSlug = pathname.startsWith("/work/") ? pathname.slice("/work/".length) : null;
 
   if (isWorksPage) {
@@ -655,6 +657,10 @@ export default function App() {
 
   if (isWorkshopsPage) {
     return <WorkshopsPage />;
+  }
+
+  if (isContactPage) {
+    return <ContactPage />;
   }
 
   if (workSlug) {
