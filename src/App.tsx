@@ -450,7 +450,7 @@ const Specialisms = () => {
                 <p className="text-brand-primary/70 group-hover:text-white/80 font-light transition-colors">{service.desc}</p>
               </div>
               <div className="mt-12 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 transform translate-y-0 md:translate-y-2 md:group-hover:translate-y-0">
-                <a href="#" className="text-brand-secondary group-hover:text-white transition-colors text-[0.6rem] tracking-widest uppercase flex items-center gap-2">
+                <a href="/work" className="text-brand-secondary group-hover:text-white transition-colors text-[0.6rem] tracking-widest uppercase flex items-center gap-2">
                   Explore <ArrowRight className="w-3 h-3" />
                 </a>
               </div>
@@ -502,7 +502,7 @@ const CaseStudy = () => {
             <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Case Study</span>
             <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">The Obsidian Gala</h2>
           </div>
-          <a href="#" className="case-header-link text-[0.6rem] tracking-widest uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap">
+          <a href="/work" className="case-header-link text-[0.6rem] tracking-widest uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap">
             See All Projects
           </a>
         </div>
@@ -565,7 +565,7 @@ const Workshops = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {items.map((item, idx) => (
-            <div key={idx} className="workshop-item group cursor-pointer">
+            <a href="/workshops" key={idx} className="workshop-item group block cursor-pointer">
               <div className="aspect-square bg-brand-surface-low mb-6 overflow-hidden relative">
                 <img 
                   src={`https://picsum.photos/seed/workshop${idx}/800/800`} 
@@ -582,7 +582,7 @@ const Workshops = () => {
               <span className="text-[0.6rem] tracking-widest uppercase font-bold text-brand-secondary border-b border-brand-secondary/20 pb-1 group-hover:border-brand-secondary transition-all">
                 Register
               </span>
-            </div>
+            </a>
           ))}
         </div>
       </div>
@@ -604,9 +604,9 @@ const Product = () => (
             <p className="text-brand-primary/80 font-light leading-relaxed mb-12">
               Designed for the visionary mind, this physical companion bridges the gap between ambitious ideation and tactile execution. A signature piece of our methodology, now available for your personal ritual.
             </p>
-            <button className="bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all editorial-shadow">
+            <a href="/contact#contact-form" className="inline-block bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all editorial-shadow">
               Explore the Planner
-            </button>
+            </a>
           </div>
         </div>
         <div className="lg:col-span-7 order-1 lg:order-2">
