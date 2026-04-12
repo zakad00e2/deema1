@@ -7,22 +7,36 @@ import WorksPage from "./WorksPage";
 import WorkshopsPage from "./WorkshopsPage";
 import ContactPage from "./ContactPage";
 import SharedFooter from "./SharedFooter";
+import { useLanguage } from "./i18n/LanguageContext";
 import { 
-  ArrowRight, 
+  ArrowRight,
+  ArrowLeft,
   Menu, 
   X,
-  Calendar, 
-  Megaphone, 
-  PenTool, 
-  Share2, 
-  Sparkles
+  Globe,
 } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
+export function LanguageSwitcher({ className = "" }: { className?: string }) {
+  const { locale, setLocale, t } = useLanguage();
+  return (
+    <button
+      type="button"
+      onClick={() => setLocale(locale === "en" ? "ar" : "en")}
+      className={`lang-switch flex items-center gap-1.5 text-xs font-medium text-brand-primary hover:text-brand-secondary transition-colors ${className}`}
+      aria-label="Switch language"
+    >
+      <Globe className="w-4 h-4" />
+      <span>{t("langSwitch.label")}</span>
+    </button>
+  );
+}
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t, isRTL, locale } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,21 +50,24 @@ const Navbar = () => {
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${isScrolled ? "bg-brand-bg/80 backdrop-blur-md border-brand-surface-high/30" : "bg-transparent border-transparent"}`}>
       <div className="max-w-360 mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-14" />
+          <a href="/" aria-label="Go to home page">
+            <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-14" />
+          </a>
         </div>
-        <div className="hidden md:flex items-center space-x-12 font-serif text-base tracking-tight">
-          <a href="/" className="text-brand-dark border-b border-brand-secondary pb-1">Home</a>
-          <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors">Portfolio</a>
-          <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">Workshops</a>
-          <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors">Contact</a>
+        <div className={`hidden md:flex items-center ${isRTL ? "gap-12" : "space-x-12"} font-serif text-base tracking-tight`}>
+          <a href="/" className="text-brand-dark border-b border-brand-secondary pb-1">{t("nav.home")}</a>
+          <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors">{t("nav.portfolio")}</a>
+          <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">{t("nav.workshops")}</a>
+          <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors">{t("nav.contact")}</a>
         </div>
-        <div className="flex items-center gap-6">
-          <a href="/contact#contact-form" className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest  font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
-            <span className="relative z-10">Let's Talk</span>
+        <div className="flex items-center gap-4 md:gap-6">
+          <LanguageSwitcher className="hidden md:flex" />
+          <a href="/contact#contact-form" className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
+            <span className="relative z-10">{t("nav.letsTalk")}</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img 
                 src="/athr.png" 
-                alt="Hover Effect" 
+                alt="" 
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
               />
             </div>
@@ -63,27 +80,30 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`fixed top-0 left-0 w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between items-center mb-16">
-          <img src="/logo.png" alt="Athr Logo" className="h-12" />
+          <a href="/" aria-label="Go to home page" onClick={() => setIsMobileMenuOpen(false)}>
+            <img src="/logo.png" alt="Athr Logo" className="h-12" />
+          </a>
           <X 
             className="text-brand-secondary w-8 h-8 cursor-pointer hover:rotate-90 transition-transform" 
             onClick={() => setIsMobileMenuOpen(false)}
           />
         </div>
         <div className="flex flex-col space-y-8 font-serif text-2xl text-center grow justify-center pb-20">
-          <a href="/" className="text-brand-dark hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
-          <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Portfolio</a>
-          <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Workshops</a>
-          <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
+          <a href="/" className="text-brand-dark hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.home")}</a>
+          <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.portfolio")}</a>
+          <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.workshops")}</a>
+          <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.contact")}</a>
+          <LanguageSwitcher className="justify-center text-lg" />
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
           <a href="/contact#contact-form" className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center">
-            <span className="relative z-10">Let's Talk</span>
+            <span className="relative z-10">{t("nav.letsTalk")}</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img 
                 src="/athr.png" 
-                alt="Hover Effect" 
+                alt="" 
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
               />
             </div>
@@ -96,6 +116,8 @@ const Navbar = () => {
 
 const Hero = () => {
   const containerRef = useRef(null);
+  const { t, isRTL } = useLanguage();
+  const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -110,12 +132,11 @@ const Hero = () => {
       "-=0.5"
     )
     .fromTo(".hero-badge",
-      { opacity: 0, x: -20 },
+      { opacity: 0, x: isRTL ? 20 : -20 },
       { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
       "-=0.8"
     );
 
-    // Parallax effect on the background texture
     gsap.to(".hero-bg", {
       y: 100,
       ease: "none",
@@ -140,30 +161,30 @@ const Hero = () => {
         />
       </div>
       <div className="max-w-360 mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-4 lg:gap-8 items-center relative z-10 w-full">
-        <div className="md:col-span-7 lg:col-span-7 hero-text">
+        <div className={`md:col-span-7 lg:col-span-7 hero-text ${isRTL ? "md:order-1" : ""}`}>
           <h1 className="text-5xl md:text-7xl lg:text-8xl leading-[1.1] text-brand-primary font-serif tracking-tighter mb-8">
-            Leave an <span className="font-light text-brand-secondary">Athr</span>
+            {t("hero.titlePart1")} <span className="text-brand-secondary">{t("hero.titleHighlight")}</span>
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl text-brand-primary/80 font-light max-w-2xl leading-relaxed mb-12">
-We turn ideas into creative campaigns, brand experiences, and exceptional events that leave a lasting impression.
+            {t("hero.subtitle")}
           </p>
           <div className="flex flex-wrap items-center gap-8">
             <a href="/contact#contact-form" className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden">
-              <span className="relative z-10">Work with us</span>
+              <span className="relative z-10">{t("hero.cta")}</span>
               <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
                 <img 
                   src="/athr.png" 
-                  alt="Hover Effect" 
+                  alt="" 
                   className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
                 />
               </div>
             </a>
             <a href="/work" className="group flex items-center gap-3 text-brand-secondary tracking-widest uppercase text-xs font-semibold">
-              Our work <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              {t("hero.ctaSecondary")} <ArrowIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
         </div>
-        <div className="md:col-span-5 lg:col-span-5 relative hero-image">
+        <div className={`md:col-span-5 lg:col-span-5 relative hero-image ${isRTL ? "md:order-2" : ""}`}>
           <div className="relative overflow-visible">
             <img 
               src="/hero-img.png" 
@@ -171,10 +192,6 @@ We turn ideas into creative campaigns, brand experiences, and exceptional events
               className="w-full h-auto object-contain drop-shadow-2xl"
             />
           </div>
-          {/* <div className="absolute -bottom-10 -left-8 hidden md:block w-48 bg-brand-surface-high/40 backdrop-blur-md p-6 pb-20 border border-white/20 hero-badge">
-            <p className="text-[0.6rem] uppercase tracking-[0.3em] text-brand-secondary font-bold mb-2">Heritage</p>
-            <p className="text-xs font-serif leading-tight italic">Every encounter is a chance to leave a lasting impression.</p>
-          </div> */}
         </div>
       </div>
     </section>
@@ -183,6 +200,7 @@ We turn ideas into creative campaigns, brand experiences, and exceptional events
 
 const About = () => {
   const sectionRef = useRef(null);
+  const { t, isRTL } = useLanguage();
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -194,7 +212,7 @@ const About = () => {
     });
 
     tl.fromTo(".about-img", 
-      { opacity: 0, x: -50 }, 
+      { opacity: 0, x: isRTL ? 50 : -50 }, 
       { opacity: 1, x: 0, duration: 1, ease: "power3.out" }
     )
     .fromTo(".about-badge",
@@ -211,51 +229,56 @@ const About = () => {
       { opacity: 0, scale: 0.8 },
       { opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.7)" },
       "-=0.4"
-    )
-    .fromTo(".stat-num-1", 
-      { innerHTML: 0 }, 
-      { innerHTML: 120, duration: 2, ease: "power2.out", snap: { innerHTML: 1 } }, 
-      "-=0.4"
-    )
-    .fromTo(".stat-num-2", 
-      { innerHTML: 0 }, 
-      { innerHTML: 12, duration: 2, ease: "power2.out", snap: { innerHTML: 1 } }, 
-      "<"
     );
+
+    const statsObj = { num1: 0, num2: 0 };
+    tl.to(statsObj, {
+      num1: 120,
+      num2: 12,
+      duration: 2,
+      ease: "power2.out",
+      onUpdate: () => {
+        const el1 = document.querySelector(".stat-num-1");
+        const el2 = document.querySelector(".stat-num-2");
+        if (el1) el1.innerHTML = isRTL ? new Intl.NumberFormat("ar-EG").format(Math.round(statsObj.num1)) : String(Math.round(statsObj.num1));
+        if (el2) el2.innerHTML = isRTL ? new Intl.NumberFormat("ar-EG").format(Math.round(statsObj.num2)) : String(Math.round(statsObj.num2));
+      }
+    }, "-=0.4");
+
   }, { scope: sectionRef });
 
   return (
     <section ref={sectionRef} className="py-32 bg-brand-surface-low overflow-hidden">
       <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
-          <div className="order-2 md:order-1 relative">
+          <div className={`${isRTL ? "order-2 md:order-2" : "order-2 md:order-1"} relative`}>
             <img 
               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" 
               alt="Deema - Professional portrait" 
               className="about-img w-full h-150 object-cover editorial-shadow"
               referrerPolicy="no-referrer"
             />
-            <div className="about-badge absolute -bottom-8 -left-8 hidden md:block w-64 bg-white/40 backdrop-blur-md p-8 editorial-shadow border border-white/20">
-              <p className="text-[0.6rem] uppercase tracking-[0.3em] text-brand-secondary font-bold mb-2">Signature</p>
+            <div className={`about-badge absolute -bottom-8 ${isRTL ? "-right-8" : "-left-8"} hidden md:block w-64 bg-white/40 backdrop-blur-md p-8 editorial-shadow border border-white/20`}>
+              <p className="text-[0.6rem] uppercase tracking-[0.3em] text-brand-secondary font-bold mb-2">{t("about.signatureLabel")}</p>
               <p className="text-sm font-serif leading-tight italic">
-                "The mark we leave is defined by the intentionality of every small detail."
+                {t("about.signature")}
               </p>
             </div>
           </div>
-          <div className="order-1 md:order-2 about-text">
-            <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-6">Meet Deema</span>
-            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary mb-8 leading-tight">Creative excellence in every touchpoint.</h2>
+          <div className={`${isRTL ? "order-1 md:order-1" : "order-1 md:order-2"} about-text`}>
+            <span className={`${isRTL ? "text-base" : "text-xs"} tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-6`}>{t("about.label")}</span>
+            <h2 className={`${isRTL ? "text-3xl md:text-4xl" : "text-4xl md:text-5xl"} font-serif text-brand-primary mb-8 leading-tight`}>{t("about.title")}</h2>
             <div className="space-y-6 text-brand-primary/80 font-light leading-relaxed text-lg">
-              <p>Deema is the creative mind behind “Athr,” seamlessly blending strategic marketing precision with a refined artistic approach to event design and execution. With a strong eye for detail and a deep understanding of brand storytelling, she transforms ideas into thoughtfully curated experiences. Driven by the belief that true impact—your “Athr”—lives in the finest details, she focuses on crafting immersive environments where every element has purpose, allowing brands to come to life in a natural and authentic way while creating meaningful, lasting connections with audiences.</p>
+              <p>{t("about.bio")}</p>
             </div>
-            <div className="mt-12 pt-1 border-t border-brand-surface-high/30 about-stats flex gap-12">
+            <div className={`mt-12 pt-1 border-t border-brand-surface-high/30 about-stats flex gap-12`}>
               <div>
                 <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-1">120</span>+</p>
-                <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">Experiences Crafted</p>
+                <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">{t("about.stat1Label")}</p>
               </div>
               <div>
                 <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-2">12</span></p>
-                <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">Global Awards</p>
+                <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">{t("about.stat2Label")}</p>
               </div>
             </div>
           </div>
@@ -267,6 +290,8 @@ const About = () => {
 
 const Specialisms = () => {
   const sectionRef = useRef(null);
+  const { t, isRTL } = useLanguage();
+  const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
 
   useGSAP(() => {
     let mm = gsap.matchMedia();
@@ -421,41 +446,49 @@ const Specialisms = () => {
     </svg>
   );
 
-  const services = [
-    { icon: CreativeCampaignsIcon, title: "Creative Campaigns & Concepts", desc: "From conceptual blueprints to flawless execution, we handle the intricate machinery of elite gatherings." },
-    { icon: EventConceptIcon, title: "Event Concept & Production", desc: "Narrative-driven campaigns that cut through the noise and deliver measurable brand affinity." },
-    { icon: BrandExperienceIcon, title: "Brand Experience", desc: "Defining the visual and verbal language of your brand's unique presence." },
-    { icon: InfluencerIcon, title: "Influencer & Content Strategy", desc: "Strategic partnerships and content that resonates with your target audience." },
-    { icon: CreativeDirectionIcon, title: "Creative Direction & Consulting", desc: "High-level vision and execution for your most ambitious projects." }
+  const serviceKeys = [
+    "creativeCampaigns",
+    "eventConcept",
+    "brandExperience",
+    "influencer",
+    "creativeDirection",
+  ] as const;
+
+  const serviceIcons = [
+    CreativeCampaignsIcon,
+    EventConceptIcon,
+    BrandExperienceIcon,
+    InfluencerIcon,
+    CreativeDirectionIcon,
   ];
 
   return (
     <section ref={sectionRef} className="py-32 bg-brand-bg overflow-hidden">
       <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="mb-20 text-center max-w-2xl mx-auto spec-title">
-          <h2 className="text-4xl font-serif text-brand-primary mb-6">Our Specialisms</h2>
-          <p className="text-brand-primary/70 font-light">Comprehensive solutions designed for those who value substance over spectacle.</p>
+          <h2 className="text-4xl font-serif text-brand-primary mb-6">{t("specialisms.title")}</h2>
+          <p className="text-brand-primary/70 font-light">{t("specialisms.subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
-          {services.map((service, idx) => (
-            <div 
-              key={idx} 
-              className={`spec-card ${idx < 2 ? 'md:col-span-3' : 'md:col-span-2'} bg-brand-surface-low p-12 flex flex-col justify-between group hover:bg-brand-secondary transition-all duration-500 cursor-pointer`}
-            >
-              <div>
-                <div className="spec-icon inline-block mb-8">
-                  <service.icon className="w-12 h-12 text-brand-secondary group-hover:text-white transition-colors" />
+          {serviceKeys.map((key, idx) => {
+            const Icon = serviceIcons[idx];
+            return (
+              <div 
+                key={key} 
+                className={`spec-card ${idx < 2 ? 'md:col-span-3' : 'md:col-span-2'} bg-brand-surface-low p-12 flex flex-col justify-between group hover:bg-brand-secondary transition-all duration-500`}
+              >
+                <div>
+                  <div className="spec-icon inline-block mb-8">
+                    <div className={isRTL ? "[transform:scaleX(-1)]" : ""}>
+                      <Icon className="w-12 h-12 text-brand-secondary group-hover:text-white transition-colors" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-serif mb-4 group-hover:text-white transition-colors">{t(`specialisms.services.${key}.title`)}</h3>
+                  <p className="text-brand-primary/70 group-hover:text-white/80 font-light transition-colors">{t(`specialisms.services.${key}.desc`)}</p>
                 </div>
-                <h3 className="text-2xl font-serif mb-4 group-hover:text-white transition-colors">{service.title}</h3>
-                <p className="text-brand-primary/70 group-hover:text-white/80 font-light transition-colors">{service.desc}</p>
               </div>
-              <div className="mt-12 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 transform translate-y-0 md:translate-y-2 md:group-hover:translate-y-0">
-                <a href="/work" className="text-brand-secondary group-hover:text-white transition-colors text-[0.6rem] tracking-widest uppercase flex items-center gap-2">
-                  Explore <ArrowRight className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -464,6 +497,7 @@ const Specialisms = () => {
 
 const CaseStudy = () => {
   const sectionRef = useRef(null);
+  const { t, isRTL, locale } = useLanguage();
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -478,7 +512,7 @@ const CaseStudy = () => {
       { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" }
     )
     .fromTo(".case-header-link",
-      { opacity: 0, x: -20 },
+      { opacity: 0, x: isRTL ? 20 : -20 },
       { opacity: 1, x: 0, duration: 0.6, ease: "power2.out" },
       "-=0.4"
     )
@@ -499,28 +533,28 @@ const CaseStudy = () => {
       <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0 mb-12 md:mb-16">
           <div className="case-header-content">
-            <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Case Study</span>
-            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">The Obsidian Gala</h2>
+            <span className={`${locale === "ar" ? "text-sm md:text-base tracking-[0.28em]" : "text-xs tracking-[0.4em]"} uppercase text-brand-secondary font-bold block mb-4`}>{t("caseStudy.label")}</span>
+            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">{t("caseStudy.title")}</h2>
           </div>
-          <a href="/work" className="case-header-link text-[0.6rem] tracking-widest uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap">
-            See All Projects
+          <a href="/work" className={`case-header-link ${locale === "ar" ? "text-[0.8rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap`}>
+            {t("caseStudy.seeAll")}
           </a>
         </div>
         <div className="relative group">
           <div className="case-media aspect-square sm:aspect-4/3 md:aspect-21/9 w-full bg-brand-dark overflow-hidden">
             <img 
-              src="https://picsum.photos/seed/gala/1600/800" 
-              alt="The Obsidian Gala" 
+              src="/cover.jpeg" 
+              alt="Besan Khalaily – Spring Launch" 
               className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[2s]"
               referrerPolicy="no-referrer"
             />
           </div>
-          <div className="case-content md:absolute relative md:bottom-0 md:right-0 p-8 md:p-12 bg-brand-surface-low md:bg-brand-bg w-[85%] sm:w-[75%] md:w-full md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0 mx-auto md:mx-0 border border-white/5 md:border-none">
-            <h4 className="text-xl sm:text-2xl font-serif mb-4">A study in contrast and intimacy.</h4>
-            <p className="text-brand-primary/70 font-sm md:font-light leading-relaxed mb-6">A private launch event for a luxury automotive brand, focusing on sensory immersion and architectural lighting.</p>
+          <div className={`case-content md:absolute relative md:bottom-0 ${isRTL ? "md:left-0" : "md:right-0"} p-8 md:p-12 bg-brand-surface-low md:bg-brand-bg w-[85%] sm:w-[75%] md:w-full md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0 mx-auto md:mx-0 border border-white/5 md:border-none`}>
+            <h4 className="text-xl sm:text-2xl font-serif mb-4">{t("caseStudy.cardTitle")}</h4>
+            <p className="text-brand-primary/70 font-sm md:font-light leading-relaxed mb-6">{t("caseStudy.cardDesc")}</p>
             <div className="flex flex-wrap gap-3">
-              <span className="text-[0.5rem] uppercase tracking-widest bg-brand-bg px-3 py-2 text-brand-secondary font-bold">Creative Direction</span>
-              <span className="text-[0.5rem] uppercase tracking-widest bg-brand-bg px-3 py-2 text-brand-secondary font-bold">Event Production</span>
+              <span className={`${locale === "ar" ? "text-[0.78rem] tracking-[0.18em] px-5 py-3" : "text-[0.5rem] tracking-widest px-3 py-2"} uppercase bg-brand-bg text-brand-secondary font-bold`}>{t("caseStudy.tag1")}</span>
+              <span className={`${locale === "ar" ? "text-[0.78rem] tracking-[0.18em] px-5 py-3" : "text-[0.5rem] tracking-widest px-3 py-2"} uppercase bg-brand-bg text-brand-secondary font-bold`}>{t("caseStudy.tag2")}</span>
             </div>
           </div>
         </div>
@@ -529,13 +563,29 @@ const CaseStudy = () => {
   );
 };
 
-const Workshops = () => {
+const WorkshopsHome = () => {
   const sectionRef = useRef(null);
-  const items = [
-    { date: "DEC 12", title: "The Art of Presence", desc: "Exploring spatial psychology and how environment shapes brand memory." },
-    { date: "JAN 08", title: "Tactile Strategy", desc: "Moving beyond digital: Why physical touch remains the ultimate marketing tool." },
-    { date: "FEB 20", title: "Minimalist Impact", desc: "How to create high-impact experiences using the power of restraint." }
-  ];
+  const { t, isRTL, locale } = useLanguage();
+
+  const items = locale === "ar"
+    ? (ar_workshops_items())
+    : (en_workshops_items());
+
+  function en_workshops_items() {
+    return [
+      { date: "DEC 12", title: "The Art of Presence", desc: "Exploring spatial psychology and how environment shapes brand memory." },
+      { date: "JAN 08", title: "Tactile Strategy", desc: "Moving beyond digital: Why physical touch remains the ultimate marketing tool." },
+      { date: "FEB 20", title: "Minimalist Impact", desc: "How to create high-impact experiences using the power of restraint." },
+    ];
+  }
+
+  function ar_workshops_items() {
+    return [
+      { date: "ديسمبر ١٢", title: "فن الحضور", desc: "استكشاف علم نفس المكان وكيف تشكّل البيئة ذاكرة العلامة التجارية." },
+      { date: "يناير ٠٨", title: "الاستراتيجية الملموسة", desc: "ما وراء الرقمية: لماذا يظل اللمس الفعلي أقوى أداة تسويقية." },
+      { date: "فبراير ٢٠", title: "التأثير البسيط", desc: "كيف تصنع تجارب عالية التأثير باستخدام قوة ضبط النفس." },
+    ];
+  }
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -560,8 +610,8 @@ const Workshops = () => {
     <section id="workshops" ref={sectionRef} className="py-32 bg-brand-bg">
       <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="workshops-header mb-16">
-          <h2 className="text-4xl font-serif text-brand-primary mb-2">Upcoming Workshops</h2>
-          <p className="text-brand-primary/70 font-light">Join us for intimate Sessions exploring the art of the 'Athr'.</p>
+          <h2 className="text-4xl font-serif text-brand-primary mb-2">{t("workshops.title")}</h2>
+          <p className="text-brand-primary/70 font-light">{t("workshops.subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {items.map((item, idx) => (
@@ -573,14 +623,14 @@ const Workshops = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 text-[0.6rem] uppercase tracking-widest font-bold text-brand-secondary">
+                <div className={`absolute top-4 ${isRTL ? "left-4" : "right-4"} bg-white/90 px-3 py-1 text-[0.6rem] uppercase tracking-widest font-bold text-brand-secondary`}>
                   {item.date}
                 </div>
               </div>
               <h3 className="text-xl font-serif text-brand-primary mb-2">{item.title}</h3>
               <p className="text-brand-primary/70 font-light text-sm leading-relaxed mb-4">{item.desc}</p>
-              <span className="text-[0.6rem] tracking-widest uppercase font-bold text-brand-secondary border-b border-brand-secondary/20 pb-1 group-hover:border-brand-secondary transition-all">
-                Register
+              <span className={`${locale === "ar" ? "text-[0.82rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-bold text-brand-secondary border-b border-brand-secondary/20 pb-1 group-hover:border-brand-secondary transition-all`}>
+                {t("workshops.register")}
               </span>
             </a>
           ))}
@@ -592,41 +642,45 @@ const Workshops = () => {
 
 const CTA = () => null;
 
-const Product = () => (
-  <section className="py-32 bg-brand-surface-high">
-    <div className="max-w-360 mx-auto px-6 md:px-12">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-        <div className="lg:col-span-5 order-2 lg:order-1">
-          <div className="max-w-md">
-            <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">Limited Edition</span>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-primary mb-4 leading-tight whitespace-nowrap">The Athr Planner</h2>
-            <p className="text-lg font-serif italic text-brand-primary/70 mb-6">Plan, create, leave an Athr</p>
-            <p className="text-brand-primary/80 font-light leading-relaxed mb-12">
-              Designed for the visionary mind, this physical companion bridges the gap between ambitious ideation and tactile execution. A signature piece of our methodology, now available for your personal ritual.
-            </p>
-            <a href="/contact#contact-form" className="inline-block bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all editorial-shadow">
-              Explore the Planner
-            </a>
-          </div>
-        </div>
-        <div className="lg:col-span-7 order-1 lg:order-2">
-          <div className="relative group">
-            <div className="aspect-square bg-brand-surface-low overflow-hidden editorial-shadow">
-              <img 
-                src="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=1000&q=80" 
-                alt="The Athr Planner" 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
-                referrerPolicy="no-referrer"
-              />
+const Product = () => {
+  const { t, isRTL } = useLanguage();
+
+  return (
+    <section className="py-32 bg-brand-surface-high">
+      <div className="max-w-360 mx-auto px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          <div className={`lg:col-span-5 ${isRTL ? "order-2 lg:order-2" : "order-2 lg:order-1"}`}>
+            <div className="max-w-md">
+              <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">{t("product.label")}</span>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-primary mb-4 leading-tight whitespace-nowrap">{t("product.title")}</h2>
+              <p className="text-lg font-serif italic text-brand-primary/70 mb-6">{t("product.tagline")}</p>
+              <p className="text-brand-primary/80 font-light leading-relaxed mb-12">
+                {t("product.desc")}
+              </p>
+              <a href="/contact#contact-form" className="inline-block bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all editorial-shadow">
+                {t("product.cta")}
+              </a>
             </div>
-            <div className="absolute -top-6 -right-6 w-32 h-32 border border-brand-secondary/10 hidden md:block"></div>
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 border border-brand-secondary/10 hidden md:block"></div>
+          </div>
+          <div className={`lg:col-span-7 ${isRTL ? "order-1 lg:order-1" : "order-1 lg:order-2"}`}>
+            <div className="relative group">
+              <div className="aspect-square bg-brand-surface-low overflow-hidden editorial-shadow">
+                <img 
+                  src="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=1000&q=80" 
+                  alt="The Athr Planner" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className={`absolute -top-6 ${isRTL ? "-left-6" : "-right-6"} w-32 h-32 border border-brand-secondary/10 hidden md:block`}></div>
+              <div className={`absolute -bottom-6 ${isRTL ? "-right-6" : "-left-6"} w-32 h-32 border border-brand-secondary/10 hidden md:block`}></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 function HomePage() {
   return (
@@ -636,7 +690,7 @@ function HomePage() {
       <About />
       <Specialisms />
       <CaseStudy />
-      <Workshops />
+      <WorkshopsHome />
       <CTA />
       <Product />
       <SharedFooter />

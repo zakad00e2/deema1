@@ -1,10 +1,11 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,300&family=Manrope:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,300&family=Manrope:wght@200;300;400;500;600&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-serif: "Noto Serif", serif;
   --font-sans: "Manrope", sans-serif;
-  
+  --font-arabic: "IBM Plex Sans Arabic", sans-serif;
+
   --color-brand-bg: #fdf9f2;
   --color-brand-primary: #605b55;
   --color-brand-secondary: #745940;
@@ -18,13 +19,49 @@
   body {
     @apply bg-brand-bg text-brand-dark font-sans;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif;
   }
 
   a, button, [role="button"] {
     @apply cursor-pointer;
+  }
+
+  [dir="rtl"] body,
+  [dir="rtl"] {
+    font-family: "IBM Plex Sans Arabic", sans-serif !important;
+    font-weight: 500;
+  }
+
+  [dir="rtl"] * {
+    font-family: "IBM Plex Sans Arabic", sans-serif !important;
+  }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    font-family: "IBM Plex Sans Arabic", sans-serif !important;
+    font-weight: 600;
+  }
+
+  [dir="rtl"] .font-light {
+    font-weight: 400 !important;
+  }
+
+  [dir="rtl"] .font-normal {
+    font-weight: 500 !important;
+  }
+
+  [dir="rtl"] .font-medium {
+    font-weight: 500 !important;
+  }
+
+  [dir="rtl"] .font-semibold {
+    font-weight: 600 !important;
   }
 }
 
@@ -45,4 +82,76 @@
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #d4d4d4;
+}
+
+/* RTL layout adaptations */
+[dir="rtl"] .space-x-12 > :not(:last-child) {
+  margin-right: 0;
+  margin-left: 3rem;
+}
+[dir="rtl"] .space-x-8 > :not(:last-child) {
+  margin-right: 0;
+  margin-left: 2rem;
+}
+
+[dir="rtl"] .tracking-widest {
+  letter-spacing: 0.05em;
+}
+
+[dir="rtl"] .tracking-tight {
+  letter-spacing: 0;
+}
+
+[dir="rtl"] .tracking-tighter {
+  letter-spacing: 0;
+}
+
+[dir="rtl"] .tracking-\[0\.4em\] {
+  letter-spacing: 0.1em;
+}
+
+[dir="rtl"] .tracking-\[0\.3em\] {
+  letter-spacing: 0.08em;
+}
+
+[dir="rtl"] .tracking-\[0\.2em\] {
+  letter-spacing: 0.05em;
+}
+
+[dir="rtl"] .tracking-\[0\.28em\] {
+  letter-spacing: 0.06em;
+}
+
+[dir="rtl"] .tracking-\[0\.24em\] {
+  letter-spacing: 0.05em;
+}
+
+/* Mixed-direction content: keep LTR for emails, phones, URLs */
+[dir="rtl"] a[href^="mailto:"],
+[dir="rtl"] a[href^="tel:"],
+[dir="rtl"] .ltr-content {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* Language switcher */
+.lang-switch {
+  transition: all 0.3s ease;
+}
+.lang-switch:hover {
+  opacity: 0.8;
+}
+
+[dir="rtl"] a.bg-brand-secondary.text-xs,
+[dir="rtl"] button.bg-brand-secondary.text-xs,
+[dir="rtl"] a.text-brand-secondary.text-xs,
+[dir="rtl"] button.text-brand-secondary.text-xs {
+  font-size: 0.85rem;
+}
+
+[dir="rtl"] a.bg-brand-secondary.text-sm,
+[dir="rtl"] button.bg-brand-secondary.text-sm,
+[dir="rtl"] a.text-brand-secondary.text-sm,
+[dir="rtl"] button.text-brand-secondary.text-sm {
+  font-size: 0.95rem;
 }

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, ArrowLeft, Menu, X } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SharedFooter from "./SharedFooter";
-import { categoryLabel, filters, projects, type FilterValue, type Project } from "./workData";
+import { filters, projects, type FilterValue, type Project } from "./workData";
+import { useLanguage } from "./i18n/LanguageContext";
+import { LanguageSwitcher } from "./App";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -15,6 +17,7 @@ export function WorksNavbar({
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t, isRTL } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,26 +39,28 @@ export function WorksNavbar({
     >
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-14" />
+          <a href="/" aria-label="Go to home page">
+            <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-14" />
+          </a>
         </div>
-        <div className="hidden md:flex items-center space-x-12 font-serif text-base tracking-tight">
+        <div className={`hidden md:flex items-center ${isRTL ? "gap-12" : "space-x-12"} font-serif text-base tracking-tight`}>
           <a
             href="/"
             className={active === "home" ? "text-brand-dark border-b border-brand-secondary pb-1" : "text-brand-primary hover:text-brand-secondary transition-colors"}
           >
-            Home
+            {t("nav.home")}
           </a>
           <a
             href="/work"
             className={active === "work" ? "text-brand-dark border-b border-brand-secondary pb-1" : "text-brand-primary hover:text-brand-secondary transition-colors"}
           >
-            Portfolio
+            {t("nav.portfolio")}
           </a>
           <a
             href="/workshops"
             className={active === "workshops" ? "text-brand-dark border-b border-brand-secondary pb-1" : "text-brand-primary hover:text-brand-secondary transition-colors"}
           >
-            Workshops
+            {t("nav.workshops")}
           </a>
           <a
             href="/contact"
@@ -65,19 +70,20 @@ export function WorksNavbar({
                 : "text-brand-primary hover:text-brand-secondary transition-colors"
             }
           >
-            Contact
+            {t("nav.contact")}
           </a>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 md:gap-6">
+          <LanguageSwitcher className="hidden md:flex" />
           <a
             href="/contact#contact-form"
             className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden"
           >
-            <span className="relative z-10">Let's Talk</span>
+            <span className="relative z-10">{t("nav.letsTalk")}</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img
                 src="/athr.png"
-                alt="Hover Effect"
+                alt=""
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
               />
             </div>
@@ -90,12 +96,14 @@ export function WorksNavbar({
       </div>
 
       <div
-        className={`fixed top-0 left-0 w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${
+        className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${
           isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
         <div className="flex justify-between items-center mb-16">
-          <img src="/logo.png" alt="Athr Logo" className="h-12" />
+          <a href="/" aria-label="Go to home page" onClick={() => setIsMobileMenuOpen(false)}>
+            <img src="/logo.png" alt="Athr Logo" className="h-12" />
+          </a>
           <X
             className="text-brand-secondary w-8 h-8 cursor-pointer hover:rotate-90 transition-transform"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -103,32 +111,33 @@ export function WorksNavbar({
         </div>
         <div className="flex flex-col space-y-8 font-serif text-2xl text-center flex-grow justify-center pb-20">
           <a href="/" className={active === "home" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"} onClick={() => setIsMobileMenuOpen(false)}>
-            Home
+            {t("nav.home")}
           </a>
           <a href="/work" className={active === "work" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"} onClick={() => setIsMobileMenuOpen(false)}>
-            Portfolio
+            {t("nav.portfolio")}
           </a>
           <a href="/workshops" className={active === "workshops" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"} onClick={() => setIsMobileMenuOpen(false)}>
-            Workshops
+            {t("nav.workshops")}
           </a>
           <a
             href="/contact"
             className={active === "contact" ? "text-brand-dark" : "text-brand-primary hover:text-brand-secondary transition-colors"}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Contact
+            {t("nav.contact")}
           </a>
+          <LanguageSwitcher className="justify-center text-lg" />
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
           <a
             href="/contact#contact-form"
             className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center"
           >
-            <span className="relative z-10">Let's Talk</span>
+            <span className="relative z-10">{t("nav.letsTalk")}</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img
                 src="/athr.png"
-                alt="Hover Effect"
+                alt=""
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
               />
             </div>
@@ -140,6 +149,12 @@ export function WorksNavbar({
 }
 
 function ProjectCard({ project }: { project: Project }) {
+  const { t, isRTL } = useLanguage();
+  const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
+  const categoryLabelText = t(`works.categoryLabels.${project.category}`);
+  const projectTitle = t(`projects.${project.slug}.title`);
+  const projectDesc = t(`projects.${project.slug}.description`);
+
   return (
     <article className="group h-full flex flex-col cursor-pointer">
       <a href={`/work/${project.slug}`} className="block relative">
@@ -149,31 +164,31 @@ function ProjectCard({ project }: { project: Project }) {
               className={`h-full w-full object-cover transition-all duration-[1.5s] ease-in-out group-hover:scale-105 ${
                 project.grayscale ? "grayscale group-hover:grayscale-0" : ""
               }`}
-              alt={project.title}
+              alt={projectTitle}
               src={project.image}
               referrerPolicy="no-referrer"
             />
           </div>
           <div
-            className={`absolute left-6 top-6 bg-white px-4 py-1 text-[10px] uppercase tracking-[0.2em] text-brand-secondary ${
+            className={`absolute ${isRTL ? "right-6" : "left-6"} top-6 bg-white px-4 py-1 text-[10px] uppercase tracking-[0.2em] text-brand-secondary ${
               project.badgeClassName ?? "text-brand-secondary"
             }`}
           >
-            {categoryLabel[project.category]}
+            {categoryLabelText}
           </div>
         </div>
       </a>
 
       <div className="flex flex-col gap-4">
         <div>
-          <h3 className="mb-3 font-serif text-3xl text-brand-dark md:text-4xl">{project.title}</h3>
-          <p className="max-w-xl text-sm font-light leading-relaxed text-brand-primary/90">{project.description}</p>
+          <h3 className="mb-3 font-serif text-3xl text-brand-dark md:text-4xl">{projectTitle}</h3>
+          <p className="max-w-xl text-sm font-light leading-relaxed text-brand-primary/90">{projectDesc}</p>
         </div>
 
         {project.notes?.[0] && (
           <div className="flex items-center gap-3 pt-1 text-[10px] uppercase tracking-[0.24em] text-brand-secondary">
             <span className="h-px w-8 bg-brand-secondary/35" />
-            <span>{project.notes[0]}</span>
+            <span>{t(`projects.${project.slug}.notes`) !== `projects.${project.slug}.notes` ? t(`projects.${project.slug}.notes`).split(", ")[0] : project.notes[0]}</span>
           </div>
         )}
 
@@ -181,8 +196,8 @@ function ProjectCard({ project }: { project: Project }) {
           href={`/work/${project.slug}`}
           className="inline-flex items-center gap-2 pt-1 text-xs font-medium uppercase tracking-widest text-brand-secondary"
         >
-          View Study
-          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          {t("works.viewStudy")}
+          <ArrowIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </a>
       </div>
     </article>
@@ -192,21 +207,27 @@ function ProjectCard({ project }: { project: Project }) {
 export default function WorksPage() {
   const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t, isRTL, locale } = useLanguage();
 
   const visibleProjects =
     activeFilter === "all"
       ? projects
       : projects.filter((project) => project.category === activeFilter);
 
+  const filterLabels: Record<FilterValue, string> = {
+    all: t("works.filters.all"),
+    executed: t("works.filters.executed"),
+    reimagined: t("works.filters.reimagined"),
+    conceptual: t("works.filters.conceptual"),
+  };
+
   useGSAP(() => {
-    // Framer-style Header animations
     gsap.fromTo(
       ".works-header-element",
       { y: 80, opacity: 0 },
       { y: 0, opacity: 1, duration: 1.8, stagger: 0.15, ease: "expo.out" }
     );
 
-    // Filters animation
     gsap.fromTo(
       ".works-filter",
       { y: 30, opacity: 0 },
@@ -215,7 +236,6 @@ export default function WorksPage() {
   }, { scope: containerRef });
 
   useGSAP(() => {
-    // Framer-style Projects animation on scroll/filter change
     const cards = gsap.utils.toArray(".project-card");
     cards.forEach((card: any) => {
       gsap.fromTo(
@@ -243,10 +263,10 @@ export default function WorksPage() {
       <main className="pb-24 pt-32">
         <header className="mb-16 px-6 md:px-12">
           <div className="mx-auto max-w-[1920px]">
-            <p className="works-header-element mb-6 text-sm uppercase tracking-[0.3em] text-brand-secondary">Our Portfolio</p>
+            <p className="works-header-element mb-6 text-sm uppercase tracking-[0.3em] text-brand-secondary">{t("works.label")}</p>
             <h1 className="works-header-element max-w-4xl font-serif text-6xl leading-tight tracking-[-0.02em] text-brand-dark md:text-8xl">
-              Selected <br />
-              <span className="font-light italic text-brand-primary">Works.</span>
+              {t("works.titleLine1")} <br />
+              <span className={locale === "ar" ? "text-brand-dark" : "font-light italic text-brand-primary"}>{t("works.titleLine2")}</span>
             </h1>
           </div>
         </header>
@@ -260,13 +280,13 @@ export default function WorksPage() {
                   key={filter.value}
                   type="button"
                   onClick={() => setActiveFilter(filter.value)}
-                  className={`works-filter -mb-[1.65rem] border-b-2 pb-6 text-[9.5px] min-[375px]:text-[10.5px] sm:text-xs md:text-xs uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${
+                  className={`works-filter -mb-[1.65rem] border-b-2 pb-6 ${isRTL ? "text-[11px] min-[375px]:text-xs sm:text-sm md:text-sm" : "text-[9.5px] min-[375px]:text-[10.5px] sm:text-xs md:text-xs"} uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${
                     isActive
                       ? "border-brand-secondary text-brand-dark"
                       : "border-transparent text-brand-primary hover:text-brand-dark"
                   }`}
                 >
-                  {filter.label}
+                  {filterLabels[filter.value]}
                 </button>
               );
             })}
