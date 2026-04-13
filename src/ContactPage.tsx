@@ -15,6 +15,20 @@ export default function ContactPage() {
   const infoRef = useRef<HTMLDivElement>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const { t, isRTL, locale } = useLanguage();
+  const contactHeroTitleClass =
+    locale === "ar"
+      ? "font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tighter text-brand-dark mb-8"
+      : "contact-hero-line font-serif text-5xl leading-[1.05] tracking-[-0.04em] text-brand-primary md:text-7xl lg:text-[5.5rem]";
+  const contactHeroLineWrapClass =
+    locale === "ar" ? "overflow-hidden py-2 -my-2" : "overflow-hidden";
+  const contactHeroHighlightClass =
+    locale === "ar"
+      ? "text-brand-dark"
+      : "font-light italic text-brand-secondary";
+  const fieldLabelBaseClass =
+    locale === "ar"
+      ? "mb-2 block text-[0.9rem] font-semibold tracking-[0.08em] transition-colors duration-300"
+      : "mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.28em] transition-colors duration-300";
 
   useGSAP(
     () => {
@@ -96,19 +110,33 @@ export default function ContactPage() {
       >
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <div className="max-w-4xl">
-            <div className="overflow-hidden">
-              <h1 className="contact-hero-line font-serif text-5xl leading-[1.05] tracking-[-0.04em] text-brand-primary md:text-7xl lg:text-[5.5rem]">
-                {t("contact.heroLine1")}
-              </h1>
-            </div>
-            <div className="overflow-hidden">
-              <h1 className="contact-hero-line font-serif text-5xl leading-[1.05] tracking-[-0.04em] text-brand-primary md:text-7xl lg:text-[5.5rem]">
-                {t("contact.heroLine2")}{" "}
-                <span className="font-light italic text-brand-secondary">
-                  {t("contact.heroLine2Highlight")}
+            {locale === "ar" ? (
+              <h1 className={contactHeroTitleClass}>
+                <span className="contact-hero-line block">{t("contact.heroLine1")}</span>
+                <span className="contact-hero-line block">
+                  {t("contact.heroLine2")}{" "}
+                  <span className={contactHeroHighlightClass}>
+                    {t("contact.heroLine2Highlight")}
+                  </span>
                 </span>
               </h1>
-            </div>
+            ) : (
+              <>
+                <div className={contactHeroLineWrapClass}>
+                  <h1 className={contactHeroTitleClass}>
+                    {t("contact.heroLine1")}
+                  </h1>
+                </div>
+                <div className={contactHeroLineWrapClass}>
+                  <h1 className={contactHeroTitleClass}>
+                    {t("contact.heroLine2")}{" "}
+                    <span className={contactHeroHighlightClass}>
+                      {t("contact.heroLine2Highlight")}
+                    </span>
+                  </h1>
+                </div>
+              </>
+            )}
             <p className="contact-hero-sub mt-8 max-w-xl text-lg leading-relaxed text-brand-primary/70 md:text-xl">
               {t("contact.heroSub")}
             </p>
@@ -149,7 +177,7 @@ export default function ContactPage() {
                     <div className="relative">
                       <label
                         htmlFor="contact-name"
-                        className={`mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.28em] transition-colors duration-300 ${focusedField === "name" ? "text-brand-secondary" : "text-brand-primary/50"}`}
+                        className={`${fieldLabelBaseClass} ${focusedField === "name" ? "text-brand-secondary" : locale === "ar" ? "text-brand-dark" : "text-brand-primary/50"}`}
                       >
                         {t("contact.nameLabel")}
                       </label>
@@ -165,7 +193,7 @@ export default function ContactPage() {
                     <div className="relative">
                       <label
                         htmlFor="contact-email"
-                        className={`mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.28em] transition-colors duration-300 ${focusedField === "email" ? "text-brand-secondary" : "text-brand-primary/50"}`}
+                        className={`${fieldLabelBaseClass} ${focusedField === "email" ? "text-brand-secondary" : locale === "ar" ? "text-brand-dark" : "text-brand-primary/50"}`}
                       >
                         {t("contact.emailLabel")}
                       </label>
@@ -184,7 +212,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="contact-interest"
-                      className={`mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.28em] transition-colors duration-300 ${focusedField === "interest" ? "text-brand-secondary" : "text-brand-primary/50"}`}
+                      className={`${fieldLabelBaseClass} ${focusedField === "interest" ? "text-brand-secondary" : locale === "ar" ? "text-brand-dark" : "text-brand-primary/50"}`}
                     >
                       {t("contact.interestLabel")}
                     </label>
@@ -204,7 +232,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="contact-message"
-                      className={`mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.28em] transition-colors duration-300 ${focusedField === "message" ? "text-brand-secondary" : "text-brand-primary/50"}`}
+                      className={`${fieldLabelBaseClass} ${focusedField === "message" ? "text-brand-secondary" : locale === "ar" ? "text-brand-dark" : "text-brand-primary/50"}`}
                     >
                       {t("contact.messageLabel")}
                     </label>
@@ -224,7 +252,9 @@ export default function ContactPage() {
                       className="group relative inline-flex items-center gap-3 overflow-hidden bg-brand-secondary px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-dark active:scale-[0.98]"
                     >
                       <span className="relative z-10">{t("contact.sendButton")}</span>
-                      <Send className={`relative z-10 h-3.5 w-3.5 transition-transform duration-300 ${isRTL ? "rotate-180 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5"}`} />
+                      <span className={`relative z-10 ${isRTL ? "[transform:scaleX(-1)]" : ""}`}>
+                        <Send className={`h-3.5 w-3.5 transition-transform duration-300 ${isRTL ? "group-hover:translate-x-0.5 group-hover:-translate-y-0.5" : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5"}`} />
+                      </span>
                     </button>
                     <span className="hidden text-xs text-brand-primary/40 md:block">
                       {t("contact.replyNote")}

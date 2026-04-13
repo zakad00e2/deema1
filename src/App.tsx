@@ -8,6 +8,7 @@ import WorkshopsPage from "./WorkshopsPage";
 import ContactPage from "./ContactPage";
 import SharedFooter from "./SharedFooter";
 import { useLanguage } from "./i18n/LanguageContext";
+import { getBrandLogoSrc } from "./brandLogo";
 import { 
   ArrowRight,
   ArrowLeft,
@@ -37,6 +38,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t, isRTL, locale } = useLanguage();
+  const brandLogoSrc = getBrandLogoSrc(locale);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +53,7 @@ const Navbar = () => {
       <div className="max-w-360 mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <a href="/" aria-label="Go to home page">
-            <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-14" />
+            <img src={brandLogoSrc} alt="Athr Logo" className="h-12 md:h-14" />
           </a>
         </div>
         <div className={`hidden md:flex items-center ${isRTL ? "gap-12" : "space-x-12"} font-serif text-base tracking-tight`}>
@@ -83,7 +85,7 @@ const Navbar = () => {
       <div className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between items-center mb-16">
           <a href="/" aria-label="Go to home page" onClick={() => setIsMobileMenuOpen(false)}>
-            <img src="/logo.png" alt="Athr Logo" className="h-12" />
+            <img src={brandLogoSrc} alt="Athr Logo" className="h-12" />
           </a>
           <X 
             className="text-brand-secondary w-8 h-8 cursor-pointer hover:rotate-90 transition-transform" 

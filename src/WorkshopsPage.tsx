@@ -167,12 +167,6 @@ export default function WorkshopsPage() {
           "-=0.85"
         )
         .fromTo(
-          ".ws-featured-badge",
-          { opacity: 0, y: 28, scale: 0.92 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: "power2.out" },
-          "-=0.7"
-        )
-        .fromTo(
           ".ws-featured-content > *",
           { opacity: 0, y: 28 },
           { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" },
@@ -320,8 +314,8 @@ export default function WorkshopsPage() {
         {/* Featured: Content That Converts */}
         <section className="ws-featured py-24 md:py-32 bg-brand-surface-low overflow-hidden">
           <div className="max-w-[100rem] mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] gap-16 lg:gap-20 items-center">
-              <div className={`relative ${isRTL ? "order-2 lg:order-2" : "order-2 lg:order-1"}`}>
+            <div className={`grid grid-cols-1 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] ${locale === "ar" ? "gap-10 lg:gap-12" : "gap-16 lg:gap-20"} items-center`}>
+              <div className="relative order-2 lg:order-1">
                 <div className="ws-featured-img aspect-4/5 bg-brand-surface-mid overflow-hidden editorial-shadow">
                   <img
                     src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80"
@@ -330,19 +324,13 @@ export default function WorkshopsPage() {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <div className={`ws-featured-badge absolute -bottom-8 ${isRTL ? "-left-8" : "-right-8"} hidden md:block bg-white/40 backdrop-blur-md p-8 editorial-shadow border border-white/20 w-56`}>
-                  <p className="text-[0.6rem] uppercase tracking-[0.3em] text-brand-secondary font-bold mb-2">
-                    {t("workshopsPage.durationLabel")}
-                  </p>
-                  <p className="text-sm font-serif leading-tight italic pb-12">
-                    {t("workshopsPage.durationText")}
-                  </p>
-                </div>
                 <div className={`ws-featured-frame absolute -top-6 ${isRTL ? "-right-6" : "-left-6"} w-32 h-32 border border-brand-secondary/10 hidden md:block`} />
               </div>
 
-              <div className={`ws-featured-content ${isRTL ? "order-1 lg:order-1" : "order-1 lg:order-2"} w-full lg:max-w-[56rem]`}>
-                <span className="text-[0.6rem] uppercase tracking-widest bg-brand-secondary text-white px-4 py-2 font-bold inline-block mb-8">
+              <div className="ws-featured-content order-1 lg:order-2 w-full lg:max-w-[56rem]">
+                <span className={locale === "ar"
+                  ? "ws-group-copy inline-block mb-8 text-[0.78rem] uppercase tracking-[0.16em] bg-brand-surface-mid px-5 py-3 text-brand-secondary font-bold"
+                  : "inline-block mb-8 text-[0.6rem] uppercase tracking-widest bg-brand-secondary px-4 py-2 text-white font-bold"}>
                   {t("workshopsPage.featuredBadge")}
                 </span>
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-brand-primary mb-6 leading-tight">
@@ -426,7 +414,9 @@ export default function WorkshopsPage() {
                     </div>
                   </div>
 
-                  <span className="ws-group-copy text-[0.5rem] uppercase tracking-widest bg-brand-surface-mid px-3 py-2 text-brand-secondary font-bold">
+                  <span className={locale === "ar"
+                    ? "ws-group-copy text-[0.68rem] uppercase tracking-[0.18em] bg-brand-surface-mid px-4 py-2.5 text-brand-secondary font-bold"
+                    : "ws-group-copy text-[0.5rem] uppercase tracking-widest bg-brand-surface-mid px-3 py-2 text-brand-secondary font-bold"}>
                     {t("workshopsPage.groupWorkshopBadge")}
                   </span>
 

@@ -1,17 +1,19 @@
 import { Instagram, Linkedin } from "lucide-react";
 import { useLanguage } from "./i18n/LanguageContext";
+import { getBrandLogoSrc } from "./brandLogo";
 
 export default function SharedFooter() {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, locale } = useLanguage();
+  const brandLogoSrc = getBrandLogoSrc(locale);
 
   const addressLines = t("footer.address").split("\n");
 
   return (
-    <footer id="contact" className="border-t border-white/8 bg-brand-dark py-24">
+    <footer id="contact" className="border-t border-white/8 bg-brand-dark pt-24 pb-8">
       <div className="mx-auto grid max-w-360 gap-12 px-6 md:px-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)]">
         <div className="max-w-sm">
           <a href="/" aria-label="Go to home page" className="inline-block">
-            <img src="/logo.png" alt="Athr Logo" className="mb-6 h-12 md:h-16" />
+            <img src={brandLogoSrc} alt="Athr Logo" className="mb-6 h-12 md:h-16" />
           </a>
           <p className="mb-8 text-sm font-light leading-relaxed text-white/62">
             {t("footer.tagline")}
@@ -45,11 +47,11 @@ export default function SharedFooter() {
 
           <div className="flex flex-col gap-6">
             <p className="text-[0.6rem] font-bold uppercase tracking-widest text-brand-secondary">{t("footer.contactLabel")}</p>
-            <div className="flex flex-col gap-2">
-              <a href="mailto:hello@athr.studio" className="ltr-content text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary">
+            <div className={`flex w-full flex-col gap-2 ${isRTL ? "items-end" : "items-start"}`}>
+              <a href="mailto:hello@athr.studio" className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-right" : "text-left"}`}>
                 hello@athr.studio
               </a>
-              <a href="tel:+97143411367" className="ltr-content text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary">
+              <a href="tel:+97143411367" className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-right" : "text-left"}`}>
                 +971 (0) 4 341 1367
               </a>
             </div>
@@ -65,9 +67,11 @@ export default function SharedFooter() {
         </div>
       </div>
 
-      <div className="mx-auto mt-24 flex max-w-360 justify-between px-6 text-[0.5rem] uppercase tracking-[0.4em] text-white/28 md:px-12">
-        <p>{t("footer.copyright")}</p>
-        <p>{t("footer.designedWith")}</p>
+      <div className="mt-24 w-full border-t border-white/5" />
+      <div className="mx-auto mt-8 max-w-360 px-6 md:px-12">
+        <div className="flex justify-center text-center text-[0.62rem] uppercase tracking-[0.35em] text-white/28 md:text-[0.72rem]">
+          <p className={isRTL ? "text-[0.7rem] md:text-[0.8rem]" : undefined}>{t("footer.copyright")}</p>
+        </div>
       </div>
     </footer>
   );

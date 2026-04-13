@@ -7,6 +7,7 @@ import SharedFooter from "./SharedFooter";
 import { filters, projects, type FilterValue, type Project } from "./workData";
 import { useLanguage } from "./i18n/LanguageContext";
 import { LanguageSwitcher } from "./App";
+import { getBrandLogoSrc } from "./brandLogo";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -17,7 +18,8 @@ export function WorksNavbar({
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, locale } = useLanguage();
+  const brandLogoSrc = getBrandLogoSrc(locale);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,7 +42,7 @@ export function WorksNavbar({
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
         <div className="flex items-center">
           <a href="/" aria-label="Go to home page">
-            <img src="/logo.png" alt="Athr Logo" className="h-12 md:h-14" />
+            <img src={brandLogoSrc} alt="Athr Logo" className="h-12 md:h-14" />
           </a>
         </div>
         <div className={`hidden md:flex items-center ${isRTL ? "gap-12" : "space-x-12"} font-serif text-base tracking-tight`}>
@@ -102,7 +104,7 @@ export function WorksNavbar({
       >
         <div className="flex justify-between items-center mb-16">
           <a href="/" aria-label="Go to home page" onClick={() => setIsMobileMenuOpen(false)}>
-            <img src="/logo.png" alt="Athr Logo" className="h-12" />
+            <img src={brandLogoSrc} alt="Athr Logo" className="h-12" />
           </a>
           <X
             className="text-brand-secondary w-8 h-8 cursor-pointer hover:rotate-90 transition-transform"

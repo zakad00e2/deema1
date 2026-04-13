@@ -94,36 +94,30 @@
   margin-left: 2rem;
 }
 
-[dir="rtl"] .tracking-widest {
-  letter-spacing: 0.05em;
-}
-
-[dir="rtl"] .tracking-tight {
-  letter-spacing: 0;
-}
-
-[dir="rtl"] .tracking-tighter {
-  letter-spacing: 0;
-}
-
-[dir="rtl"] .tracking-\[0\.4em\] {
-  letter-spacing: 0.1em;
-}
-
-[dir="rtl"] .tracking-\[0\.3em\] {
-  letter-spacing: 0.08em;
-}
-
-[dir="rtl"] .tracking-\[0\.2em\] {
-  letter-spacing: 0.05em;
-}
-
-[dir="rtl"] .tracking-\[0\.28em\] {
-  letter-spacing: 0.06em;
-}
-
-[dir="rtl"] .tracking-\[0\.24em\] {
-  letter-spacing: 0.05em;
+[dir="rtl"] :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  a,
+  button,
+  label,
+  li,
+  dt,
+  dd,
+  blockquote,
+  input,
+  textarea,
+  select,
+  option
+):not(.ltr-content):not(a[href^="mailto:"]):not(a[href^="tel:"]) {
+  letter-spacing: 0 !important;
+  word-spacing: normal;
+  font-kerning: normal;
 }
 
 /* Mixed-direction content: keep LTR for emails, phones, URLs */
