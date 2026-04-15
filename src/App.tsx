@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import AdminApp from "./admin/AdminApp";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -191,7 +192,7 @@ const Hero = () => {
             <img 
               src="/hero-img.png" 
               alt="Creative team collaboration" 
-              className="w-full h-auto object-contain drop-shadow-2xl"
+              className="w-full max-w-[440px] md:max-w-[580px] lg:max-w-[700px] h-auto max-h-[320px] md:max-h-[420px] lg:max-h-[480px] object-contain drop-shadow-2xl mx-auto"
             />
           </div>
         </div>
@@ -555,8 +556,11 @@ const CaseStudy = () => {
             <h4 className="text-xl sm:text-2xl font-serif mb-4">{t("caseStudy.cardTitle")}</h4>
             <p className="text-brand-primary/70 font-sm md:font-light leading-relaxed mb-6">{t("caseStudy.cardDesc")}</p>
             <div className="flex flex-wrap gap-3">
-              <span className={`${locale === "ar" ? "text-[0.78rem] tracking-[0.18em] px-5 py-3" : "text-[0.5rem] tracking-widest px-3 py-2"} uppercase bg-brand-bg text-brand-secondary font-bold`}>{t("caseStudy.tag1")}</span>
-              <span className={`${locale === "ar" ? "text-[0.78rem] tracking-[0.18em] px-5 py-3" : "text-[0.5rem] tracking-widest px-3 py-2"} uppercase bg-brand-bg text-brand-secondary font-bold`}>{t("caseStudy.tag2")}</span>
+              {[t("caseStudy.tag1"), t("caseStudy.tag2")].map((tag) => (
+                <span key={tag} className={`${locale === "ar" ? "text-[0.78rem] tracking-[0.18em] px-5 py-3" : "text-[0.5rem] tracking-widest px-3 py-2"} uppercase bg-brand-bg text-brand-secondary font-bold`}>
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
         </div>
@@ -702,6 +706,12 @@ function HomePage() {
 
 export default function App() {
   const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+
+  // ── Admin Dashboard ──────────────────────────────────────────────────────────
+  if (pathname.startsWith("/admin")) {
+    return <AdminApp />;
+  }
+
   const isWorksPage = pathname === "/work";
   const isWorkshopsPage = pathname === "/workshops";
   const isContactPage = pathname === "/contact";

@@ -339,6 +339,102 @@ export const categoryLabel: Record<ProjectCategory, string> = {
   conceptual: "Conceptual",
 };
 
-export function getProjectBySlug(slug: string) {
+export function getProjectBySlug(slug: string): Project | undefined {
+  try {
+    const raw = localStorage.getItem("admin_portfolio_v1");
+    if (raw) {
+      const items = JSON.parse(raw) as Array<any>;
+      const match = items.find((item) => item.slug === slug && item.status === "published");
+      if (match) {
+        return {
+          slug: match.slug,
+          title: match.title?.en ?? "",
+          category: match.category,
+          year: match.year,
+          location: match.location?.en ?? "",
+          client: match.client?.en ?? "",
+          description: match.shortDescription?.en ?? "",
+          image: match.coverImage,
+          desktopImage: match.desktopImage || undefined,
+          aspectClass: match.aspectClass,
+          spanClass: match.spanClass,
+          badgeClassName: match.badgeClassName || undefined,
+          notes: match.notes?.en ?? [],
+          grayscale: match.grayscale,
+          heroTitle: match.heroTitle?.en ?? "",
+          heroIntro: match.heroIntro?.en ?? "",
+          campaignOverview: match.campaignOverview?.en ?? "",
+          preEventMarketing: match.preEventMarketing?.en ?? [],
+          launchEventExperience: match.launchEventExperience?.en ?? [],
+          postEventMarketing: match.postEventMarketing?.en ?? [],
+          campaignImpact: match.campaignImpact?.en ?? [],
+          preEventImages: match.preEventImages ?? [],
+          postEventImages: match.postEventImages ?? [],
+          services: match.services?.en ?? [],
+          metrics: (match.metrics ?? []).map((metric: any) => ({
+            label: metric.label?.en ?? "",
+            value: metric.value,
+          })),
+          gallery: match.gallery ?? [],
+          nextProjectSlug: match.nextProjectSlug,
+        };
+      }
+    }
+  } catch {
+    // Ignore localStorage errors and fall back to hardcoded content.
+  }
+
   return projects.find((project) => project.slug === slug);
+}
+
+export function getManagedProjects(): Project[] {
+  try {
+    const raw = localStorage.getItem("admin_portfolio_v1");
+    if (raw) {
+      const items = JSON.parse(raw) as Array<any>;
+      const published = items
+        .filter((item) => item.status === "published")
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map((item) => ({
+          slug: item.slug,
+          title: item.title?.en ?? "",
+          category: item.category,
+          year: item.year,
+          location: item.location?.en ?? "",
+          client: item.client?.en ?? "",
+          description: item.shortDescription?.en ?? "",
+          image: item.coverImage,
+          desktopImage: item.desktopImage || undefined,
+          aspectClass: item.aspectClass,
+          spanClass: item.spanClass,
+          badgeClassName: item.badgeClassName || undefined,
+          notes: item.notes?.en ?? [],
+          grayscale: item.grayscale,
+          heroTitle: item.heroTitle?.en ?? "",
+          heroIntro: item.heroIntro?.en ?? "",
+          campaignOverview: item.campaignOverview?.en ?? "",
+          preEventMarketing: item.preEventMarketing?.en ?? [],
+          launchEventExperience: item.launchEventExperience?.en ?? [],
+          postEventMarketing: item.postEventMarketing?.en ?? [],
+          campaignImpact: item.campaignImpact?.en ?? [],
+          preEventImages: item.preEventImages ?? [],
+          postEventImages: item.postEventImages ?? [],
+          services: item.services?.en ?? [],
+          metrics: (item.metrics ?? []).map((metric: any) => ({
+            label: metric.label?.en ?? "",
+            value: metric.value,
+          })),
+          gallery: item.gallery ?? [],
+          nextProjectSlug: item.nextProjectSlug,
+        })) as Project[];
+
+      if (published.length > 0) {
+        return published;
+      }
+    }
+  } catch {
+    // Ignore localStorage errors and fall back to hardcoded content.
+  }
+
+  return projects;
 }

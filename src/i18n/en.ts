@@ -126,6 +126,7 @@ const en = {
     interestOptions: [
       "Bespoke Design Project",
       "Artistic Workshop",
+      "Planner Service",
       "Press & Collaboration",
       "General Message",
     ],

@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import SharedFooter from "./SharedFooter";
 import { WorksNavbar } from "./WorksPage";
-import { getProjectBySlug, projects } from "./workData";
+import { getProjectBySlug, getManagedProjects } from "./workData";
 import { useLanguage } from "./i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -127,9 +127,9 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
 }
 
 export default function WorkCaseStudyPage({ slug }: { slug: string }) {
-  const project = getProjectBySlug(slug);
   const containerRef = useRef<HTMLDivElement>(null);
   const { t, isRTL, locale } = useLanguage();
+  const project = getProjectBySlug(slug);
   const NavArrow = isRTL ? ArrowRight : ArrowLeft;
   const NextArrow = isRTL ? ArrowLeft : ArrowRight;
 
@@ -316,27 +316,17 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
     );
   }
 
-  const nextProject = getProjectBySlug(project.nextProjectSlug) ?? projects[0];
+  const nextProject = getProjectBySlug(project.nextProjectSlug) ?? getManagedProjects()[0];
 
   const projectTitle = tp("title");
   const projectHeroTitle = tp("heroTitle");
   const categoryLabelText = t(`works.categoryLabels.${project.category}`);
 
-  const preEventMarketing = locale === "ar"
-    ? (tpArray("preEventMarketing").length > 1 ? tpArray("preEventMarketing") : project.preEventMarketing)
-    : project.preEventMarketing;
-  const postEventMarketing = locale === "ar"
-    ? (tpArray("postEventMarketing").length > 1 ? tpArray("postEventMarketing") : project.postEventMarketing)
-    : project.postEventMarketing;
-  const launchEventExperience = locale === "ar"
-    ? (tpArray("launchEventExperience").length > 1 ? tpArray("launchEventExperience") : project.launchEventExperience)
-    : project.launchEventExperience;
-  const campaignImpact = locale === "ar"
-    ? (tpArray("campaignImpact").length > 1 ? tpArray("campaignImpact") : project.campaignImpact)
-    : project.campaignImpact;
-  const services = locale === "ar"
-    ? (tpArray("services").length > 1 ? tpArray("services") : project.services)
-    : project.services;
+  const preEventMarketing = locale === "ar" ? (tpArray("preEventMarketing").length > 1 ? tpArray("preEventMarketing") : project.preEventMarketing) : project.preEventMarketing;
+  const postEventMarketing = locale === "ar" ? (tpArray("postEventMarketing").length > 1 ? tpArray("postEventMarketing") : project.postEventMarketing) : project.postEventMarketing;
+  const launchEventExperience = locale === "ar" ? (tpArray("launchEventExperience").length > 1 ? tpArray("launchEventExperience") : project.launchEventExperience) : project.launchEventExperience;
+  const campaignImpact = locale === "ar" ? (tpArray("campaignImpact").length > 1 ? tpArray("campaignImpact") : project.campaignImpact) : project.campaignImpact;
+  const services = locale === "ar" ? (tpArray("services").length > 1 ? tpArray("services") : project.services) : project.services;
 
   const visibleServices = services.slice(0, 3);
 

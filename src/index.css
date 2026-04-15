@@ -149,3 +149,9 @@
 [dir="rtl"] button.text-brand-secondary.text-sm {
   font-size: 0.95rem;
 }
+
+/* Admin toast animation */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SharedFooter from "./SharedFooter";
-import { filters, projects, type FilterValue, type Project } from "./workData";
+import { filters, getManagedProjects, type FilterValue, type Project } from "./workData";
 import { useLanguage } from "./i18n/LanguageContext";
 import { LanguageSwitcher } from "./App";
 import { getBrandLogoSrc } from "./brandLogo";
@@ -154,8 +154,10 @@ function ProjectCard({ project }: { project: Project }) {
   const { t, isRTL } = useLanguage();
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
   const categoryLabelText = t(`works.categoryLabels.${project.category}`);
-  const projectTitle = t(`projects.${project.slug}.title`);
-  const projectDesc = t(`projects.${project.slug}.description`);
+  const i18nTitle = t(`projects.${project.slug}.title`);
+  const i18nDesc = t(`projects.${project.slug}.description`);
+  const projectTitle = i18nTitle.startsWith("projects.") ? project.title : i18nTitle;
+  const projectDesc = i18nDesc.startsWith("projects.") ? project.description : i18nDesc;
 
   return (
     <article className="group h-full flex flex-col cursor-pointer">
@@ -206,15 +208,17 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
+
 export default function WorksPage() {
   const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
   const containerRef = useRef<HTMLDivElement>(null);
   const { t, isRTL, locale } = useLanguage();
-
+  const allProjects = getManagedProjects();
   const visibleProjects =
     activeFilter === "all"
-      ? projects
-      : projects.filter((project) => project.category === activeFilter);
+      ? allProjects
+      : allProjects.filter((project) => project.category === activeFilter);
+
 
   const filterLabels: Record<FilterValue, string> = {
     all: t("works.filters.all"),
@@ -299,7 +303,7 @@ export default function WorksPage() {
           <div className="mx-auto max-w-[1920px]">
             <div className="projects-grid grid grid-cols-1 gap-x-12 gap-y-24 md:grid-cols-12">
               {visibleProjects.map((project) => (
-                <div key={project.title} className="project-card md:col-span-6">
+                <div key={project.slug} className="project-card md:col-span-6">
                   <ProjectCard project={project} />
                 </div>
               ))}

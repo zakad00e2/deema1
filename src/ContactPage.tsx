@@ -99,6 +99,9 @@ export default function ContactPage() {
   const interestOptions = locale === "ar"
     ? ["مشروع تصميم مخصص", "ورشة عمل فنية", "صحافة وتعاون", "رسالة عامة"]
     : ["Bespoke Design Project", "Artistic Workshop", "Press & Collaboration", "General Message"];
+  const contactInterestOptions = locale === "ar"
+    ? [...interestOptions.slice(0, 2), "خدمة Planner", ...interestOptions.slice(2)]
+    : [...interestOptions.slice(0, 2), "Planner Service", ...interestOptions.slice(2)];
 
   return (
     <div className="min-h-screen bg-brand-bg font-sans text-brand-dark antialiased">
@@ -219,11 +222,11 @@ export default function ContactPage() {
                     <select
                       id="contact-interest"
                       className={fieldBase}
-                      defaultValue={interestOptions[0]}
+                      defaultValue={contactInterestOptions[0]}
                       onFocus={() => setFocusedField("interest")}
                       onBlur={() => setFocusedField(null)}
                     >
-                      {interestOptions.map((opt) => (
+                      {contactInterestOptions.map((opt) => (
                         <option key={opt}>{opt}</option>
                       ))}
                     </select>
