@@ -173,7 +173,7 @@ const Hero = () => {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative flex min-h-[100vh] items-end overflow-hidden bg-brand-dark pt-28 md:pt-32 lg:pt-36">
+    <section ref={containerRef} className="relative flex h-[100vh] items-end overflow-hidden bg-brand-dark pt-28 md:pt-32 lg:pt-36">
       <div
         className="hero-media absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-fixed"
         style={{ backgroundImage: "url('/ed02b462-b517-438d-b25a-932331549f62.jpg')" }}
@@ -181,7 +181,7 @@ const Hero = () => {
       />
       <div className={`hero-overlay absolute inset-0 z-10 ${isRTL ? "bg-gradient-to-l" : "bg-gradient-to-r"} from-[#1c1c18]/82 via-[#1c1c18]/48 to-[#1c1c18]/10`} />
       <div className="absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-[#1c1c18]/50 to-transparent" />
-      <div className="max-w-360 mx-auto px-6 md:px-12 relative z-20 flex min-h-[100vh] w-full items-end">
+      <div className="max-w-360 mx-auto px-6 md:px-12 relative z-20 flex h-[100vh] w-full items-end">
         <div className={`hero-text max-w-xl pb-16 md:pb-20 lg:max-w-2xl lg:pb-24 ${isRTL ? "ml-auto text-right" : "mr-auto text-left"}`}>
           <h1 className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-white font-serif tracking-tighter mb-6">
             {t("hero.titlePart1")} <span className="text-white">{t("hero.titleHighlight")}</span>
