@@ -126,6 +126,7 @@
 [dir="rtl"] .ltr-content {
   direction: ltr;
   unicode-bidi: embed;
+  text-align: left !important;
 }
 
 /* Language switcher */

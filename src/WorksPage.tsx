@@ -20,6 +20,12 @@ export function WorksNavbar({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t, isRTL, locale } = useLanguage();
   const brandLogoSrc = getBrandLogoSrc(locale);
+  const desktopNavLinkClass = isScrolled
+    ? "text-brand-primary hover:text-brand-secondary transition-colors"
+    : "text-white hover:text-white/75 transition-colors";
+  const desktopActiveNavLinkClass = isScrolled
+    ? "text-brand-dark border-b border-brand-secondary pb-1 transition-colors"
+    : "text-white border-b border-white/75 pb-1 transition-colors";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,19 +54,19 @@ export function WorksNavbar({
         <div className={`hidden md:flex items-center ${isRTL ? "gap-12" : "space-x-12"} font-serif text-base tracking-tight`}>
           <a
             href="/"
-            className={active === "home" ? "text-brand-dark border-b border-brand-secondary pb-1" : "text-brand-primary hover:text-brand-secondary transition-colors"}
+            className={active === "home" ? desktopActiveNavLinkClass : desktopNavLinkClass}
           >
             {t("nav.home")}
           </a>
           <a
             href="/work"
-            className={active === "work" ? "text-brand-dark border-b border-brand-secondary pb-1" : "text-brand-primary hover:text-brand-secondary transition-colors"}
+            className={active === "work" ? desktopActiveNavLinkClass : desktopNavLinkClass}
           >
             {t("nav.portfolio")}
           </a>
           <a
             href="/workshops"
-            className={active === "workshops" ? "text-brand-dark border-b border-brand-secondary pb-1" : "text-brand-primary hover:text-brand-secondary transition-colors"}
+            className={active === "workshops" ? desktopActiveNavLinkClass : desktopNavLinkClass}
           >
             {t("nav.workshops")}
           </a>
@@ -68,15 +74,15 @@ export function WorksNavbar({
             href="/contact"
             className={
               active === "contact"
-                ? "text-brand-dark border-b border-brand-secondary pb-1"
-                : "text-brand-primary hover:text-brand-secondary transition-colors"
+                ? desktopActiveNavLinkClass
+                : desktopNavLinkClass
             }
           >
             {t("nav.contact")}
           </a>
         </div>
         <div className="flex items-center gap-4 md:gap-6">
-          <LanguageSwitcher className="hidden md:flex" />
+          <LanguageSwitcher className="hidden md:flex" tone={isScrolled ? "brand" : "light"} />
           <a
             href="/contact#contact-form"
             className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden"

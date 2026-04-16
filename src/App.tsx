@@ -9,7 +9,10 @@ import WorkshopsPage from "./WorkshopsPage";
 import ContactPage from "./ContactPage";
 import SharedFooter from "./SharedFooter";
 import { useLanguage } from "./i18n/LanguageContext";
-import { getBrandLogoSrc } from "./brandLogo";
+import {
+  getBrandLogoGreySrc,
+  getBrandLogoWhiteSrc,
+} from "./brandLogo";
 import { 
   ArrowRight,
   ArrowLeft,
@@ -20,13 +23,24 @@ import {
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-export function LanguageSwitcher({ className = "" }: { className?: string }) {
+export function LanguageSwitcher({
+  className = "",
+  tone = "brand",
+}: {
+  className?: string;
+  tone?: "brand" | "light";
+}) {
   const { locale, setLocale, t } = useLanguage();
+  const toneClass =
+    tone === "light"
+      ? "text-white hover:text-white/75"
+      : "text-brand-primary hover:text-brand-secondary";
+
   return (
     <button
       type="button"
       onClick={() => setLocale(locale === "en" ? "ar" : "en")}
-      className={`lang-switch flex items-center gap-1.5 text-xs font-medium text-brand-primary hover:text-brand-secondary transition-colors ${className}`}
+      className={`lang-switch flex items-center gap-1.5 text-xs font-medium transition-colors ${toneClass} ${className}`}
       aria-label="Switch language"
     >
       <Globe className="w-4 h-4" />
@@ -39,7 +53,16 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t, isRTL, locale } = useLanguage();
-  const brandLogoSrc = getBrandLogoSrc(locale);
+  const brandLogoSrc = isScrolled
+    ? getBrandLogoGreySrc(locale)
+    : getBrandLogoWhiteSrc(locale);
+  const mobileMenuLogoSrc = getBrandLogoGreySrc(locale);
+  const desktopNavLinkClass = isScrolled
+    ? "text-brand-primary hover:text-brand-secondary transition-colors"
+    : "text-white hover:text-white/75 transition-colors";
+  const desktopActiveNavLinkClass = isScrolled
+    ? "text-brand-dark border-b border-brand-secondary pb-1 transition-colors"
+    : "text-white border-b border-white/75 pb-1 transition-colors";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,20 +74,20 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${isScrolled ? "bg-brand-bg/80 backdrop-blur-md border-brand-surface-high/30" : "bg-transparent border-transparent"}`}>
-      <div className="max-w-360 mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
+      <div className="max-w-360 mx-auto h-16 md:h-[4.5rem] px-6 md:px-12 flex justify-between items-center">
         <div className="flex items-center">
           <a href="/" aria-label="Go to home page">
-            <img src={brandLogoSrc} alt="Athr Logo" className="h-12 md:h-14" />
+            <img src={brandLogoSrc} alt="Athr Logo" className="h-16 md:h-20" />
           </a>
         </div>
         <div className={`hidden md:flex items-center ${isRTL ? "gap-12" : "space-x-12"} font-serif text-base tracking-tight`}>
-          <a href="/" className="text-brand-dark border-b border-brand-secondary pb-1">{t("nav.home")}</a>
-          <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors">{t("nav.portfolio")}</a>
-          <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors">{t("nav.workshops")}</a>
-          <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors">{t("nav.contact")}</a>
+          <a href="/" className={desktopActiveNavLinkClass}>{t("nav.home")}</a>
+          <a href="/work" className={desktopNavLinkClass}>{t("nav.portfolio")}</a>
+          <a href="/workshops" className={desktopNavLinkClass}>{t("nav.workshops")}</a>
+          <a href="/contact" className={desktopNavLinkClass}>{t("nav.contact")}</a>
         </div>
         <div className="flex items-center gap-4 md:gap-6">
-          <LanguageSwitcher className="hidden md:flex" />
+          <LanguageSwitcher className="hidden md:flex" tone={isScrolled ? "brand" : "light"} />
           <a href="/contact#contact-form" className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
             <span className="relative z-10">{t("nav.letsTalk")}</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
@@ -86,7 +109,7 @@ const Navbar = () => {
       <div className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between items-center mb-16">
           <a href="/" aria-label="Go to home page" onClick={() => setIsMobileMenuOpen(false)}>
-            <img src={brandLogoSrc} alt="Athr Logo" className="h-12" />
+            <img src={mobileMenuLogoSrc} alt="Athr Logo" className="h-16" />
           </a>
           <X 
             className="text-brand-secondary w-8 h-8 cursor-pointer hover:rotate-90 transition-transform" 
@@ -121,6 +144,18 @@ const Hero = () => {
   const containerRef = useRef(null);
   const { t, isRTL } = useLanguage();
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
+  const heroActions = [
+    {
+      href: "/contact#contact-form",
+      variant: "primary" as const,
+      label: t("hero.cta"),
+    },
+    {
+      href: "/work",
+      variant: "secondary" as const,
+      label: t("hero.ctaSecondary"),
+    },
+  ];
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -129,71 +164,58 @@ const Hero = () => {
       { opacity: 0, y: 30 }, 
       { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out" }
     )
-    .fromTo(".hero-image", 
+    .fromTo(".hero-media", 
       { opacity: 0, scale: 0.9 }, 
       { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, 
       "-=0.5"
-    )
-    .fromTo(".hero-badge",
-      { opacity: 0, x: isRTL ? 20 : -20 },
-      { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
-      "-=0.8"
     );
-
-    gsap.to(".hero-bg", {
-      y: 100,
-      ease: "none",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
-      }
-    });
 
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center pt-32 pb-16 md:py-0 overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none hero-bg">
-        <img 
-          src="https://picsum.photos/seed/texture/1920/1080" 
-          alt="" 
-          className="w-full h-full object-cover scale-110 rotate-1"
-          referrerPolicy="no-referrer"
-        />
-      </div>
-      <div className="max-w-360 mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-4 lg:gap-8 items-center relative z-10 w-full">
-        <div className={`md:col-span-7 lg:col-span-7 hero-text ${isRTL ? "md:order-1" : ""}`}>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl leading-[1.1] text-brand-primary font-serif tracking-tighter mb-8">
-            {t("hero.titlePart1")} <span className="text-brand-secondary">{t("hero.titleHighlight")}</span>
+    <section ref={containerRef} className="relative flex h-[100vh] items-end overflow-hidden bg-brand-dark pt-28 md:pt-32 lg:pt-36">
+      <div
+        className="hero-media absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-fixed"
+        style={{ backgroundImage: "url('/ed02b462-b517-438d-b25a-932331549f62.jpg')" }}
+        aria-hidden="true"
+      />
+      <div className={`hero-overlay absolute inset-0 z-10 ${isRTL ? "bg-gradient-to-l" : "bg-gradient-to-r"} from-[#1c1c18]/82 via-[#1c1c18]/48 to-[#1c1c18]/10`} />
+      <div className="absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-[#1c1c18]/50 to-transparent" />
+      <div className="max-w-360 mx-auto px-6 md:px-12 relative z-20 flex h-[100vh] w-full items-end">
+        <div className={`hero-text max-w-xl pb-16 md:pb-20 lg:max-w-2xl lg:pb-24 ${isRTL ? "ml-auto text-right" : "mr-auto text-left"}`}>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-white font-serif tracking-tighter mb-6">
+            {t("hero.titlePart1")} <span className="text-white">{t("hero.titleHighlight")}</span>
           </h1>
-          <p className="text-lg md:text-xl lg:text-2xl text-brand-primary/80 font-light max-w-2xl leading-relaxed mb-12">
+          <p className={`max-w-xl text-base md:text-lg lg:text-xl text-white/85 font-light leading-relaxed ${isRTL ? "ml-auto" : "mr-auto"}`}>
             {t("hero.subtitle")}
           </p>
-          <div className="flex flex-wrap items-center gap-8">
-            <a href="/contact#contact-form" className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden">
-              <span className="relative z-10">{t("hero.cta")}</span>
-              <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
-                <img 
-                  src="/athr.png" 
-                  alt="" 
-                  className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
-                />
-              </div>
-            </a>
-            <a href="/work" className="group flex items-center gap-3 text-brand-secondary tracking-widest uppercase text-xs font-semibold">
-              {t("hero.ctaSecondary")} <ArrowIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </div>
-        </div>
-        <div className={`md:col-span-5 lg:col-span-5 relative hero-image ${isRTL ? "md:order-2" : ""}`}>
-          <div className="relative overflow-visible">
-            <img 
-              src="/hero-img.png" 
-              alt="Creative team collaboration" 
-              className="w-full max-w-[440px] md:max-w-[580px] lg:max-w-[700px] h-auto max-h-[320px] md:max-h-[420px] lg:max-h-[480px] object-contain drop-shadow-2xl mx-auto"
-            />
+          <div className="mt-10 flex w-full flex-wrap items-center justify-start gap-5 md:gap-7">
+            {heroActions.map((action) =>
+              action.variant === "primary" ? (
+                <a
+                  key={action.href}
+                  href={action.href}
+                  className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden"
+                >
+                  <span className="relative z-10">{action.label}</span>
+                  <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
+                    <img 
+                      src="/athr.png" 
+                      alt="" 
+                      className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
+                    />
+                  </div>
+                </a>
+              ) : (
+                <a
+                  key={action.href}
+                  href={action.href}
+                  className="group flex items-center gap-3 text-[#f4e5d4] tracking-widest uppercase text-xs font-semibold"
+                >
+                  {action.label} <ArrowIcon className={`w-4 h-4 transition-transform ${isRTL ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
+                </a>
+              )
+            )}
           </div>
         </div>
       </div>
