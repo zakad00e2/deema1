@@ -225,7 +225,8 @@ const Hero = () => {
 
 const About = () => {
   const sectionRef = useRef(null);
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, locale } = useLanguage();
+  const aboutBadgeText = locale === "ar" ? "مـــــــــؤسـسة أثـــــــــــــر " : "Athr Foundation";
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -239,11 +240,6 @@ const About = () => {
     tl.fromTo(".about-img", 
       { opacity: 0, x: isRTL ? 50 : -50 }, 
       { opacity: 1, x: 0, duration: 1, ease: "power3.out" }
-    )
-    .fromTo(".about-badge",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-      "-=0.6"
     )
     .fromTo(".about-text > *",
       { opacity: 0, y: 30 },
@@ -273,21 +269,25 @@ const About = () => {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} className="py-32 bg-brand-surface-low overflow-hidden">
+    <section ref={sectionRef} className="py-20 md:py-24 bg-brand-surface-low overflow-hidden">
       <div className="max-w-360 mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
           <div className={`${isRTL ? "order-2 md:order-2" : "order-2 md:order-1"} relative`}>
             <img 
-              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" 
+              src="/deema1.jpg" 
               alt="Deema - Professional portrait" 
-              className="about-img w-full h-150 object-cover editorial-shadow"
+              className="about-img w-[90%] md:w-[80%] mx-auto h-[32rem] md:h-[34rem] block object-cover object-top editorial-shadow"
               referrerPolicy="no-referrer"
             />
-            <div className={`about-badge absolute -bottom-8 ${isRTL ? "-right-8" : "-left-8"} hidden md:block w-64 bg-white/40 backdrop-blur-md p-8 editorial-shadow border border-white/20`}>
-              <p className="text-[0.6rem] uppercase tracking-[0.3em] text-brand-secondary font-bold mb-2">{t("about.signatureLabel")}</p>
-              <p className="text-sm font-serif leading-tight italic">
-                {t("about.signature")}
-              </p>
+            <div className={`about-badge absolute bottom-5 md:bottom-7 ${isRTL ? "right-[9%] md:right-[13%]" : "left-[9%] md:left-[13%]"}`}>
+              <div
+                className={`inline-flex w-fit items-center rounded-[14px] bg-[#f4eeea] px-4 py-3 shadow-[0_10px_28px_rgba(71,49,34,0.14)] ring-1 ring-white/70 flex-row justify-start gap-3`}
+              >
+                <span className="status-glow-dot h-2.5 w-2.5 shrink-0 rounded-full bg-[#46cf72]" />
+                <span className={`whitespace-nowrap font-medium leading-none text-[#473122] ${isRTL ? "text-[1rem] text-right" : "text-[0.82rem] text-left tracking-[0.03em]"}`}>
+                  {aboutBadgeText}
+                </span>
+              </div>
             </div>
           </div>
           <div className={`${isRTL ? "order-1 md:order-1" : "order-1 md:order-2"} about-text`}>

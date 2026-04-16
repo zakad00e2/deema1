@@ -20,6 +20,7 @@ const en = {
     label: "Meet Deema",
     title: "Creative excellence in every touchpoint.",
     bio: "Deema is the creative mind behind \"Athr,\" seamlessly blending strategic marketing precision with a refined artistic approach to event design and execution. With a strong eye for detail and a deep understanding of brand storytelling, she transforms ideas into thoughtfully curated experiences. Driven by the belief that true impact—your \"Athr\"—lives in the finest details, she focuses on crafting immersive environments where every element has purpose, allowing brands to come to life in a natural and authentic way while creating meaningful, lasting connections with audiences.",
+    badge: "Athr Foundation",
     signatureLabel: "Signature",
     signature:
       "\"The mark we leave is defined by the intentionality of every small detail.\"",
