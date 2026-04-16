@@ -276,10 +276,10 @@ const About = () => {
             <img 
               src="/deema1.jpg" 
               alt="Deema - Professional portrait" 
-              className="about-img w-[90%] md:w-[80%] mx-auto h-[32rem] md:h-[34rem] block object-cover object-top editorial-shadow"
+              className="about-img w-[96%] md:w-[80%] mx-auto h-[32rem] md:h-[34rem] block object-cover object-top editorial-shadow"
               referrerPolicy="no-referrer"
             />
-            <div className={`about-badge absolute bottom-5 md:bottom-7 ${isRTL ? "right-[9%] md:right-[13%]" : "left-[9%] md:left-[13%]"}`}>
+            <div className={`about-badge absolute bottom-5 md:bottom-7 ${isRTL ? "right-[5%] md:right-[13%]" : "left-[5%] md:left-[13%]"}`}>
               <div
                 className={`inline-flex w-fit items-center rounded-[14px] bg-[#f4eeea] px-4 py-3 shadow-[0_10px_28px_rgba(71,49,34,0.14)] ring-1 ring-white/70 flex-row justify-start gap-3`}
               >
