@@ -8,6 +8,7 @@ import WorksPage from "./WorksPage";
 import WorkshopsPage from "./WorkshopsPage";
 import ContactPage from "./ContactPage";
 import SharedFooter from "./SharedFooter";
+import { getGroupWorkshopsContent } from "./workshopContent";
 import { useLanguage } from "./i18n/LanguageContext";
 import {
   getBrandLogoGreySrc,
@@ -74,7 +75,7 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${isScrolled ? "bg-brand-bg/80 backdrop-blur-md border-brand-surface-high/30" : "bg-transparent border-transparent"}`}>
-      <div className="max-w-360 mx-auto h-16 md:h-[4.5rem] px-6 md:px-12 flex justify-between items-center">
+      <div className="max-w-360 mx-auto h-[4.5rem] md:h-20 px-6 md:px-12 flex justify-between items-center">
         <div className="flex items-center">
           <a href="/" aria-label="Go to home page">
             <img src={brandLogoSrc} alt="Athr Logo" className="h-16 md:h-20" />
@@ -99,14 +100,14 @@ const Navbar = () => {
             </div>
           </a>
           <Menu 
-            className="md:hidden text-brand-secondary w-7 h-7 cursor-pointer" 
+            className={`md:hidden w-7 h-7 cursor-pointer transition-colors ${isScrolled ? "text-brand-secondary" : "text-white"}`} 
             onClick={() => setIsMobileMenuOpen(true)}
           />
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <div className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100vh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100svh] bg-brand-bg z-[100] flex flex-col px-6 py-6 transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex justify-between items-center mb-16">
           <a href="/" aria-label="Go to home page" onClick={() => setIsMobileMenuOpen(false)}>
             <img src={mobileMenuLogoSrc} alt="Athr Logo" className="h-16" />
@@ -123,7 +124,7 @@ const Navbar = () => {
           <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.contact")}</a>
           <LanguageSwitcher className="justify-center text-lg" />
         </div>
-        <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
+        <div className="mt-auto border-t border-brand-surface-high pt-8 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
           <a href="/contact#contact-form" className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center">
             <span className="relative z-10">{t("nav.letsTalk")}</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
@@ -173,7 +174,7 @@ const Hero = () => {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative flex h-[100vh] items-end overflow-hidden bg-brand-dark pt-28 md:pt-32 lg:pt-36">
+    <section ref={containerRef} className="relative flex h-[100svh] items-end overflow-hidden bg-brand-dark pt-28 md:h-[100vh] md:pt-32 lg:pt-36">
       <div
         className="hero-media absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-fixed"
         style={{ backgroundImage: "url('/ed02b462-b517-438d-b25a-932331549f62.jpg')" }}
@@ -181,8 +182,8 @@ const Hero = () => {
       />
       <div className={`hero-overlay absolute inset-0 z-10 ${isRTL ? "bg-gradient-to-l" : "bg-gradient-to-r"} from-[#1c1c18]/82 via-[#1c1c18]/48 to-[#1c1c18]/10`} />
       <div className="absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-[#1c1c18]/50 to-transparent" />
-      <div className="max-w-360 mx-auto px-6 md:px-12 relative z-20 flex h-[100vh] w-full items-end">
-        <div className={`hero-text max-w-xl pb-16 md:pb-20 lg:max-w-2xl lg:pb-24 ${isRTL ? "ml-auto text-right" : "mr-auto text-left"}`}>
+      <div className="max-w-360 mx-auto px-6 md:px-12 relative z-20 flex h-[100svh] w-full items-end md:h-[100vh]">
+        <div className={`hero-text max-w-xl pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-20 lg:max-w-2xl lg:pb-24 ${isRTL ? "ml-auto text-right" : "mr-auto text-left"}`}>
           <h1 className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-white font-serif tracking-tighter mb-6">
             {t("hero.titlePart1")} <span className="text-white">{t("hero.titleHighlight")}</span>
           </h1>
@@ -275,7 +276,7 @@ const About = () => {
           <div className={`${isRTL ? "order-2 md:order-2" : "order-2 md:order-1"} relative`}>
             <img 
               src="/deema1.jpg" 
-              alt="Deema - Professional portrait" 
+              alt="dima - Professional portrait" 
               className="about-img w-[96%] md:w-[80%] mx-auto h-[32rem] md:h-[34rem] block object-cover object-top editorial-shadow"
               referrerPolicy="no-referrer"
             />
@@ -525,6 +526,10 @@ const CaseStudy = () => {
   const { t, isRTL, locale } = useLanguage();
 
   useGSAP(() => {
+    const spotlight = sectionRef.current?.querySelector(".case-spotlight") as HTMLDivElement | null;
+    const image = sectionRef.current?.querySelector(".case-image") as HTMLImageElement | null;
+    const content = sectionRef.current?.querySelector(".case-content") as HTMLDivElement | null;
+    const tags = gsap.utils.toArray<HTMLElement>(".case-tag");
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -542,15 +547,98 @@ const CaseStudy = () => {
       "-=0.4"
     )
     .fromTo(".case-media",
-      { opacity: 0, scale: 0.95, y: 40 },
-      { opacity: 1, scale: 1, y: 0, duration: 1, ease: "power3.out" },
+      { opacity: 0, scale: 0.95, y: 40, clipPath: "inset(12% 8% 12% 8%)" },
+      { opacity: 1, scale: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 1, ease: "power3.out" },
       "-=0.4"
     )
     .fromTo(".case-content",
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      { opacity: 0, y: 40, x: isRTL ? -24 : 24 },
+      { opacity: 1, y: 0, x: 0, duration: 0.8, ease: "power3.out" },
       "-=0.6"
+    )
+    .fromTo(".case-content > *",
+      { opacity: 0, y: 18 },
+      { opacity: 1, y: 0, duration: 0.55, stagger: 0.12, ease: "power2.out" },
+      "-=0.3"
     );
+
+    if (tags.length) {
+      gsap.fromTo(tags,
+        { opacity: 0, y: 16 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: content ?? sectionRef.current,
+            start: "top 85%",
+          },
+        }
+      );
+    }
+
+    if (!spotlight || !image || !content) {
+      return;
+    }
+
+    const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isFinePointer) {
+      return;
+    }
+
+    const handleMove = (event: MouseEvent) => {
+      const bounds = spotlight.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+
+      gsap.to(image, {
+        x: x * 18,
+        y: y * 14,
+        scale: 1.07,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+
+      gsap.to(content, {
+        x: x * -12,
+        y: y * -10,
+        rotateX: y * -2,
+        rotateY: x * 3,
+        duration: 0.8,
+        ease: "power3.out",
+        transformPerspective: 1000,
+        transformOrigin: "center center",
+      });
+    };
+
+    const handleLeave = () => {
+      gsap.to(image, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.9,
+        ease: "power3.out",
+      });
+
+      gsap.to(content, {
+        x: 0,
+        y: 0,
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.9,
+        ease: "power3.out",
+      });
+    };
+
+    spotlight.addEventListener("mousemove", handleMove);
+    spotlight.addEventListener("mouseleave", handleLeave);
+
+    return () => {
+      spotlight.removeEventListener("mousemove", handleMove);
+      spotlight.removeEventListener("mouseleave", handleLeave);
+    };
   }, { scope: sectionRef });
 
   return (
@@ -565,21 +653,22 @@ const CaseStudy = () => {
             {t("caseStudy.seeAll")}
           </a>
         </div>
-        <div className="relative group">
+        <div className="case-spotlight relative group [perspective:1200px]">
           <div className="case-media aspect-square sm:aspect-4/3 md:aspect-21/9 w-full bg-brand-dark overflow-hidden">
             <img 
               src="/cover.jpeg" 
               alt="Besan Khalaily – Spring Launch" 
-              className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[2s]"
+              className="case-image w-full h-full object-cover opacity-80 transition-transform duration-[2s] will-change-transform"
               referrerPolicy="no-referrer"
             />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#1c1c18]/30 via-transparent to-[#f4e5d4]/10 opacity-70 transition-opacity duration-700 group-hover:opacity-100" />
           </div>
-          <div className={`case-content md:absolute relative md:bottom-0 ${isRTL ? "md:left-0" : "md:right-0"} p-8 md:p-12 bg-brand-surface-low md:bg-brand-bg w-[85%] sm:w-[75%] md:w-full md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0 mx-auto md:mx-0 border border-white/5 md:border-none`}>
+          <div className={`case-content md:absolute relative md:bottom-0 ${isRTL ? "md:left-0" : "md:right-0"} p-8 md:p-12 bg-brand-surface-low/95 md:bg-brand-bg/95 backdrop-blur-sm w-[85%] sm:w-[75%] md:w-full md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0 mx-auto md:mx-0 border border-white/5 md:border-none will-change-transform`}>
             <h4 className="text-xl sm:text-2xl font-serif mb-4">{t("caseStudy.cardTitle")}</h4>
             <p className="text-brand-primary/70 font-sm md:font-light leading-relaxed mb-6">{t("caseStudy.cardDesc")}</p>
             <div className="flex flex-wrap gap-3">
               {[t("caseStudy.tag1"), t("caseStudy.tag2")].map((tag) => (
-                <span key={tag} className={`${locale === "ar" ? "text-[0.78rem] tracking-[0.18em] px-5 py-3" : "text-[0.5rem] tracking-widest px-3 py-2"} uppercase bg-brand-bg text-brand-secondary font-bold`}>
+                <span key={tag} className={`case-tag ${locale === "ar" ? "text-[0.78rem] tracking-[0.18em] px-5 py-3" : "text-[0.5rem] tracking-widest px-3 py-2"} uppercase bg-brand-bg text-brand-secondary font-bold`}>
                   {tag}
                 </span>
               ))}
@@ -595,9 +684,7 @@ const WorkshopsHome = () => {
   const sectionRef = useRef(null);
   const { t, isRTL, locale } = useLanguage();
 
-  const items = locale === "ar"
-    ? (ar_workshops_items())
-    : (en_workshops_items());
+  const items = getGroupWorkshopsContent(locale);
 
   function en_workshops_items() {
     return [
@@ -641,24 +728,24 @@ const WorkshopsHome = () => {
           <h2 className="text-4xl font-serif text-brand-primary mb-2">{t("workshops.title")}</h2>
           <p className="text-brand-primary/70 font-light">{t("workshops.subtitle")}</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {items.map((item, idx) => (
-            <a href="/workshops" key={idx} className="workshop-item group block cursor-pointer">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
+          {items.map((item) => (
+            <a href={item.ctaLink} key={item.id} className="workshop-item group block cursor-pointer">
               <div className="aspect-square bg-brand-surface-low mb-6 overflow-hidden relative">
                 <img 
-                  src={`https://picsum.photos/seed/workshop${idx}/800/800`} 
+                  src={item.image}
                   alt={item.title} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
                 />
                 <div className={`absolute top-4 ${isRTL ? "left-4" : "right-4"} bg-white/90 px-3 py-1 text-[0.6rem] uppercase tracking-widest font-bold text-brand-secondary`}>
-                  {item.date}
+                  {item.level}
                 </div>
               </div>
               <h3 className="text-xl font-serif text-brand-primary mb-2">{item.title}</h3>
-              <p className="text-brand-primary/70 font-light text-sm leading-relaxed mb-4">{item.desc}</p>
+              <p className="text-brand-primary/70 font-light text-sm leading-relaxed mb-4">{item.summary}</p>
               <span className={`${locale === "ar" ? "text-[0.82rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-bold text-brand-secondary border-b border-brand-secondary/20 pb-1 group-hover:border-brand-secondary transition-all`}>
-                {t("workshops.register")}
+                {item.ctaText || t("workshops.register")}
               </span>
             </a>
           ))}

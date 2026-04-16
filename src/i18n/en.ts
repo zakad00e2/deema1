@@ -11,15 +11,15 @@ const en = {
     titlePart1: "Leave an",
     titleHighlight: "Athr",
     subtitle:
-      "We turn ideas into creative campaigns, brand experiences, and exceptional events that leave a lasting impression.",
+      "We create unforgettable experiences through impactful events and strategic campaigns that leave a lasting impression.",
     cta: "Work with us",
     ctaSecondary: "Our work",
   },
 
   about: {
-    label: "Meet Deema",
+    label: "Meet dima",
     title: "Creative excellence in every touchpoint.",
-    bio: "Deema is the creative mind behind \"Athr,\" seamlessly blending strategic marketing precision with a refined artistic approach to event design and execution. With a strong eye for detail and a deep understanding of brand storytelling, she transforms ideas into thoughtfully curated experiences. Driven by the belief that true impact—your \"Athr\"—lives in the finest details, she focuses on crafting immersive environments where every element has purpose, allowing brands to come to life in a natural and authentic way while creating meaningful, lasting connections with audiences.",
+    bio: "dima is the creative mind behind \"Athr,\" seamlessly blending strategic marketing precision with a refined artistic approach to event design and execution. With a strong eye for detail and a deep understanding of brand storytelling, she transforms ideas into thoughtfully curated experiences. Driven by the belief that true impact—your \"Athr\"—lives in the finest details, she focuses on crafting immersive environments where every element has purpose, allowing brands to come to life in a natural and authentic way while creating meaningful, lasting connections with audiences.",
     badge: "Athr Foundation",
     signatureLabel: "Signature",
     signature:
@@ -36,11 +36,11 @@ const en = {
     services: {
       creativeCampaigns: {
         title: "Creative Campaigns & Concepts",
-        desc: "From conceptual blueprints to flawless execution, we handle the intricate machinery of elite gatherings.",
+        desc: "From concept to execution, we build campaigns that turn ideas into impactful brand moments.",
       },
       eventConcept: {
         title: "Event Concept & Production",
-        desc: "Narrative-driven campaigns that cut through the noise and deliver measurable brand affinity.",
+        desc: "We design and produce immersive events that translate brand stories into real experiences.",
       },
       brandExperience: {
         title: "Brand Experience",
@@ -201,7 +201,7 @@ const en = {
           "Practical techniques you can use immediately on your phone",
         ],
         format: "Group workshop",
-        dates: "Dates announced by Deema",
+        dates: "Dates announced by dima",
       },
       {
         level: "Advanced",
@@ -215,7 +215,7 @@ const en = {
           "Creating scroll-stopping content without complicated software",
         ],
         format: "Group workshop",
-        dates: "Dates announced by Deema",
+        dates: "Dates announced by dima",
       },
     ],
     registerLink: "Register",

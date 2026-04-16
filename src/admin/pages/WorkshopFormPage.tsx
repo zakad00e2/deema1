@@ -216,7 +216,7 @@ export default function WorkshopFormPage({ editId, onNavigate }: WorkshopFormPag
               </FieldWrapper>
             </div>
             <FieldWrapper label="Dates / Scheduling Text">
-              <TextInput value={form.dates[lang]} onChange={(v) => setBilingual("dates", v)} placeholder={lang === "en" ? "Dates announced by Deema" : "يتم الإعلان عن المواعيد من قبل ديما"} dir={dirAttr} />
+              <TextInput value={form.dates[lang]} onChange={(v) => setBilingual("dates", v)} placeholder={lang === "en" ? "Dates announced by dima" : "يتم الإعلان عن المواعيد من قبل ديما"} dir={dirAttr} />
             </FieldWrapper>
           </div>
 

@@ -41,7 +41,7 @@ export function WorksNavbar({
           : "bg-transparent border-transparent"
       }`}
     >
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-3 flex justify-between items-center">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
         <div className="flex items-center">
           <a href="/" aria-label="Go to home page">
             <img src={brandLogoSrc} alt="Athr Logo" className="h-12 md:h-14" />

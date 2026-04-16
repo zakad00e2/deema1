@@ -28,7 +28,7 @@ export default function WorkshopsPage() {
           ],
           format: "ورشة عمل جماعية",
           dates: "يتم الإعلان عن المواعيد من قبل ديما",
-          image: "https://picsum.photos/seed/editfoundations/800/600",
+          image: "https://images.unsplash.com/photo-1581335967005-7f1c1f7addf9?w=800&auto=format&fit=crop&q=60",
         },
         {
           level: "المتقدمين",
@@ -42,7 +42,7 @@ export default function WorkshopsPage() {
           ],
           format: "ورشة عمل جماعية",
           dates: "يتم الإعلان عن المواعيد من قبل ديما",
-          image: "https://picsum.photos/seed/greenscreen/800/600",
+          image: "https://images.unsplash.com/photo-1601815197826-64673887ceaf?w=800&auto=format&fit=crop&q=60",
         },
       ]
     : [
@@ -57,8 +57,8 @@ export default function WorkshopsPage() {
             "Practical techniques you can use immediately on your phone",
           ],
           format: "Group workshop",
-          dates: "Dates announced by Deema",
-          image: "https://picsum.photos/seed/editfoundations/800/600",
+          dates: "Dates announced by dima",
+          image: "https://images.unsplash.com/photo-1581335967005-7f1c1f7addf9?w=800&auto=format&fit=crop&q=60",
         },
         {
           level: "Advanced",
@@ -71,8 +71,8 @@ export default function WorkshopsPage() {
             "Creating scroll-stopping content without complicated software",
           ],
           format: "Group workshop",
-          dates: "Dates announced by Deema",
-          image: "https://picsum.photos/seed/greenscreen/800/600",
+          dates: "Dates announced by dima",
+          image: "https://images.unsplash.com/photo-1601815197826-64673887ceaf?w=800&auto=format&fit=crop&q=60",
         },
       ];
 
@@ -281,7 +281,7 @@ export default function WorkshopsPage() {
         <section className="ws-hero relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
             <img
-              src="https://picsum.photos/seed/wstexture/1920/1080"
+              src="https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=60&auto=format&fit=crop"
               alt=""
               className="ws-hero-texture w-full h-full object-cover scale-110 rotate-1"
               referrerPolicy="no-referrer"
