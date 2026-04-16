@@ -266,7 +266,7 @@ const About = () => {
       }
     }, "-=0.4");
 
-  }, { scope: sectionRef });
+  }, { scope: sectionRef, dependencies: [isRTL] });
 
   return (
     <section ref={sectionRef} className="py-20 md:py-24 bg-brand-surface-low overflow-hidden">
@@ -298,11 +298,11 @@ const About = () => {
             </div>
             <div className={`mt-12 pt-1 border-t border-brand-surface-high/30 about-stats flex gap-12`}>
               <div>
-                <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-1">120</span>+</p>
+                <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-1">{isRTL ? "١٢٠" : "120"}</span>+</p>
                 <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">{t("about.stat1Label")}</p>
               </div>
               <div>
-                <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-2">12</span></p>
+                <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-2">{isRTL ? "١٢" : "12"}</span></p>
                 <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">{t("about.stat2Label")}</p>
               </div>
             </div>
@@ -561,7 +561,7 @@ const CaseStudy = () => {
             <span className={`${locale === "ar" ? "text-sm md:text-base tracking-[0.28em]" : "text-xs tracking-[0.4em]"} uppercase text-brand-secondary font-bold block mb-4`}>{t("caseStudy.label")}</span>
             <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">{t("caseStudy.title")}</h2>
           </div>
-          <a href="/work" className={`case-header-link ${locale === "ar" ? "text-[0.8rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap`}>
+          <a href="/work/the-obsidian-gala" className={`case-header-link ${locale === "ar" ? "text-[0.8rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap`}>
             {t("caseStudy.seeAll")}
           </a>
         </div>

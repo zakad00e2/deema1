@@ -20,12 +20,8 @@ export function WorksNavbar({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t, isRTL, locale } = useLanguage();
   const brandLogoSrc = getBrandLogoSrc(locale);
-  const desktopNavLinkClass = isScrolled
-    ? "text-brand-primary hover:text-brand-secondary transition-colors"
-    : "text-white hover:text-white/75 transition-colors";
-  const desktopActiveNavLinkClass = isScrolled
-    ? "text-brand-dark border-b border-brand-secondary pb-1 transition-colors"
-    : "text-white border-b border-white/75 pb-1 transition-colors";
+  const desktopNavLinkClass = "text-brand-primary hover:text-brand-secondary transition-colors";
+  const desktopActiveNavLinkClass = "text-brand-dark border-b border-brand-secondary pb-1 transition-colors";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,7 +78,7 @@ export function WorksNavbar({
           </a>
         </div>
         <div className="flex items-center gap-4 md:gap-6">
-          <LanguageSwitcher className="hidden md:flex" tone={isScrolled ? "brand" : "light"} />
+          <LanguageSwitcher className="hidden md:flex" tone="brand" />
           <a
             href="/contact#contact-form"
             className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden"

@@ -60,7 +60,7 @@ const en = {
   caseStudy: {
     label: "Case Study",
     title: "Besan Khalaily – Spring Launch",
-    seeAll: "See All Projects",
+    seeAll: "See Project",
     cardTitle: "A complete launch campaign for a spring collection.",
     cardDesc:
       "A complete marketing and event campaign for Besan Khalaily's Spring Collection, built around visual storytelling and an immersive fashion event.",
