@@ -100,7 +100,7 @@ export function WorksNavbar({
       </div>
 
       <div
-        className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100dvh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${
+        className={`fixed top-0 ${isRTL ? "right-0" : "left-0"} w-full h-[100vh] bg-brand-bg z-[100] flex flex-col px-6 py-6 pb-8 transition-transform duration-500 ease-in-out md:hidden ${
           isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
