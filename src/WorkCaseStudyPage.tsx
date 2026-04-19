@@ -349,11 +349,13 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
   const projectHeroTitle = tpWithFallback("heroTitle", project.heroTitle);
   const categoryLabelText = t(`works.categoryLabels.${project.category}`);
 
-  const preEventMarketing = locale === "ar" ? (tpArray("preEventMarketing").length > 1 ? tpArray("preEventMarketing") : project.preEventMarketing) : project.preEventMarketing;
-  const postEventMarketing = locale === "ar" ? (tpArray("postEventMarketing").length > 1 ? tpArray("postEventMarketing") : project.postEventMarketing) : project.postEventMarketing;
+  const preEventMarketingTitle = project.preEventMarketingTitle || t("caseStudyPage.preEventMarketing");
+  const preEventMarketing = project.preEventMarketing.length > 0 ? project.preEventMarketing : tpArray("preEventMarketing");
+  const postEventMarketingTitle = project.postEventMarketingTitle || t("caseStudyPage.postEventMarketing");
+  const postEventMarketing = project.postEventMarketing.length > 0 ? project.postEventMarketing : tpArray("postEventMarketing");
   const launchEventExperience = locale === "ar" ? (tpArray("launchEventExperience").length > 1 ? tpArray("launchEventExperience") : project.launchEventExperience) : project.launchEventExperience;
   const campaignImpact = locale === "ar" ? (tpArray("campaignImpact").length > 1 ? tpArray("campaignImpact") : project.campaignImpact) : project.campaignImpact;
-  const services = locale === "ar" ? (tpArray("services").length > 1 ? tpArray("services") : project.services) : project.services;
+  const services = project.services;
 
   const visibleServices = services.slice(0, 3);
 
@@ -478,7 +480,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 <div className="pre-event-heading mb-8 flex items-center gap-4">
                   <span className="h-px w-10 bg-brand-secondary/40" />
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight">
-                    {t("caseStudyPage.preEventMarketing")}
+                    {preEventMarketingTitle}
                   </h3>
                 </div>
                 <div className="flex flex-col gap-3">
@@ -491,7 +493,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 </div>
               </div>
               <div className="pre-event-carousel max-w-full overflow-hidden">
-                <ImageCarousel images={project.preEventImages} label={t("caseStudyPage.preEventMarketing")} />
+                <ImageCarousel images={project.preEventImages} label={preEventMarketingTitle} />
               </div>
             </div>
           </div>
@@ -505,7 +507,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 <div className="post-event-heading mb-8 flex items-center gap-4">
                   <span className="h-px w-10 bg-brand-secondary/40" />
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark tracking-tight">
-                    {t("caseStudyPage.postEventMarketing")}
+                    {postEventMarketingTitle}
                   </h3>
                 </div>
                 <div className="flex flex-col gap-3">
@@ -518,7 +520,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 </div>
               </div>
               <div className="post-event-carousel max-w-full overflow-hidden">
-                <ImageCarousel images={project.postEventImages} label={t("caseStudyPage.postEventMarketing")} />
+                <ImageCarousel images={project.postEventImages} label={postEventMarketingTitle} />
               </div>
             </div>
           </div>

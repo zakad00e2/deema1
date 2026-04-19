@@ -19,8 +19,10 @@ export type Project = {
   heroTitle: string;
   heroIntro: string;
   campaignOverview: string;
+  preEventMarketingTitle?: string;
   preEventMarketing: string[];
   launchEventExperience: string[];
+  postEventMarketingTitle?: string;
   postEventMarketing: string[];
   campaignImpact: string[];
   preEventImages: string[];

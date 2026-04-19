@@ -18,6 +18,19 @@ type StrapiPoint = {
   title?: string | null;
 };
 
+type StrapiPointGroup = {
+  id?: number;
+  title?: string | null;
+  points?: StrapiPoint[] | StrapiPoint | null;
+};
+
+type StrapiPointSource =
+  | StrapiPoint[]
+  | StrapiPoint
+  | StrapiPointGroup
+  | null
+  | undefined;
+
 type StrapiWork = {
   id: number;
   documentId: string;
@@ -32,10 +45,11 @@ type StrapiWork = {
   publishedAt?: string | null;
   mainImage?: StrapiImage | null;
   gallery?: StrapiImage[] | null;
-  preEventMarketingPoints?: StrapiPoint[] | StrapiPoint | null;
-  postEventMarketingPoints?: StrapiPoint[] | StrapiPoint | null;
-  launchEventExperiencePoints?: StrapiPoint[] | StrapiPoint | null;
-  campaignImpactPoints?: StrapiPoint[] | StrapiPoint | null;
+  preEventMarketingPoints?: StrapiPointSource;
+  postEventMarketingPoints?: StrapiPointSource;
+  launchEventExperiencePoints?: StrapiPointSource;
+  campaignImpactPoints?: StrapiPointSource;
+  services?: StrapiPointSource;
   localizations?: StrapiWork[] | null;
 };
 
@@ -75,6 +89,20 @@ function pointsToStrings(points: StrapiPoint[] | StrapiPoint | null | undefined)
     .filter((text) => text.length > 0);
 }
 
+function sectionToContent(source: StrapiPointSource): { title: string; points: string[] } {
+  if (!source) return { title: "", points: [] };
+  if (!Array.isArray(source) && "points" in source) {
+    return {
+      title: (source.title ?? "").trim(),
+      points: pointsToStrings(source.points),
+    };
+  }
+  return {
+    title: "",
+    points: pointsToStrings(source),
+  };
+}
+
 function padGallery(images: string[], fallback: string): string[] {
   const base = images.length > 0 ? images : fallback ? [fallback] : [];
   if (base.length === 0) return [];
@@ -101,10 +129,11 @@ function mapStrapiWorkToProject(
     .map((image) => resolveMediaUrl(image?.url))
     .filter((url) => url.length > 0);
 
-  const preEventMarketing = pointsToStrings(work.preEventMarketingPoints);
-  const postEventMarketing = pointsToStrings(work.postEventMarketingPoints);
-  const launchEventExperience = pointsToStrings(work.launchEventExperiencePoints);
-  const campaignImpact = pointsToStrings(work.campaignImpactPoints);
+  const preEventMarketingSection = sectionToContent(work.preEventMarketingPoints);
+  const postEventMarketingSection = sectionToContent(work.postEventMarketingPoints);
+  const launchEventExperienceSection = sectionToContent(work.launchEventExperiencePoints);
+  const campaignImpactSection = sectionToContent(work.campaignImpactPoints);
+  const servicesSection = sectionToContent(work.services);
 
   const paddedGallery = padGallery(gallery, mainImage);
   const coverImage = mainImage || gallery[0] || "";
@@ -127,13 +156,15 @@ function mapStrapiWorkToProject(
     heroTitle: work.shortDescription ?? "",
     heroIntro: work.shortDescription ?? "",
     campaignOverview: work.shortDescription ?? "",
-    preEventMarketing,
-    launchEventExperience,
-    postEventMarketing,
-    campaignImpact,
+    preEventMarketingTitle: preEventMarketingSection.title,
+    preEventMarketing: preEventMarketingSection.points,
+    launchEventExperience: launchEventExperienceSection.points,
+    postEventMarketingTitle: postEventMarketingSection.title,
+    postEventMarketing: postEventMarketingSection.points,
+    campaignImpact: campaignImpactSection.points,
     preEventImages: paddedGallery,
     postEventImages: paddedGallery,
-    services: [],
+    services: servicesSection.points,
     metrics: [],
     gallery: paddedGallery,
     nextProjectSlug: nextSlug,
