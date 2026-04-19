@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works?populate=*\")",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('num_items:', len\\(d['data']\\)\\); print\\('keys of first:', list\\(d['data'][0].keys\\(\\)\\)\\); print\\('launchEventExperiencePoints:', d['data'][0].get\\('launchEventExperiencePoints'\\)\\); print\\('campaignImpactPoints:', d['data'][0].get\\('campaignImpactPoints'\\)\\); print\\('localizations:', d['data'][0].get\\('localizations'\\)\\)\")",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); item=d['data'][0]; print\\('mainImage.url:', item['mainImage']['url']\\); print\\('gallery len:', len\\(item['gallery']\\)\\); print\\('first gallery url:', item['gallery'][0]['url']\\)\")",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('num:', len\\(d['data']\\)\\); print\\('keys:', list\\(d['data'][0].keys\\(\\)\\) if d['data'] else 'none'\\); item=d['data'][0] if d['data'] else None; print\\('title:', item['title'] if item else ''\\); print\\('launch pts:', item.get\\('launchEventExperiencePoints'\\) if item else ''\\)\")",
+      "Bash(curl -sG \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works\" --data-urlencode \"populate=*\" --data-urlencode \"locale=ar\")",
+      "Bash(python -c \"import json; d=json.load\\(open\\('/tmp/works_ar.json','r',encoding='utf-8'\\)\\); print\\('num:', len\\(d['data']\\)\\); item=d['data'][0] if d['data'] else None; print\\('keys:', list\\(item.keys\\(\\)\\) if item else 'none'\\); print\\('title:', item['title'] if item else ''\\)\")",
+      "Bash(curl -sG \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works\" --data-urlencode \"populate=*\" --data-urlencode \"locale=ar\" -o C:/Users/zeka1/works_ar.json)",
+      "Bash(python -c \"import json; d=json.load\\(open\\('C:/Users/zeka1/works_ar.json','r',encoding='utf-8'\\)\\); print\\('num:', len\\(d['data']\\)\\); item=d['data'][0] if d['data'] else None; print\\('keys:', list\\(item.keys\\(\\)\\) if item else 'none'\\); print\\('title:', item['title'] if item else ''\\)\")",
+      "Bash(npx tsc *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Read(//c/Users/zeka1/Desktop/projects/dema/deema1/**)",
+      "Read(//c/Users/zeka1/Desktop/projects/dema/deema1/src/**)",
+      "Bash(curl -sI \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works?populate=*&locale=en\" -H \"Origin: http://localhost:5173\")",
+      "Bash(curl -s -X OPTIONS \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works?populate=*&locale=en\" -H \"Origin: http://localhost:5173\" -H \"Access-Control-Request-Method: GET\" -D - -o /dev/null)",
+      "Bash(curl -sI 'https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works?populate=*' -H 'Origin: __TRACKED_VAR__')",
+      "Bash(curl -sv \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works?populate=*&locale=en\" -H \"Origin: http://localhost:5173\" -o /dev/null)",
+      "Bash(curl -sG \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works\" --data-urlencode \"populate=*\" --data-urlencode \"locale=ar\" -o C:/Users/zeka1/works_ar2.json)",
+      "Bash(python -c ' *)",
+      "Bash(curl -sG \"https://jubilant-basketball-030ed19cd1.strapiapp.com/api/works\" --data-urlencode \"populate=*\" --data-urlencode \"locale=en\" -o C:/Users/zeka1/works_en2.json)"
+    ]
+  }
+}

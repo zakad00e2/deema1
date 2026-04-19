@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import SharedFooter from "./SharedFooter";
 import { WorksNavbar } from "./WorksPage";
-import { getProjectBySlug, getManagedProjects } from "./workData";
+import { useProjects } from "./api/works";
 import { useLanguage } from "./i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -129,7 +129,8 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
 export default function WorkCaseStudyPage({ slug }: { slug: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { t, isRTL, locale } = useLanguage();
-  const project = getProjectBySlug(slug);
+  const { projects, loading, error } = useProjects(locale);
+  const project = projects.find((p) => p.slug === slug);
   const NavArrow = isRTL ? ArrowRight : ArrowLeft;
   const NextArrow = isRTL ? ArrowLeft : ArrowRight;
 
@@ -296,13 +297,39 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
     });
   }, { scope: containerRef, dependencies: [project] });
 
-  if (!project) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-brand-bg text-brand-dark">
         <WorksNavbar active="work" />
         <main className="mx-auto max-w-275 px-6 pb-24 pt-40 md:px-12">
-          <p className="text-sm uppercase tracking-[0.3em] text-brand-secondary">{t("caseStudyPage.notFoundLabel")}</p>
-          <h1 className="mt-6 font-serif text-5xl md:text-7xl">{t("caseStudyPage.notFoundTitle")}</h1>
+          <p className="text-sm uppercase tracking-[0.3em] text-brand-secondary/70">
+            {t("caseStudyPage.loading") === "caseStudyPage.loading" ? "Loading project…" : t("caseStudyPage.loading")}
+          </p>
+        </main>
+        <SharedFooter />
+      </div>
+    );
+  }
+
+  if (error || !project) {
+    return (
+      <div className="min-h-screen bg-brand-bg text-brand-dark">
+        <WorksNavbar active="work" />
+        <main className="mx-auto max-w-275 px-6 pb-24 pt-40 md:px-12">
+          <p className="text-sm uppercase tracking-[0.3em] text-brand-secondary">
+            {error
+              ? t("caseStudyPage.errorLabel") === "caseStudyPage.errorLabel"
+                ? "Unable to load project"
+                : t("caseStudyPage.errorLabel")
+              : t("caseStudyPage.notFoundLabel")}
+          </p>
+          <h1 className="mt-6 font-serif text-5xl md:text-7xl">
+            {error
+              ? t("caseStudyPage.errorTitle") === "caseStudyPage.errorTitle"
+                ? "Something went wrong."
+                : t("caseStudyPage.errorTitle")
+              : t("caseStudyPage.notFoundTitle")}
+          </h1>
           <a
             href="/work"
             className="mt-10 inline-flex items-center gap-3 text-sm uppercase tracking-[0.22em] text-brand-secondary"
@@ -316,10 +343,10 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
     );
   }
 
-  const nextProject = getProjectBySlug(project.nextProjectSlug) ?? getManagedProjects()[0];
+  const nextProject = projects.find((p) => p.slug === project.nextProjectSlug) ?? projects[0] ?? project;
 
-  const projectTitle = tp("title");
-  const projectHeroTitle = tp("heroTitle");
+  const projectTitle = tpWithFallback("title", project.title);
+  const projectHeroTitle = tpWithFallback("heroTitle", project.heroTitle);
   const categoryLabelText = t(`works.categoryLabels.${project.category}`);
 
   const preEventMarketing = locale === "ar" ? (tpArray("preEventMarketing").length > 1 ? tpArray("preEventMarketing") : project.preEventMarketing) : project.preEventMarketing;
@@ -330,8 +357,10 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
 
   const visibleServices = services.slice(0, 3);
 
-  const nextProjectTitle = t(`projects.${nextProject.slug}.title`);
-  const nextProjectDesc = t(`projects.${nextProject.slug}.description`);
+  const nextProjectTitleRaw = t(`projects.${nextProject.slug}.title`);
+  const nextProjectDescRaw = t(`projects.${nextProject.slug}.description`);
+  const nextProjectTitle = nextProjectTitleRaw === `projects.${nextProject.slug}.title` ? nextProject.title : nextProjectTitleRaw;
+  const nextProjectDesc = nextProjectDescRaw === `projects.${nextProject.slug}.description` ? nextProject.description : nextProjectDescRaw;
 
   return (
     <div ref={containerRef} className="min-h-screen bg-brand-bg text-brand-dark antialiased">

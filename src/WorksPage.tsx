@@ -4,7 +4,8 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SharedFooter from "./SharedFooter";
-import { filters, getManagedProjects, type FilterValue, type Project } from "./workData";
+import { filters, type FilterValue, type Project } from "./workData";
+import { useProjects } from "./api/works";
 import { useLanguage } from "./i18n/LanguageContext";
 import { LanguageSwitcher } from "./App";
 import { getBrandLogoSrc } from "./brandLogo";
@@ -215,7 +216,7 @@ export default function WorksPage() {
   const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
   const containerRef = useRef<HTMLDivElement>(null);
   const { t, isRTL, locale } = useLanguage();
-  const allProjects = getManagedProjects();
+  const { projects: allProjects, loading, error } = useProjects(locale);
   const visibleProjects =
     activeFilter === "all"
       ? allProjects
@@ -303,13 +304,32 @@ export default function WorksPage() {
 
         <section className="px-6 md:px-12">
           <div className="mx-auto max-w-[1920px]">
-            <div className="projects-grid grid grid-cols-1 gap-x-12 gap-y-24 md:grid-cols-12">
-              {visibleProjects.map((project) => (
-                <div key={project.slug} className="project-card md:col-span-6">
-                  <ProjectCard project={project} />
-                </div>
-              ))}
-            </div>
+            {loading ? (
+              <div className="py-24 text-center text-sm uppercase tracking-[0.3em] text-brand-secondary/70">
+                {t("works.loading") === "works.loading" ? "Loading projects…" : t("works.loading")}
+              </div>
+            ) : error ? (
+              <div className="py-24 text-center">
+                <p className="text-sm uppercase tracking-[0.3em] text-brand-secondary">
+                  {t("works.error") === "works.error"
+                    ? "We couldn't load the portfolio. Please try again."
+                    : t("works.error")}
+                </p>
+                <p className="mt-4 text-xs text-brand-primary/60 font-mono">{error}</p>
+              </div>
+            ) : visibleProjects.length === 0 ? (
+              <div className="py-24 text-center text-sm uppercase tracking-[0.3em] text-brand-primary/70">
+                {t("works.empty") === "works.empty" ? "No projects to show yet." : t("works.empty")}
+              </div>
+            ) : (
+              <div className="projects-grid grid grid-cols-1 gap-x-12 gap-y-24 md:grid-cols-12">
+                {visibleProjects.map((project) => (
+                  <div key={project.slug} className="project-card md:col-span-6">
+                    <ProjectCard project={project} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>
