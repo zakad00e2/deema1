@@ -1,0 +1,218 @@
+import { useEffect, useState } from "react";
+import type { Locale } from "../i18n/LanguageContext";
+import type { Project, ProjectCategory } from "../workData";
+
+const STRAPI_ORIGIN = "https://jubilant-basketball-030ed19cd1.strapiapp.com";
+// Requests go through a same-origin proxy (Vite dev server + Vercel rewrite)
+// to avoid CORS. Media URLs returned in the payload stay absolute.
+const API_BASE = "/strapi";
+const WORKS_PATH = "/api/works";
+
+type StrapiImage = {
+  url?: string | null;
+};
+
+type StrapiPoint = {
+  id?: number;
+  text?: string | null;
+  title?: string | null;
+};
+
+type StrapiWork = {
+  id: number;
+  documentId: string;
+  title?: string | null;
+  slug?: string | null;
+  shortDescription?: string | null;
+  clientName?: string | null;
+  clientType?: string | null;
+  location?: string | null;
+  displayOrder?: number | null;
+  locale?: string | null;
+  publishedAt?: string | null;
+  mainImage?: StrapiImage | null;
+  gallery?: StrapiImage[] | null;
+  preEventMarketingPoints?: StrapiPoint[] | StrapiPoint | null;
+  postEventMarketingPoints?: StrapiPoint[] | StrapiPoint | null;
+  launchEventExperiencePoints?: StrapiPoint[] | StrapiPoint | null;
+  campaignImpactPoints?: StrapiPoint[] | StrapiPoint | null;
+  localizations?: StrapiWork[] | null;
+};
+
+type StrapiResponse = {
+  data?: StrapiWork[] | null;
+};
+
+function buildWorksUrl(locale: Locale): string {
+  const params = new URLSearchParams({ populate: "*", locale });
+  return `${API_BASE}${WORKS_PATH}?${params.toString()}`;
+}
+
+function resolveMediaUrl(raw: string | null | undefined): string {
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return `${STRAPI_ORIGIN}${raw.startsWith("/") ? raw : `/${raw}`}`;
+}
+
+function mapCategory(clientType: string | null | undefined): ProjectCategory {
+  const key = (clientType ?? "").trim().toLowerCase();
+  if (key === "reimagined") return "reimagined";
+  if (key === "conceptual") return "conceptual";
+  return "executed";
+}
+
+function yearFromTimestamp(timestamp: string | null | undefined): string {
+  if (!timestamp) return "";
+  const year = new Date(timestamp).getFullYear();
+  return Number.isFinite(year) ? String(year) : "";
+}
+
+function pointsToStrings(points: StrapiPoint[] | StrapiPoint | null | undefined): string[] {
+  if (!points) return [];
+  const list = Array.isArray(points) ? points : [points];
+  return list
+    .map((point) => ((point?.text ?? point?.title) ?? "").trim())
+    .filter((text) => text.length > 0);
+}
+
+function padGallery(images: string[], fallback: string): string[] {
+  const base = images.length > 0 ? images : fallback ? [fallback] : [];
+  if (base.length === 0) return [];
+  const result = [...base];
+  while (result.length < 3) {
+    result.push(result[result.length % base.length]);
+  }
+  return result;
+}
+
+function slugFor(work: StrapiWork): string {
+  const raw = (work.slug ?? "").trim();
+  if (raw) return raw;
+  return work.documentId ?? String(work.id);
+}
+
+function mapStrapiWorkToProject(
+  work: StrapiWork,
+  index: number,
+  ordered: StrapiWork[],
+): Project {
+  const mainImage = resolveMediaUrl(work.mainImage?.url);
+  const gallery = (work.gallery ?? [])
+    .map((image) => resolveMediaUrl(image?.url))
+    .filter((url) => url.length > 0);
+
+  const preEventMarketing = pointsToStrings(work.preEventMarketingPoints);
+  const postEventMarketing = pointsToStrings(work.postEventMarketingPoints);
+  const launchEventExperience = pointsToStrings(work.launchEventExperiencePoints);
+  const campaignImpact = pointsToStrings(work.campaignImpactPoints);
+
+  const paddedGallery = padGallery(gallery, mainImage);
+  const coverImage = mainImage || gallery[0] || "";
+  const nextSlug = slugFor(ordered[(index + 1) % ordered.length] ?? work);
+
+  return {
+    slug: slugFor(work),
+    title: work.title ?? "",
+    category: mapCategory(work.clientType),
+    year: yearFromTimestamp(work.publishedAt),
+    location: work.location ?? "",
+    client: work.clientName ?? "",
+    description: work.shortDescription ?? "",
+    image: coverImage,
+    desktopImage: undefined,
+    aspectClass: "aspect-[16/9]",
+    spanClass: "md:col-span-6",
+    notes: work.clientType ? [work.clientType] : [],
+    grayscale: false,
+    heroTitle: work.shortDescription ?? "",
+    heroIntro: work.shortDescription ?? "",
+    campaignOverview: work.shortDescription ?? "",
+    preEventMarketing,
+    launchEventExperience,
+    postEventMarketing,
+    campaignImpact,
+    preEventImages: paddedGallery,
+    postEventImages: paddedGallery,
+    services: [],
+    metrics: [],
+    gallery: paddedGallery,
+    nextProjectSlug: nextSlug,
+  };
+}
+
+async function fetchFrom(url: string, signal?: AbortSignal): Promise<StrapiResponse> {
+  const response = await fetch(url, { signal });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} from ${url}`);
+  }
+  return (await response.json()) as StrapiResponse;
+}
+
+export async function fetchProjects(
+  locale: Locale,
+  signal?: AbortSignal,
+): Promise<Project[]> {
+  const params = new URLSearchParams({ populate: "*", locale });
+  const proxyUrl = `${API_BASE}${WORKS_PATH}?${params.toString()}`;
+  const directUrl = `${STRAPI_ORIGIN}${WORKS_PATH}?${params.toString()}`;
+
+  let payload: StrapiResponse;
+  try {
+    payload = await fetchFrom(proxyUrl, signal);
+  } catch (proxyErr) {
+    if (signal?.aborted) throw proxyErr;
+    // Fallback to the direct origin (works only if the Strapi server allows CORS).
+    try {
+      payload = await fetchFrom(directUrl, signal);
+    } catch (directErr) {
+      console.error("[portfolio] proxy fetch failed:", proxyErr);
+      console.error("[portfolio] direct fetch failed:", directErr);
+      const hint =
+        directErr instanceof TypeError
+          ? "Network/CORS blocked the request. Restart the dev server so the Vite proxy loads, or configure Strapi CORS."
+          : directErr instanceof Error
+            ? directErr.message
+            : "Unknown error";
+      throw new Error(hint);
+    }
+  }
+
+  const items = payload.data ?? [];
+  const ordered = [...items].sort(
+    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
+  );
+  return ordered.map((item, index, arr) => mapStrapiWorkToProject(item, index, arr));
+}
+
+type UseProjectsResult = {
+  projects: Project[];
+  loading: boolean;
+  error: string | null;
+};
+
+export function useProjects(locale: Locale): UseProjectsResult {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+    setError(null);
+    fetchProjects(locale, controller.signal)
+      .then((data) => {
+        setProjects(data);
+      })
+      .catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        const message = err instanceof Error ? err.message : "Unable to load portfolio.";
+        setError(message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
+  }, [locale]);
+
+  return { projects, loading, error };
+}

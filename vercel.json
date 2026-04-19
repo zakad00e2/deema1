@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/strapi/:path*",
+      "destination": "https://jubilant-basketball-030ed19cd1.strapiapp.com/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
