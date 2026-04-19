@@ -9,6 +9,8 @@ import { useProjects } from "./api/works";
 import { useLanguage } from "./i18n/LanguageContext";
 import { LanguageSwitcher } from "./App";
 import { getBrandLogoSrc } from "./brandLogo";
+import { getCategoryLabel } from "./categoryLabels";
+import { SkeletonBlock, SkeletonLines } from "./ui/Skeleton";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -154,9 +156,9 @@ export function WorksNavbar({
 }
 
 function ProjectCard({ project }: { project: Project }) {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, locale } = useLanguage();
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
-  const categoryLabelText = t(`works.categoryLabels.${project.category}`);
+  const categoryLabelText = getCategoryLabel(project.category, locale);
   const i18nTitle = t(`projects.${project.slug}.title`);
   const i18nDesc = t(`projects.${project.slug}.description`);
   const projectTitle = i18nTitle.startsWith("projects.") ? project.title : i18nTitle;
@@ -192,13 +194,6 @@ function ProjectCard({ project }: { project: Project }) {
           <p className="max-w-xl text-sm font-light leading-relaxed text-brand-primary/90">{projectDesc}</p>
         </div>
 
-        {project.notes?.[0] && (
-          <div className="flex items-center gap-3 pt-1 text-[10px] uppercase tracking-[0.24em] text-brand-secondary">
-            <span className="h-px w-8 bg-brand-secondary/35" />
-            <span>{t(`projects.${project.slug}.notes`) !== `projects.${project.slug}.notes` ? t(`projects.${project.slug}.notes`).split(", ")[0] : project.notes[0]}</span>
-          </div>
-        )}
-
         <a
           href={`/work/${project.slug}`}
           className="inline-flex items-center gap-2 pt-1 text-xs font-medium uppercase tracking-widest text-brand-secondary"
@@ -208,6 +203,85 @@ function ProjectCard({ project }: { project: Project }) {
         </a>
       </div>
     </article>
+  );
+}
+
+function ProjectCardSkeleton({ isRTL }: { isRTL: boolean }) {
+  return (
+    <article className="flex h-full flex-col">
+      <div className="relative mb-8 overflow-hidden bg-brand-surface-low">
+        <div className="aspect-[4/3]">
+          <SkeletonBlock className="h-full w-full" />
+        </div>
+        <SkeletonBlock
+          className={`absolute top-6 h-6 w-24 rounded-full ${
+            isRTL ? "right-6" : "left-6"
+          }`}
+        />
+      </div>
+
+      <div className="flex flex-col gap-5">
+        <div className="space-y-4">
+          <SkeletonBlock className="h-10 w-4/5 rounded-sm md:h-12" />
+          <SkeletonLines
+            widths={["w-full", "w-11/12", "w-7/12"]}
+            lineClassName="h-4 rounded-full"
+          />
+        </div>
+        <SkeletonBlock className="h-4 w-32 rounded-full" />
+      </div>
+    </article>
+  );
+}
+
+function WorksPageSkeleton({
+  isRTL,
+  loadingLabel,
+}: {
+  isRTL: boolean;
+  loadingLabel: string;
+}) {
+  return (
+    <div className="min-h-screen bg-brand-bg font-sans text-brand-dark antialiased">
+      <WorksNavbar active="work" />
+
+      <main className="pb-24 pt-32" role="status" aria-live="polite" aria-label={loadingLabel}>
+        <header className="mb-16 px-6 md:px-12">
+          <div className="mx-auto max-w-[1920px]">
+            <SkeletonBlock className="mb-6 h-4 w-24 rounded-full" />
+            <div className="max-w-4xl space-y-4">
+              <SkeletonBlock className="h-16 w-full rounded-sm md:h-20" />
+              <SkeletonBlock className="h-16 w-4/5 rounded-sm md:h-20" />
+            </div>
+          </div>
+        </header>
+
+        <section className="mb-16 px-4 md:px-12">
+          <div className="mx-auto flex max-w-[1920px] justify-between gap-3 border-b border-brand-surface-high pb-6 md:justify-start md:gap-8">
+            {["w-14", "w-24", "w-28", "w-24"].map((width, index) => (
+              <SkeletonBlock
+                key={`${width}-${index}`}
+                className={`-mb-[1.65rem] h-5 rounded-full ${width}`}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="px-6 md:px-12">
+          <div className="mx-auto max-w-[1920px]">
+            <div className="grid grid-cols-1 gap-x-12 gap-y-24 md:grid-cols-12">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="md:col-span-6">
+                  <ProjectCardSkeleton isRTL={isRTL} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SharedFooter />
+    </div>
   );
 }
 
@@ -264,6 +338,13 @@ export default function WorksPage() {
       );
     });
   }, { scope: containerRef, dependencies: [visibleProjects] });
+
+  const loadingLabel =
+    t("works.loading") === "works.loading" ? "Loading projects..." : t("works.loading");
+
+  if (loading) {
+    return <WorksPageSkeleton isRTL={isRTL} loadingLabel={loadingLabel} />;
+  }
 
   return (
     <div ref={containerRef} className="min-h-screen bg-brand-bg font-sans text-brand-dark antialiased">

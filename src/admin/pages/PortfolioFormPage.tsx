@@ -16,6 +16,7 @@ import {
 } from "../components/FormField";
 import { toast } from "../components/Toast";
 import { ArrowLeft, Save, ExternalLink, Loader2 } from "lucide-react";
+import { getCategoryLabel, getCurrentSiteLocale } from "../../categoryLabels";
 
 interface PortfolioFormPageProps {
   editId?: string;
@@ -69,6 +70,7 @@ function newItem(): Omit<PortfolioItem, "id" | "createdAt" | "updatedAt"> {
 }
 
 export default function PortfolioFormPage({ editId, onNavigate }: PortfolioFormPageProps) {
+  const siteLocale = getCurrentSiteLocale();
   const isEditing = !!editId;
   const [lang, setLang] = useState<"en" | "ar">("en");
   const [saving, setSaving] = useState(false);
@@ -175,9 +177,9 @@ export default function PortfolioFormPage({ editId, onNavigate }: PortfolioFormP
   const dirAttr = lang === "ar" ? "rtl" : "ltr";
 
   const categoryOptions = [
-    { value: "executed", label: "Executed" },
-    { value: "reimagined", label: "Reimagined" },
-    { value: "conceptual", label: "Conceptual" },
+    { value: "executed", label: getCategoryLabel("executed", siteLocale) },
+    { value: "reimagined", label: getCategoryLabel("reimagined", siteLocale) },
+    { value: "conceptual", label: getCategoryLabel("conceptual", siteLocale) },
   ];
 
   const statusOptions = [

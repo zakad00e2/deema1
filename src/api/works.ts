@@ -12,6 +12,8 @@ type StrapiImage = {
   url?: string | null;
 };
 
+type StrapiImageSource = StrapiImage[] | StrapiImage | null | undefined;
+
 type StrapiPoint = {
   id?: number;
   text?: string | null;
@@ -22,6 +24,7 @@ type StrapiPointGroup = {
   id?: number;
   title?: string | null;
   points?: StrapiPoint[] | StrapiPoint | null;
+  images?: StrapiImageSource;
 };
 
 type StrapiPointSource =
@@ -44,7 +47,12 @@ type StrapiWork = {
   locale?: string | null;
   publishedAt?: string | null;
   mainImage?: StrapiImage | null;
-  gallery?: StrapiImage[] | null;
+  gallery?: StrapiImageSource;
+  galleryImages?: StrapiImageSource;
+  preEventImages?: StrapiImageSource;
+  preEventMarketingImages?: StrapiImageSource;
+  postEventImages?: StrapiImageSource;
+  postEventMarketingImages?: StrapiImageSource;
   preEventMarketingPoints?: StrapiPointSource;
   postEventMarketingPoints?: StrapiPointSource;
   launchEventExperiencePoints?: StrapiPointSource;
@@ -103,6 +111,19 @@ function sectionToContent(source: StrapiPointSource): { title: string; points: s
   };
 }
 
+function sectionToImages(source: StrapiPointSource): string[] {
+  if (!source || Array.isArray(source) || !("images" in source)) return [];
+  return imagesToUrls(source.images);
+}
+
+function imagesToUrls(source: StrapiImageSource): string[] {
+  if (!source) return [];
+  const items = Array.isArray(source) ? source : [source];
+  return items
+    .map((image) => resolveMediaUrl(image?.url))
+    .filter((url) => url.length > 0);
+}
+
 function padGallery(images: string[], fallback: string): string[] {
   const base = images.length > 0 ? images : fallback ? [fallback] : [];
   if (base.length === 0) return [];
@@ -125,9 +146,17 @@ function mapStrapiWorkToProject(
   ordered: StrapiWork[],
 ): Project {
   const mainImage = resolveMediaUrl(work.mainImage?.url);
-  const gallery = (work.gallery ?? [])
-    .map((image) => resolveMediaUrl(image?.url))
-    .filter((url) => url.length > 0);
+  const gallery = imagesToUrls(work.gallery ?? work.galleryImages);
+  const preEventSectionImages = sectionToImages(work.preEventMarketingPoints);
+  const postEventSectionImages = sectionToImages(work.postEventMarketingPoints);
+  const preEventImages =
+    preEventSectionImages.length > 0
+      ? preEventSectionImages
+      : imagesToUrls(work.preEventImages ?? work.preEventMarketingImages);
+  const postEventImages =
+    postEventSectionImages.length > 0
+      ? postEventSectionImages
+      : imagesToUrls(work.postEventImages ?? work.postEventMarketingImages);
 
   const preEventMarketingSection = sectionToContent(work.preEventMarketingPoints);
   const postEventMarketingSection = sectionToContent(work.postEventMarketingPoints);
@@ -135,8 +164,10 @@ function mapStrapiWorkToProject(
   const campaignImpactSection = sectionToContent(work.campaignImpactPoints);
   const servicesSection = sectionToContent(work.services);
 
-  const paddedGallery = padGallery(gallery, mainImage);
-  const coverImage = mainImage || gallery[0] || "";
+  const coverImage = mainImage || gallery[0] || preEventImages[0] || postEventImages[0] || "";
+  const paddedGallery = padGallery(gallery, coverImage);
+  const paddedPreEventImages = padGallery(preEventImages, "");
+  const paddedPostEventImages = padGallery(postEventImages, "");
   const nextSlug = slugFor(ordered[(index + 1) % ordered.length] ?? work);
 
   return {
@@ -151,7 +182,7 @@ function mapStrapiWorkToProject(
     desktopImage: undefined,
     aspectClass: "aspect-[16/9]",
     spanClass: "md:col-span-6",
-    notes: work.clientType ? [work.clientType] : [],
+    notes: servicesSection.points,
     grayscale: false,
     heroTitle: work.shortDescription ?? "",
     heroIntro: work.shortDescription ?? "",
@@ -162,8 +193,8 @@ function mapStrapiWorkToProject(
     postEventMarketingTitle: postEventMarketingSection.title,
     postEventMarketing: postEventMarketingSection.points,
     campaignImpact: campaignImpactSection.points,
-    preEventImages: paddedGallery,
-    postEventImages: paddedGallery,
+    preEventImages: paddedPreEventImages,
+    postEventImages: paddedPostEventImages,
     services: servicesSection.points,
     metrics: [],
     gallery: paddedGallery,

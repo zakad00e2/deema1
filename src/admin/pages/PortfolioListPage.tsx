@@ -5,6 +5,7 @@ import type { AdminPage } from "../components/AdminLayout";
 import ConfirmDialog from "../components/ConfirmDialog";
 import StatusBadge from "../components/StatusBadge";
 import { toast } from "../components/Toast";
+import { getCategoryLabel, getCurrentSiteLocale } from "../../categoryLabels";
 import {
   Plus,
   Search,
@@ -24,13 +25,6 @@ interface PortfolioListPageProps {
   onNavigate: (page: AdminPage, id?: string) => void;
 }
 
-const CATEGORY_OPTIONS: { value: "all" | ProjectCategory; label: string }[] = [
-  { value: "all", label: "All Categories" },
-  { value: "executed", label: "Executed" },
-  { value: "reimagined", label: "Reimagined" },
-  { value: "conceptual", label: "Conceptual" },
-];
-
 const STATUS_OPTIONS: { value: "all" | PublishStatus; label: string }[] = [
   { value: "all", label: "All Status" },
   { value: "published", label: "Published" },
@@ -38,6 +32,7 @@ const STATUS_OPTIONS: { value: "all" | PublishStatus; label: string }[] = [
 ];
 
 export default function PortfolioListPage({ onNavigate }: PortfolioListPageProps) {
+  const siteLocale = getCurrentSiteLocale();
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<"all" | ProjectCategory>("all");
@@ -162,6 +157,12 @@ export default function PortfolioListPage({ onNavigate }: PortfolioListPageProps
   }
 
   const hasFilters = search || categoryFilter !== "all" || statusFilter !== "all" || featuredFilter !== "all";
+  const categoryOptions: { value: "all" | ProjectCategory; label: string }[] = [
+    { value: "all", label: siteLocale === "ar" ? "جميع التصنيفات" : "All Categories" },
+    { value: "executed", label: getCategoryLabel("executed", siteLocale) },
+    { value: "reimagined", label: getCategoryLabel("reimagined", siteLocale) },
+    { value: "conceptual", label: getCategoryLabel("conceptual", siteLocale) },
+  ];
 
   if (loading) {
     return <div className="text-sm text-[#9a9590]">Loading portfolio projects...</div>;
@@ -207,7 +208,7 @@ export default function PortfolioListPage({ onNavigate }: PortfolioListPageProps
             onChange={(e) => setCategoryFilter(e.target.value as any)}
             className="bg-white border border-[#e6e2db] text-xs font-sans text-[#605b55] px-2 py-2 focus:outline-none focus:border-[#745940] transition-colors"
           >
-            {CATEGORY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            {categoryOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
           <select
             value={statusFilter}
@@ -297,7 +298,7 @@ export default function PortfolioListPage({ onNavigate }: PortfolioListPageProps
                   </td>
                   {/* Category */}
                   <td className="px-4 py-3">
-                    <span className="text-xs text-[#605b55] capitalize">{item.category}</span>
+                    <span className="text-xs text-[#605b55]">{getCategoryLabel(item.category, siteLocale)}</span>
                     <p className="text-[10px] text-[#9a9590]">{item.year}</p>
                   </td>
                   {/* Status */}
@@ -373,7 +374,7 @@ export default function PortfolioListPage({ onNavigate }: PortfolioListPageProps
                 <div className="flex items-center gap-2 mt-1 flex-wrap">
                   <StatusBadge status={item.status} />
                   {item.featured && <StatusBadge status="featured" />}
-                  <span className="text-[10px] text-[#9a9590] capitalize">{item.category}</span>
+                  <span className="text-[10px] text-[#9a9590]">{getCategoryLabel(item.category, siteLocale)}</span>
                 </div>
               </div>
               <div className="flex gap-1 shrink-0">

@@ -3,12 +3,14 @@ import { portfolioService } from "../data/portfolioService";
 import { workshopService } from "../data/workshopService";
 import type { AdminPage } from "../components/AdminLayout";
 import { Images, BookOpen, Globe, Star, FileEdit, Plus, ExternalLink } from "lucide-react";
+import { getCategoryLabel, getCurrentSiteLocale } from "../../categoryLabels";
 
 interface OverviewPageProps {
   onNavigate: (page: AdminPage, id?: string) => void;
 }
 
 export default function OverviewPage({ onNavigate }: OverviewPageProps) {
+  const siteLocale = getCurrentSiteLocale();
   const [portfolioItems, setPortfolioItems] = useState<any[]>([]);
   const [workshopItems, setWorkshopItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -144,7 +146,7 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-[#1c1c18] truncate font-medium">{item.title.en}</p>
-                  <p className="text-xs text-[#9a9590] capitalize">{item.category} · {item.year}</p>
+                  <p className="text-xs text-[#9a9590]">{getCategoryLabel(item.category, siteLocale)} · {item.year}</p>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className={`text-[10px] uppercase tracking-widest px-1.5 py-0.5 ${item.status === "published" ? "text-green-700 bg-green-50" : "text-[#9a9590] bg-[#f7f3ec]"}`}>
