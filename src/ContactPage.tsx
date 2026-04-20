@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { Send } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -9,12 +9,53 @@ import { useLanguage } from "./i18n/LanguageContext";
 const fieldBase =
   "w-full bg-transparent border-0 border-b border-brand-surface-high py-4 px-0 text-lg font-serif text-brand-primary placeholder:text-brand-primary/30 focus:border-brand-secondary focus:outline-none transition-colors duration-300";
 
+type ContactFormState = {
+  name: string;
+  email: string;
+  interest: string;
+  message: string;
+};
+
+type SubmitState = "idle" | "submitting" | "success" | "error";
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function ContactPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const infoRef = useRef<HTMLDivElement>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
-  const { t, isRTL, locale } = useLanguage();
+  const { t, tArray, isRTL, locale } = useLanguage();
+  const translatedInterestOptions = tArray("contact.interestOptions");
+  const contactInterestOptions =
+    locale === "ar" && !translatedInterestOptions.includes("خدمة Planner")
+      ? [...translatedInterestOptions.slice(0, 2), "خدمة Planner", ...translatedInterestOptions.slice(2)]
+      : translatedInterestOptions;
+  const defaultInterest = contactInterestOptions[0] ?? "";
+  const [formData, setFormData] = useState<ContactFormState>({
+    name: "",
+    email: "",
+    interest: defaultInterest,
+    message: "",
+  });
+  const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+
+  const copy =
+    locale === "ar"
+      ? {
+          sending: "جاري الإرسال...",
+          success: "تم إرسال رسالتك بنجاح. سنعود إليك قريباً.",
+          invalid: "يرجى تعبئة جميع الحقول وإدخال بريد إلكتروني صحيح.",
+          error: "تعذر إرسال الرسالة حالياً. حاولي مرة أخرى بعد قليل.",
+        }
+      : {
+          sending: "Sending...",
+          success: "Your message has been sent successfully. We'll get back to you soon.",
+          invalid: "Please complete all fields and enter a valid email address.",
+          error: "Unable to send your message right now. Please try again shortly.",
+        };
+
   const contactHeroTitleClass =
     locale === "ar"
       ? "font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tighter text-brand-dark mb-8"
@@ -29,6 +70,15 @@ export default function ContactPage() {
     locale === "ar"
       ? "mb-2 block text-[0.9rem] font-semibold tracking-[0.08em] transition-colors duration-300"
       : "mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.28em] transition-colors duration-300";
+
+  useEffect(() => {
+    setFormData((current) => ({
+      ...current,
+      interest: contactInterestOptions.includes(current.interest)
+        ? current.interest
+        : defaultInterest,
+    }));
+  }, [locale, defaultInterest]);
 
   useGSAP(
     () => {
@@ -96,12 +146,85 @@ export default function ContactPage() {
     { scope: formRef }
   );
 
-  const interestOptions = locale === "ar"
-    ? ["مشروع تصميم مخصص", "ورشة عمل فنية", "صحافة وتعاون", "رسالة عامة"]
-    : ["Bespoke Design Project", "Artistic Workshop", "Press & Collaboration", "General Message"];
-  const contactInterestOptions = locale === "ar"
-    ? [...interestOptions.slice(0, 2), "خدمة Planner", ...interestOptions.slice(2)]
-    : [...interestOptions.slice(0, 2), "Planner Service", ...interestOptions.slice(2)];
+  function handleChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+
+    if (submitState !== "idle") {
+      setSubmitState("idle");
+      setFeedbackMessage("");
+    }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const trimmed = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      interest: formData.interest.trim(),
+      message: formData.message.trim(),
+    };
+
+    if (
+      !trimmed.name ||
+      !trimmed.email ||
+      !trimmed.interest ||
+      !trimmed.message ||
+      !EMAIL_PATTERN.test(trimmed.email)
+    ) {
+      setSubmitState("error");
+      setFeedbackMessage(copy.invalid);
+      return;
+    }
+
+    setSubmitState("submitting");
+    setFeedbackMessage(copy.sending);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(trimmed),
+      });
+
+      const raw = await response.text();
+      const payload = raw ? (JSON.parse(raw) as { message?: string }) : null;
+
+      if (!response.ok) {
+        const fallbackMessage =
+          response.status === 404
+            ? "The contact endpoint is not available in the current environment."
+            : copy.error;
+        throw new Error(payload?.message || fallbackMessage);
+      }
+
+      setSubmitState("success");
+      setFeedbackMessage(copy.success);
+      setFormData({
+        name: "",
+        email: "",
+        interest: defaultInterest,
+        message: "",
+      });
+    } catch (error) {
+      setSubmitState("error");
+      setFeedbackMessage(
+        error instanceof Error && error.message ? error.message : copy.error
+      );
+    }
+  }
+
+  const feedbackClass =
+    submitState === "success"
+      ? "text-emerald-700"
+      : submitState === "error"
+        ? "text-red-700"
+        : "text-brand-primary/55";
 
   return (
     <div className="min-h-screen bg-brand-bg font-sans text-brand-dark antialiased">
@@ -126,9 +249,7 @@ export default function ContactPage() {
             ) : (
               <>
                 <div className={contactHeroLineWrapClass}>
-                  <h1 className={contactHeroTitleClass}>
-                    {t("contact.heroLine1")}
-                  </h1>
+                  <h1 className={contactHeroTitleClass}>{t("contact.heroLine1")}</h1>
                 </div>
                 <div className={contactHeroLineWrapClass}>
                   <h1 className={contactHeroTitleClass}>
@@ -172,10 +293,7 @@ export default function ContactPage() {
                   </h2>
                 </div>
 
-                <form
-                  className="space-y-10"
-                  onSubmit={(e) => e.preventDefault()}
-                >
+                <form className="space-y-10" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
                     <div className="relative">
                       <label
@@ -186,9 +304,12 @@ export default function ContactPage() {
                       </label>
                       <input
                         id="contact-name"
+                        name="name"
                         type="text"
                         placeholder={t("contact.namePlaceholder")}
                         className={fieldBase}
+                        value={formData.name}
+                        onChange={handleChange}
                         onFocus={() => setFocusedField("name")}
                         onBlur={() => setFocusedField(null)}
                       />
@@ -202,10 +323,13 @@ export default function ContactPage() {
                       </label>
                       <input
                         id="contact-email"
+                        name="email"
                         type="email"
                         placeholder={t("contact.emailPlaceholder")}
                         className={`${fieldBase} ltr-content`}
                         dir="ltr"
+                        value={formData.email}
+                        onChange={handleChange}
                         onFocus={() => setFocusedField("email")}
                         onBlur={() => setFocusedField(null)}
                       />
@@ -221,13 +345,17 @@ export default function ContactPage() {
                     </label>
                     <select
                       id="contact-interest"
+                      name="interest"
                       className={fieldBase}
-                      defaultValue={contactInterestOptions[0]}
+                      value={formData.interest}
+                      onChange={handleChange}
                       onFocus={() => setFocusedField("interest")}
                       onBlur={() => setFocusedField(null)}
                     >
                       {contactInterestOptions.map((opt) => (
-                        <option key={opt}>{opt}</option>
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -241,36 +369,48 @@ export default function ContactPage() {
                     </label>
                     <textarea
                       id="contact-message"
+                      name="message"
                       rows={5}
                       placeholder={t("contact.messagePlaceholder")}
                       className={`${fieldBase} resize-none`}
+                      value={formData.message}
+                      onChange={handleChange}
                       onFocus={() => setFocusedField("message")}
                       onBlur={() => setFocusedField(null)}
                     />
                   </div>
 
-                  <div className="flex items-center gap-8 pt-2">
-                    <button
-                      type="submit"
-                      className="group relative inline-flex items-center gap-3 overflow-hidden bg-brand-secondary px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-dark active:scale-[0.98]"
-                    >
-                      <span className="relative z-10">{t("contact.sendButton")}</span>
-                      <span className={`relative z-10 ${isRTL ? "[transform:scaleX(-1)]" : ""}`}>
-                        <Send className={`h-3.5 w-3.5 transition-transform duration-300 ${isRTL ? "group-hover:translate-x-0.5 group-hover:-translate-y-0.5" : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5"}`} />
+                  <div className="flex flex-col gap-4 pt-2 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-8">
+                      <button
+                        type="submit"
+                        disabled={submitState === "submitting"}
+                        className="group relative inline-flex items-center gap-3 overflow-hidden bg-brand-secondary px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
+                      >
+                        <span className="relative z-10">
+                          {submitState === "submitting" ? copy.sending : t("contact.sendButton")}
+                        </span>
+                        <span className={`relative z-10 ${isRTL ? "[transform:scaleX(-1)]" : ""}`}>
+                          <Send className={`h-3.5 w-3.5 transition-transform duration-300 ${isRTL ? "group-hover:translate-x-0.5 group-hover:-translate-y-0.5" : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5"}`} />
+                        </span>
+                      </button>
+                      <span className="hidden text-xs text-brand-primary/40 md:block">
+                        {t("contact.replyNote")}
                       </span>
-                    </button>
-                    <span className="hidden text-xs text-brand-primary/40 md:block">
-                      {t("contact.replyNote")}
-                    </span>
+                    </div>
+
+                    <p
+                      aria-live="polite"
+                      className={`text-sm leading-relaxed ${feedbackClass} ${isRTL ? "md:text-right" : "md:text-left"}`}
+                    >
+                      {feedbackMessage}
+                    </p>
                   </div>
                 </form>
               </div>
             </div>
 
-            <div
-              ref={infoRef}
-              className="lg:col-span-5 lg:h-full"
-            >
+            <div ref={infoRef} className="lg:col-span-5 lg:h-full">
               <div className="contact-info-block h-[24rem] md:h-[34rem] lg:h-full">
                 <img
                   src="/unnamed%20(3).png"

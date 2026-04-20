@@ -49,12 +49,12 @@ export default function SharedFooter() {
             <p className="text-[0.6rem] font-bold uppercase tracking-widest text-brand-secondary">{t("footer.contactLabel")}</p>
             <div className={`flex w-full flex-col gap-2 ${isRTL ? "items-end" : "items-start"}`}>
               <a
-                href="mailto:hello@athr.studio"
+                href="mailto:Leaveanathr@gmail.com"
                 className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${
                   isRTL ? "ltr-content-rtl-start text-right" : "text-left"
                 }`}
               >
-                hello@athr.studio
+                Leaveanathr@gmail.com
               </a>
               <a
                 href="tel:+97143411367"
