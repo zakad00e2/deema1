@@ -8,7 +8,7 @@ import WorksPage from "./WorksPage";
 import WorkshopsPage from "./WorkshopsPage";
 import ContactPage from "./ContactPage";
 import SharedFooter from "./SharedFooter";
-import { getGroupWorkshopsContent } from "./workshopContent";
+import { useGroupWorkshops } from "./api/workshops";
 import { useLanguage } from "./i18n/LanguageContext";
 import {
   getBrandLogoGreySrc,
@@ -684,7 +684,7 @@ const WorkshopsHome = () => {
   const sectionRef = useRef(null);
   const { t, isRTL, locale } = useLanguage();
 
-  const items = getGroupWorkshopsContent(locale);
+  const { workshops: items } = useGroupWorkshops(locale);
 
   function en_workshops_items() {
     return [
@@ -729,8 +729,8 @@ const WorkshopsHome = () => {
           <p className="text-brand-primary/70 font-light">{t("workshops.subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
-          {items.map((item) => (
-            <a href={item.ctaLink} key={item.id} className="workshop-item group block cursor-pointer">
+          {items.map((item, index) => (
+            <a href="/workshops" key={`${item.title}-${index}`} className="workshop-item group block cursor-pointer">
               <div className="aspect-square bg-brand-surface-low mb-6 overflow-hidden relative">
                 <img 
                   src={item.image}
@@ -743,9 +743,9 @@ const WorkshopsHome = () => {
                 </div>
               </div>
               <h3 className="text-xl font-serif text-brand-primary mb-2">{item.title}</h3>
-              <p className="text-brand-primary/70 font-light text-sm leading-relaxed mb-4">{item.summary}</p>
+              <p className="text-brand-primary/70 font-light text-sm leading-relaxed mb-4">{item.description}</p>
               <span className={`${locale === "ar" ? "text-[0.82rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-bold text-brand-secondary border-b border-brand-secondary/20 pb-1 group-hover:border-brand-secondary transition-all`}>
-                {item.ctaText || t("workshops.register")}
+                {t("workshops.register")}
               </span>
             </a>
           ))}

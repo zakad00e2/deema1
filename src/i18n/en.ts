@@ -142,6 +142,7 @@ const en = {
     label: "Our Portfolio",
     titleLine1: "Selected",
     titleLine2: "Works.",
+    desc: "A collection of projects and experiences that reflect our vision of blending visual storytelling with exceptional spatial design.",
     viewStudy: "View Study",
     filters: {
       all: "All Projects",

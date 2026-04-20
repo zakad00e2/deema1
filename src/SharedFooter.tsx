@@ -48,10 +48,20 @@ export default function SharedFooter() {
           <div className="flex flex-col gap-6">
             <p className="text-[0.6rem] font-bold uppercase tracking-widest text-brand-secondary">{t("footer.contactLabel")}</p>
             <div className={`flex w-full flex-col gap-2 ${isRTL ? "items-end" : "items-start"}`}>
-              <a href="mailto:hello@athr.studio" className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-right" : "text-left"}`}>
+              <a
+                href="mailto:hello@athr.studio"
+                className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${
+                  isRTL ? "ltr-content-rtl-start text-right" : "text-left"
+                }`}
+              >
                 hello@athr.studio
               </a>
-              <a href="tel:+97143411367" className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-right" : "text-left"}`}>
+              <a
+                href="tel:+97143411367"
+                className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${
+                  isRTL ? "ltr-content-rtl-start text-right" : "text-left"
+                }`}
+              >
                 +971 (0) 4 341 1367
               </a>
             </div>

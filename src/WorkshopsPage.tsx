@@ -6,6 +6,7 @@ import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { WorksNavbar } from "./WorksPage";
 import SharedFooter from "./SharedFooter";
 import { useLanguage } from "./i18n/LanguageContext";
+import { useGroupWorkshops } from "./api/workshops";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -13,8 +14,9 @@ export default function WorkshopsPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { t, isRTL, locale } = useLanguage();
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
+  const { workshops: groupWorkshops } = useGroupWorkshops(locale);
 
-  const groupWorkshops = locale === "ar"
+  const _staticGroupWorkshops = locale === "ar"
     ? [
         {
           level: "المبتدئين",
@@ -98,10 +100,6 @@ export default function WorkshopsPage() {
         "Live feedback & team brainstorming",
       ];
 
-  const heroTags = locale === "ar"
-    ? ["٣ ورش عمل", "من المبتدئ إلى المتقدم", "خاصة وجماعية"]
-    : ["3 Workshops", "Beginner to Advanced", "Private & Group"];
-
   useGSAP(
     () => {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -114,19 +112,6 @@ export default function WorkshopsPage() {
         ".ws-hero-el",
         { y: 72, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.5, stagger: 0.14, ease: "expo.out" }
-      );
-
-      gsap.fromTo(
-        ".ws-hero-tag",
-        { x: isRTL ? 18 : -18, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          delay: 0.45,
-          ease: "power3.out",
-        }
       );
 
       gsap.fromTo(
@@ -278,7 +263,7 @@ export default function WorkshopsPage() {
 
       <main>
         {/* Hero */}
-        <section className="ws-hero relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+        <section className="ws-hero relative pt-32 pb-14 md:pt-40 md:pb-18 overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
             <img
               src="https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=60&auto=format&fit=crop"
@@ -300,19 +285,11 @@ export default function WorkshopsPage() {
             <p className="ws-hero-el text-lg md:text-xl text-brand-primary/80 font-light max-w-2xl leading-relaxed mb-12">
               {t("workshopsPage.heroDesc")}
             </p>
-            <div className="ws-hero-el flex flex-wrap gap-8">
-              {heroTags.map((tag) => (
-                <div key={tag} className="ws-hero-tag flex items-center gap-3 text-brand-primary/60">
-                  <span className="h-px w-8 bg-brand-secondary/40" />
-                  <span className="text-[0.6rem] uppercase tracking-widest font-bold">{tag}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
         {/* Featured: Content That Converts */}
-        <section className="ws-featured py-24 md:py-32 bg-brand-surface-low overflow-hidden">
+        <section className="ws-featured pt-16 pb-24 md:pt-20 md:pb-32 bg-brand-surface-low overflow-hidden">
           <div className="max-w-[100rem] mx-auto px-6 md:px-12">
             <div className={`grid grid-cols-1 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] ${locale === "ar" ? "gap-10 lg:gap-12" : "gap-16 lg:gap-20"} items-center`}>
               <div className="relative order-2 lg:order-1">
@@ -394,7 +371,7 @@ export default function WorkshopsPage() {
               <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">
                 {t("workshopsPage.groupSessionsLabel")}
               </span>
-              <h2 className="text-3xl md:text-5xl font-serif text-brand-primary">
+              <h2 className="text-3xl md:text-5xl font-serif text-black">
                 {t("workshopsPage.openWorkshops")}
               </h2>
             </div>

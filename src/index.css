@@ -152,6 +152,10 @@
   text-align: left !important;
 }
 
+[dir="rtl"] .ltr-content-rtl-start {
+  text-align: right !important;
+}
+
 /* Language switcher */
 .lang-switch {
   transition: all 0.3s ease;
