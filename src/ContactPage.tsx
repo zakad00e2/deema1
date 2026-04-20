@@ -193,7 +193,15 @@ export default function ContactPage() {
       });
 
       const raw = await response.text();
-      const payload = raw ? (JSON.parse(raw) as { message?: string }) : null;
+      let payload: { message?: string } | null = null;
+
+      if (raw) {
+        try {
+          payload = JSON.parse(raw) as { message?: string };
+        } catch {
+          payload = { message: raw };
+        }
+      }
 
       if (!response.ok) {
         const fallbackMessage =
