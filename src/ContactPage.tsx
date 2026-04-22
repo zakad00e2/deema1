@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import emailjs from "@emailjs/browser";
 import { Send } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -19,6 +20,68 @@ type ContactFormState = {
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getEmailJsConfig() {
+  return {
+    serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim(),
+    templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim(),
+    publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim(),
+  };
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function getSiteName() {
+  if (typeof window === "undefined") return "Website";
+
+  const hostname = window.location.hostname.replace(/^www\./, "");
+  return hostname || "Website";
+}
+
+function buildEmailTemplateParams(
+  data: ContactFormState,
+  locale: string
+) {
+  const submittedAt = new Date();
+  const submittedAtLabel = new Intl.DateTimeFormat(
+    locale === "ar" ? "ar-EG" : "en-US",
+    {
+      dateStyle: "full",
+      timeStyle: "short",
+    }
+  ).format(submittedAt);
+
+  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
+  const pagePath = typeof window !== "undefined" ? window.location.pathname : "";
+  const siteName = getSiteName();
+
+  return {
+    title: `New contact request from ${data.name}`,
+    name: data.name,
+    from_name: data.name,
+    reply_to: data.email,
+    from_email: data.email,
+    email: data.email,
+    interest: data.interest,
+    message: data.message,
+    message_html: escapeHtml(data.message).replace(/\n/g, "<br />"),
+    time: submittedAtLabel,
+    locale,
+    submitted_at: submittedAtLabel,
+    submitted_at_iso: submittedAt.toISOString(),
+    page_url: pageUrl,
+    page_path: pagePath,
+    site_name: siteName,
+    email_subject: `New contact request from ${data.name}`,
+  };
+}
 
 export default function ContactPage() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -184,32 +247,22 @@ export default function ContactPage() {
     setFeedbackMessage(copy.sending);
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(trimmed),
-      });
+      const { serviceId, templateId, publicKey } = getEmailJsConfig();
 
-      const raw = await response.text();
-      let payload: { message?: string } | null = null;
-
-      if (raw) {
-        try {
-          payload = JSON.parse(raw) as { message?: string };
-        } catch {
-          payload = { message: raw };
-        }
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error(
+          locale === "ar"
+            ? "خدمة الإرسال غير مهيأة بعد. أضف VITE_EMAILJS_SERVICE_ID و VITE_EMAILJS_TEMPLATE_ID و VITE_EMAILJS_PUBLIC_KEY."
+            : "EmailJS is not configured yet. Add VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_EMAILJS_PUBLIC_KEY."
+        );
       }
 
-      if (!response.ok) {
-        const fallbackMessage =
-          response.status === 404
-            ? "The contact endpoint is not available in the current environment."
-            : copy.error;
-        throw new Error(payload?.message || fallbackMessage);
-      }
+      await emailjs.send(
+        serviceId,
+        templateId,
+        buildEmailTemplateParams(trimmed, locale),
+        { publicKey }
+      );
 
       setSubmitState("success");
       setFeedbackMessage(copy.success);
@@ -220,6 +273,7 @@ export default function ContactPage() {
         message: "",
       });
     } catch (error) {
+      console.error("[contact] EmailJS send failed:", error);
       setSubmitState("error");
       setFeedbackMessage(
         error instanceof Error && error.message ? error.message : copy.error

@@ -113,7 +113,14 @@ async function sendEmail(payload: {
   if (!resendResponse.ok) {
     const errorText = await resendResponse.text();
     console.error("[contact] Resend request failed:", errorText);
-    return json({ message: "Unable to send the email right now." }, 502);
+    let message = "Unable to send the email right now.";
+
+    if (errorText.includes("You can only send testing emails to your own email address")) {
+      message =
+        "Resend is rejecting this send because onboarding@resend.dev only works for your own Resend account email. To deliver to Leaveanathr@gmail.com, verify your own domain in Resend and use it in CONTACT_EMAIL_FROM.";
+    }
+
+    return json({ message }, 502);
   }
 
   return json({ ok: true }, 200);
