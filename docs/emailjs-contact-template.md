@@ -45,22 +45,6 @@ From Name:
           padding-right: 20px !important;
         }
 
-        .stack-col,
-        .stack-col td {
-          display: block !important;
-          width: 100% !important;
-        }
-
-        .stack-gap {
-          display: none !important;
-          width: 0 !important;
-          height: 0 !important;
-        }
-
-        .field-card {
-          margin-bottom: 12px !important;
-        }
-
         .hero-title {
           font-size: 28px !important;
         }
@@ -88,10 +72,10 @@ From Name:
 
             <tr>
               <td class="email-content" style="padding:32px 40px 10px;">
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:0 14px;">
                   <tr>
-                    <td class="stack-col" width="50%" valign="top" style="padding:0 10px 14px 0;">
-                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="field-card" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
+                    <td valign="top">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
                         <tr>
                           <td style="padding:18px 20px;">
                             <p style="margin:0 0 8px;font-size:11px;line-height:1.4;letter-spacing:0.18em;text-transform:uppercase;color:#745940;font-weight:700;">
@@ -104,9 +88,10 @@ From Name:
                         </tr>
                       </table>
                     </td>
-                    <td class="stack-gap" width="20" style="font-size:0;line-height:0;">&nbsp;</td>
-                    <td class="stack-col" width="50%" valign="top" style="padding:0 0 14px 10px;">
-                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="field-card" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
+                  </tr>
+                  <tr>
+                    <td valign="top">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
                         <tr>
                           <td style="padding:18px 20px;">
                             <p style="margin:0 0 8px;font-size:11px;line-height:1.4;letter-spacing:0.18em;text-transform:uppercase;color:#745940;font-weight:700;">
@@ -121,8 +106,8 @@ From Name:
                     </td>
                   </tr>
                   <tr>
-                    <td class="stack-col" width="50%" valign="top" style="padding:0 10px 14px 0;">
-                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="field-card" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
+                    <td valign="top">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
                         <tr>
                           <td style="padding:18px 20px;">
                             <p style="margin:0 0 8px;font-size:11px;line-height:1.4;letter-spacing:0.18em;text-transform:uppercase;color:#745940;font-weight:700;">
@@ -135,9 +120,10 @@ From Name:
                         </tr>
                       </table>
                     </td>
-                    <td class="stack-gap" width="20" style="font-size:0;line-height:0;">&nbsp;</td>
-                    <td class="stack-col" width="50%" valign="top" style="padding:0 0 14px 10px;">
-                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="field-card" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
+                  </tr>
+                  <tr>
+                    <td valign="top">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
                         <tr>
                           <td style="padding:18px 20px;">
                             <p style="margin:0 0 8px;font-size:11px;line-height:1.4;letter-spacing:0.18em;text-transform:uppercase;color:#745940;font-weight:700;">
@@ -152,8 +138,8 @@ From Name:
                     </td>
                   </tr>
                   <tr>
-                    <td class="stack-col" width="50%" valign="top" style="padding:0 10px 14px 0;">
-                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="field-card" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
+                    <td valign="top">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
                         <tr>
                           <td style="padding:18px 20px;">
                             <p style="margin:0 0 8px;font-size:11px;line-height:1.4;letter-spacing:0.18em;text-transform:uppercase;color:#745940;font-weight:700;">
@@ -166,9 +152,10 @@ From Name:
                         </tr>
                       </table>
                     </td>
-                    <td class="stack-gap" width="20" style="font-size:0;line-height:0;">&nbsp;</td>
-                    <td class="stack-col" width="50%" valign="top" style="padding:0 0 14px 10px;">
-                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="field-card" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
+                  </tr>
+                  <tr>
+                    <td valign="top">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f7f3ec;border:1px solid #e6e2db;border-radius:16px;">
                         <tr>
                           <td style="padding:18px 20px;">
                             <p style="margin:0 0 8px;font-size:11px;line-height:1.4;letter-spacing:0.18em;text-transform:uppercase;color:#745940;font-weight:700;">

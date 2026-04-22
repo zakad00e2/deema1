@@ -15,6 +15,8 @@ export default function WorkshopsPage() {
   const { t, isRTL, locale } = useLanguage();
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
   const { workshops: groupWorkshops } = useGroupWorkshops(locale);
+  const privateWorkshopContactHref = "/contact?interest=private-workshop#contact-form";
+  const publicWorkshopContactHref = "/contact?interest=public-workshop#contact-form";
 
   const _staticGroupWorkshops = locale === "ar"
     ? [
@@ -351,7 +353,7 @@ export default function WorkshopsPage() {
                 </div>
 
                 <a
-                  href="/contact#contact-form"
+                  href={privateWorkshopContactHref}
                   className="inline-block relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden"
                 >
                   <span className="relative z-10">{t("workshopsPage.enquireNow")}</span>
@@ -435,7 +437,7 @@ export default function WorkshopsPage() {
                   </div>
 
                   <a
-                    href="/contact#contact-form"
+                    href={publicWorkshopContactHref}
                     className="ws-group-link group/link inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-brand-secondary"
                   >
                     {t("workshopsPage.registerLink")}

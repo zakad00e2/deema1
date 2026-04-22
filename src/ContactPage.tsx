@@ -18,8 +18,34 @@ type ContactFormState = {
 };
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
+type ContactInterestPreset = "private-workshop" | "public-workshop";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTACT_INTEREST_PRESET_INDEX: Record<ContactInterestPreset, number> = {
+  "private-workshop": 1,
+  "public-workshop": 2,
+};
+
+function getContactInterestPreset(): ContactInterestPreset | null {
+  if (typeof window === "undefined") return null;
+
+  const preset = new URLSearchParams(window.location.search).get("interest");
+  if (preset === "private-workshop" || preset === "public-workshop") {
+    return preset;
+  }
+
+  return null;
+}
+
+function getDefaultInterestOption(
+  options: string[],
+  preset: ContactInterestPreset | null
+) {
+  if (!options.length) return "";
+  if (!preset) return options[0];
+
+  return options[CONTACT_INTEREST_PRESET_INDEX[preset]] ?? options[0];
+}
 
 function getEmailJsConfig() {
   return {
@@ -90,11 +116,12 @@ export default function ContactPage() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const { t, tArray, isRTL, locale } = useLanguage();
   const translatedInterestOptions = tArray("contact.interestOptions");
-  const contactInterestOptions =
-    locale === "ar" && !translatedInterestOptions.includes("خدمة Planner")
-      ? [...translatedInterestOptions.slice(0, 2), "خدمة Planner", ...translatedInterestOptions.slice(2)]
-      : translatedInterestOptions;
-  const defaultInterest = contactInterestOptions[0] ?? "";
+  const contactInterestOptions = translatedInterestOptions;
+  const interestPreset = getContactInterestPreset();
+  const defaultInterest = getDefaultInterestOption(
+    contactInterestOptions,
+    interestPreset
+  );
   const [formData, setFormData] = useState<ContactFormState>({
     name: "",
     email: "",
@@ -135,13 +162,19 @@ export default function ContactPage() {
       : "mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.28em] transition-colors duration-300";
 
   useEffect(() => {
-    setFormData((current) => ({
-      ...current,
-      interest: contactInterestOptions.includes(current.interest)
-        ? current.interest
-        : defaultInterest,
-    }));
-  }, [locale, defaultInterest]);
+    setFormData((current) => {
+      const nextInterest =
+        interestPreset !== null
+          ? defaultInterest
+          : contactInterestOptions.includes(current.interest)
+            ? current.interest
+            : defaultInterest;
+
+      return current.interest === nextInterest
+        ? current
+        : { ...current, interest: nextInterest };
+    });
+  }, [defaultInterest, interestPreset, locale]);
 
   useGSAP(
     () => {

@@ -125,11 +125,11 @@ const en = {
     emailPlaceholder: "you@example.com",
     interestLabel: "What brings you here?",
     interestOptions: [
-      "Bespoke Design Project",
-      "Artistic Workshop",
-      "Planner Service",
-      "Press & Collaboration",
-      "General Message",
+      "Event Management",
+      "Book a Private Workshop",
+      "Join a Public Workshop",
+      "Purchase the Planner",
+      "General Inquiry",
     ],
     messageLabel: "Your message",
     messagePlaceholder:
