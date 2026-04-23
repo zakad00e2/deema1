@@ -15,7 +15,7 @@ export default function SharedFooter() {
           <a href="/" aria-label="Go to home page" className="inline-block">
             <img src={brandLogoSrc} alt="Athr Logo" className="mb-6 h-12 md:h-16" />
           </a>
-          <p className="mb-8 text-sm font-light leading-relaxed text-white/62">
+          <p className={`mb-8 font-light leading-relaxed text-white/62 ${isRTL ? "text-[0.95rem]" : "text-sm"}`}>
             {t("footer.tagline")}
           </p>
           <div className="flex gap-6">
@@ -30,27 +30,29 @@ export default function SharedFooter() {
 
         <div className={`grid gap-10 sm:grid-cols-2 ${isRTL ? "sm:pr-8 lg:pr-10" : "sm:pl-8 lg:pl-10"}`}>
           <div className="flex flex-col gap-4">
-            <p className="text-[0.6rem] font-bold uppercase tracking-widest text-brand-secondary">{t("footer.explore")}</p>
-            <a href="/" className="text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary">
+            <p className={`font-bold uppercase tracking-widest text-brand-secondary ${isRTL ? "text-[0.68rem]" : "text-[0.6rem]"}`}>{t("footer.explore")}</p>
+            <a href="/" className={`uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-[0.85rem]" : "text-xs"}`}>
               {t("nav.home")}
             </a>
-            <a href="/work" className="text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary">
+            <a href="/work" className={`uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-[0.85rem]" : "text-xs"}`}>
               {t("nav.portfolio")}
             </a>
-            <a href="/workshops" className="text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary">
+            <a href="/workshops" className={`uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-[0.85rem]" : "text-xs"}`}>
               {t("nav.workshops")}
             </a>
-            <a href="/contact" className="text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary">
+            <a href="/contact" className={`uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "text-[0.85rem]" : "text-xs"}`}>
               {t("nav.contact")}
             </a>
           </div>
 
           <div className="flex flex-col gap-6">
-            <p className="text-[0.6rem] font-bold uppercase tracking-widest text-brand-secondary">{t("footer.contactLabel")}</p>
+            <p className={`font-bold uppercase tracking-widest text-brand-secondary ${isRTL ? "text-[0.68rem]" : "text-[0.6rem]"}`}>{t("footer.contactLabel")}</p>
             <div className={`flex w-full flex-col gap-2 ${isRTL ? "items-end" : "items-start"}`}>
               <a
                 href="mailto:Leaveanathr@gmail.com"
-                className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${
+                className={`ltr-content block w-full tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${
+                  isRTL ? "text-[0.85rem]" : "text-xs"
+                } ${
                   isRTL ? "ltr-content-rtl-start text-right" : "text-left"
                 }`}
               >
@@ -58,14 +60,16 @@ export default function SharedFooter() {
               </a>
               <a
                 href="tel:+97143411367"
-                className={`ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${
+                className={`ltr-content block w-full tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${
+                  isRTL ? "text-[0.85rem]" : "text-xs"
+                } ${
                   isRTL ? "ltr-content-rtl-start text-right" : "text-left"
                 }`}
               >
                 +971 (0) 4 341 1367
               </a>
             </div>
-            <p className="text-xs leading-relaxed tracking-widest text-white/62">
+            <p className={`leading-relaxed tracking-widest text-white/62 ${isRTL ? "text-[0.85rem]" : "text-xs"}`}>
               {addressLines.map((line, i) => (
                 <span key={i}>
                   {line}
@@ -80,7 +84,7 @@ export default function SharedFooter() {
       <div className="mt-24 w-full border-t border-white/5" />
       <div className="mx-auto mt-8 max-w-360 px-6 md:px-12">
         <div className="flex justify-center text-center text-[0.62rem] uppercase tracking-[0.35em] text-white/28 md:text-[0.72rem]">
-          <p className={isRTL ? "text-[0.7rem] md:text-[0.8rem]" : undefined}>{t("footer.copyright")}</p>
+          <p className={isRTL ? "text-[0.78rem] md:text-[0.88rem]" : undefined}>{t("footer.copyright")}</p>
         </div>
       </div>
     </footer>

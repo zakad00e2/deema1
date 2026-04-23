@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import AdminApp from "./admin/AdminApp";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -23,6 +23,20 @@ import {
 } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const renderSlantedKashidaText = (text: string) => {
+  const parts = text.match(/ـ+|[^ـ]+/g) ?? [text];
+
+  return parts.map((part, index) =>
+    part.includes("ـ") ? (
+      <span key={index} className="slanted-kashida" aria-hidden="true">
+        {part}
+      </span>
+    ) : (
+      <Fragment key={index}>{part}</Fragment>
+    )
+  );
+};
 
 export function LanguageSwitcher({
   className = "",
@@ -151,11 +165,6 @@ const Hero = () => {
       variant: "primary" as const,
       label: t("hero.cta"),
     },
-    {
-      href: "/work",
-      variant: "secondary" as const,
-      label: t("hero.ctaSecondary"),
-    },
   ];
 
   useGSAP(() => {
@@ -184,10 +193,14 @@ const Hero = () => {
       <div className="absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-[#1c1c18]/50 to-transparent" />
       <div className="max-w-360 mx-auto px-6 md:px-12 relative z-20 flex h-[100svh] w-full items-end md:h-[100vh]">
         <div className={`hero-text max-w-xl pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-20 lg:max-w-2xl lg:pb-24 ${isRTL ? "ml-auto text-right" : "mr-auto text-left"}`}>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-white font-serif tracking-tighter mb-6">
-            {t("hero.titlePart1")} <span className="text-white">{t("hero.titleHighlight")}</span>
+          <h1
+            id="athr-main-hero-title"
+            className={`text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-white font-serif  tracking-tighter mb-6 ${isRTL ? "arabic-hero-title athr-hero-display" : ""}`}
+            style={isRTL ? { fontFamily: '"thmanyahserifdisplay-Bold", "Manrope", sans-serif' } : undefined}
+          >
+            {t("hero.titlePart1")} <span className={`text-white ${isRTL ? "arabic-kashida-features" : ""}`}>{t("hero.titleHighlight")}</span>
           </h1>
-          <p className={`max-w-xl text-base md:text-lg lg:text-xl text-white/85 font-light leading-relaxed ${isRTL ? "ml-auto" : "mr-auto"}`}>
+          <p className={`athr-hero-subtitle max-w-xl text-base md:text-lg lg:text-xl text-white/85 font-light leading-relaxed ${isRTL ? "ml-auto" : "mr-auto"}`}>
             {t("hero.subtitle")}
           </p>
           <div className="mt-10 flex w-full flex-wrap items-center justify-start gap-5 md:gap-7">
@@ -198,7 +211,7 @@ const Hero = () => {
                   href={action.href}
                   className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden"
                 >
-                  <span className="relative z-10">{action.label}</span>
+                  <span className={`relative z-10 ${isRTL ? "text-sm md:text-base leading-none" : ""}`}>{action.label}</span>
                   <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
                     <img 
                       src="/athr.png" 
@@ -227,7 +240,7 @@ const Hero = () => {
 const About = () => {
   const sectionRef = useRef(null);
   const { t, isRTL, locale } = useLanguage();
-  const aboutBadgeText = locale === "ar" ? "مـــــــــؤسـسة أثـــــــــــــر " : "Athr Foundation";
+  const aboutBadgeText = locale === "ar" ? "مــــؤسسة أثـــــر " : "Athr Foundation";
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -285,21 +298,23 @@ const About = () => {
                 className={`inline-flex w-fit items-center rounded-[14px] bg-[#f4eeea] px-4 py-3 shadow-[0_10px_28px_rgba(71,49,34,0.14)] ring-1 ring-white/70 flex-row justify-start gap-3`}
               >
                 <span className="status-glow-dot h-2.5 w-2.5 shrink-0 rounded-full bg-[#46cf72]" />
-                <span className={`whitespace-nowrap font-medium leading-none text-[#473122] ${isRTL ? "text-[1rem] text-right" : "text-[0.82rem] text-left tracking-[0.03em]"}`}>
+                <span className={`whitespace-nowrap font-medium leading-none text-[#473122] ${isRTL ? "arabic-kashida-features text-[1rem] text-right" : "text-[0.82rem] text-left tracking-[0.03em]"}`}>
                   {aboutBadgeText}
                 </span>
               </div>
             </div>
           </div>
           <div className={`${isRTL ? "order-1 md:order-1" : "order-1 md:order-2"} about-text`}>
-            <span className={`${isRTL ? "text-base" : "text-xs"} tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-6`}>{t("about.label")}</span>
-            <h2 className={`${isRTL ? "text-3xl md:text-4xl" : "text-4xl md:text-5xl"} font-serif text-brand-primary mb-8 leading-tight`}>{t("about.title")}</h2>
+            <span className={`${isRTL ? "about-kashida-label arabic-kashida-features text-base" : "text-xs tracking-[0.4em] uppercase"} text-brand-secondary font-bold block mb-6`}>
+              {t("about.label")}
+            </span>
+            <h2 className={`${isRTL ? "about-title-soft arabic-kashida-features text-3xl md:text-4xl" : "text-4xl md:text-5xl"} font-serif text-brand-primary mb-8 leading-tight`}>{t("about.title")}</h2>
             <div className="space-y-6 text-brand-primary/80 font-light leading-relaxed text-lg">
               <p>{t("about.bio")}</p>
             </div>
             <div className={`mt-12 pt-1 border-t border-brand-surface-high/30 about-stats flex gap-12`}>
               <div>
-                <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-1">{isRTL ? "١٢٠" : "120"}</span>+</p>
+                <p className="text-5xl md:text-5xl font-serif text-brand-secondary">{isRTL ? "+" : ""}<span className="stat-num-1">{isRTL ? "١٢٠" : "120"}</span>{isRTL ? "" : "+"}</p>
                 <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">{t("about.stat1Label")}</p>
               </div>
               <div>
@@ -492,7 +507,7 @@ const Specialisms = () => {
     <section ref={sectionRef} className="py-32 bg-brand-bg overflow-hidden">
       <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="mb-20 text-center max-w-2xl mx-auto spec-title">
-          <h2 className="text-4xl font-serif text-brand-primary mb-6">{t("specialisms.title")}</h2>
+          <h2 className="text-4xl font-serif text-brand-dark mb-6">{t("specialisms.title")}</h2>
           <p className="text-brand-primary/70 font-light">{t("specialisms.subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
@@ -509,7 +524,7 @@ const Specialisms = () => {
                       <Icon className="w-12 h-12 text-brand-secondary group-hover:text-white transition-colors" />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-serif mb-4 group-hover:text-white transition-colors">{t(`specialisms.services.${key}.title`)}</h3>
+                  <h3 className="text-2xl font-serif text-brand-primary mb-4 group-hover:text-white transition-colors">{t(`specialisms.services.${key}.title`)}</h3>
                   <p className="text-brand-primary/70 group-hover:text-white/80 font-light transition-colors">{t(`specialisms.services.${key}.desc`)}</p>
                 </div>
               </div>
@@ -647,7 +662,7 @@ const CaseStudy = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0 mb-12 md:mb-16">
           <div className="case-header-content">
             <span className={`${locale === "ar" ? "text-sm md:text-base tracking-[0.28em]" : "text-xs tracking-[0.4em]"} uppercase text-brand-secondary font-bold block mb-4`}>{t("caseStudy.label")}</span>
-            <h2 className="text-4xl md:text-5xl font-serif text-brand-primary">{t("caseStudy.title")}</h2>
+            <h2 className="text-4xl md:text-5xl font-serif text-brand-dark">{t("caseStudy.title")}</h2>
           </div>
           <a href="/work/the-obsidian-gala" className={`case-header-link ${locale === "ar" ? "text-[0.8rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-semibold text-brand-primary/60 hover:text-brand-secondary transition-colors pb-2 border-b border-brand-surface-high whitespace-nowrap`}>
             {t("caseStudy.seeAll")}
@@ -664,7 +679,7 @@ const CaseStudy = () => {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#1c1c18]/30 via-transparent to-[#f4e5d4]/10 opacity-70 transition-opacity duration-700 group-hover:opacity-100" />
           </div>
           <div className={`case-content md:absolute relative md:bottom-0 ${isRTL ? "md:left-0" : "md:right-0"} p-8 md:p-12 bg-brand-surface-low/95 md:bg-brand-bg/95 backdrop-blur-sm w-[85%] sm:w-[75%] md:w-full md:max-w-lg editorial-shadow z-10 -mt-16 md:mt-0 mx-auto md:mx-0 border border-white/5 md:border-none will-change-transform`}>
-            <h4 className="text-xl sm:text-2xl font-serif mb-4">{t("caseStudy.cardTitle")}</h4>
+            <h4 className="text-xl sm:text-2xl font-serif text-brand-primary mb-4">{t("caseStudy.cardTitle")}</h4>
             <p className="text-brand-primary/70 font-sm md:font-light leading-relaxed mb-6">{t("caseStudy.cardDesc")}</p>
             <div className="flex flex-wrap gap-3">
               {[t("caseStudy.tag1"), t("caseStudy.tag2")].map((tag) => (
@@ -725,7 +740,7 @@ const WorkshopsHome = () => {
     <section id="workshops" ref={sectionRef} className="py-32 bg-brand-bg">
       <div className="max-w-360 mx-auto px-6 md:px-12">
         <div className="workshops-header mb-16">
-          <h2 className="text-4xl font-serif text-brand-primary mb-2">{t("workshops.title")}</h2>
+          <h2 className="text-4xl font-serif text-brand-dark mb-2">{t("workshops.title")}</h2>
           <p className="text-brand-primary/70 font-light">{t("workshops.subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
@@ -767,7 +782,7 @@ const Product = () => {
           <div className={`lg:col-span-5 ${isRTL ? "order-2 lg:order-2" : "order-2 lg:order-1"}`}>
             <div className="max-w-md">
               <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">{t("product.label")}</span>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-primary mb-4 leading-tight whitespace-nowrap">{t("product.title")}</h2>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-dark mb-4 leading-tight whitespace-nowrap">{t("product.title")}</h2>
               <p className="text-lg font-serif italic text-brand-primary/70 mb-6">{t("product.tagline")}</p>
               <p className="text-brand-primary/80 font-light leading-relaxed mb-12">
                 {t("product.desc")}

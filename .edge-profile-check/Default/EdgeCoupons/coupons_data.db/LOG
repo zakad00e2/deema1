@@ -1,0 +1,5 @@
+2026/04/23-15:09:41.801 5bc8 Creating DB C:\Users\zeka1\Desktop\projects\dema\deema1\.edge-profile-check\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/04/23-15:09:41.812 5bc8 Reusing MANIFEST C:\Users\zeka1\Desktop\projects\dema\deema1\.edge-profile-check\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/04/23-15:10:08.729 42f8 Level-0 table #5: started
+2026/04/23-15:10:08.733 42f8 Level-0 table #5: 682132 bytes OK
+2026/04/23-15:10:08.735 42f8 Delete type=0 #3

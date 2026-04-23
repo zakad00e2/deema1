@@ -278,7 +278,7 @@ export default function WorkshopsPage() {
             <p className="ws-hero-el text-sm uppercase tracking-[0.3em] text-brand-secondary mb-6">
               {t("workshopsPage.heroLabel")}
             </p>
-            <h1 className="ws-hero-el font-serif text-5xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tighter text-brand-dark mb-8">
+            <h1 className="arabic-hero-title ws-hero-el font-serif text-5xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tighter text-brand-dark mb-8">
               {t("workshopsPage.heroTitle1")}{" "}
               <span className={locale === "ar" ? "text-brand-dark" : "font-light italic text-brand-primary"}>
                 {t("workshopsPage.heroTitle2")}

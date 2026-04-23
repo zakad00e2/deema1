@@ -1,0 +1,724 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/admin/pages/WorkshopListPage.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=315e57ad"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$();
+import __vite__cjsImport1_react from "/node_modules/.vite/deps/react.js?v=315e57ad"; const useEffect = __vite__cjsImport1_react["useEffect"]; const useState = __vite__cjsImport1_react["useState"];
+import { workshopService } from "/src/admin/data/workshopService.ts";
+import ConfirmDialog from "/src/admin/components/ConfirmDialog.tsx";
+import StatusBadge from "/src/admin/components/StatusBadge.tsx";
+import { toast } from "/src/admin/components/Toast.tsx";
+import {
+  Plus,
+  Search,
+  ChevronUp,
+  ChevronDown,
+  Pencil,
+  Trash2,
+  Eye,
+  EyeOff,
+  Star,
+  StarOff,
+  Filter
+} from "/node_modules/.vite/deps/lucide-react.js?v=315e57ad";
+const TYPE_OPTIONS = [
+  { value: "all", label: "All Types" },
+  { value: "private", label: "Private" },
+  { value: "group", label: "Group" },
+  { value: "beginner", label: "Beginner" },
+  { value: "advanced", label: "Advanced" },
+  { value: "custom", label: "Custom" }
+];
+const STATUS_OPTIONS = [
+  { value: "all", label: "All Status" },
+  { value: "published", label: "Published" },
+  { value: "draft", label: "Draft" }
+];
+export default function WorkshopListPage({ onNavigate }) {
+  _s();
+  const [items, setItems] = useState([]);
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [featuredFilter, setFeaturedFilter] = useState("all");
+  const [deleteId, setDeleteId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [busyId, setBusyId] = useState(null);
+  const [error, setError] = useState("");
+  async function refresh() {
+    const nextItems = await workshopService.getAll();
+    setItems(nextItems);
+  }
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const nextItems = await workshopService.getAll();
+        if (!cancelled) {
+          setItems(nextItems);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : "Failed to load workshops.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const filtered = items.filter((item) => {
+    const q = search.toLowerCase();
+    const matchSearch = !q || item.title.en.toLowerCase().includes(q) || item.title.ar.includes(q) || item.slug.includes(q);
+    const matchType = typeFilter === "all" || item.workshopType === typeFilter;
+    const matchStatus = statusFilter === "all" || item.status === statusFilter;
+    const matchFeatured = featuredFilter === "all" || featuredFilter === "featured" && item.featured;
+    return matchSearch && matchType && matchStatus && matchFeatured;
+  });
+  const hasFilters = search || typeFilter !== "all" || statusFilter !== "all" || featuredFilter !== "all";
+  async function handleToggleStatus(id) {
+    try {
+      setBusyId(id);
+      await workshopService.toggleStatus(id);
+      await refresh();
+      toast.success("Status updated.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to update status.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+  async function handleToggleFeatured(id) {
+    try {
+      setBusyId(id);
+      await workshopService.toggleFeatured(id);
+      await refresh();
+      toast.success("Featured status updated.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to update featured status.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+  async function handleMoveUp(id) {
+    try {
+      setBusyId(id);
+      await workshopService.moveUp(id);
+      await refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to move workshop.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+  async function handleMoveDown(id) {
+    try {
+      setBusyId(id);
+      await workshopService.moveDown(id);
+      await refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to move workshop.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+  async function handleDelete() {
+    if (!deleteId) return;
+    try {
+      setBusyId(deleteId);
+      await workshopService.remove(deleteId);
+      await refresh();
+      setDeleteId(null);
+      toast.success("Workshop deleted.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to delete workshop.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+  if (loading) {
+    return /* @__PURE__ */ jsxDEV("div", { className: "text-sm text-[#9a9590]", children: "Loading workshops..." }, void 0, false, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+      lineNumber: 163,
+      columnNumber: 12
+    }, this);
+  }
+  if (error) {
+    return /* @__PURE__ */ jsxDEV("div", { className: "border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700", children: error }, void 0, false, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+      lineNumber: 167,
+      columnNumber: 12
+    }, this);
+  }
+  return /* @__PURE__ */ jsxDEV("div", { className: "space-y-5", children: [
+    /* @__PURE__ */ jsxDEV("div", { className: "flex items-center justify-between gap-4 flex-wrap", children: [
+      /* @__PURE__ */ jsxDEV("div", { children: [
+        /* @__PURE__ */ jsxDEV("h2", { className: "text-base font-semibold text-[#1c1c18]", children: "Workshops" }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 175,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { className: "text-xs text-[#9a9590] mt-0.5", children: [
+          items.length,
+          " total · ",
+          items.filter((i) => i.status === "published").length,
+          " published"
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 176,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+        lineNumber: 174,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV(
+        "button",
+        {
+          onClick: () => onNavigate("workshops-new"),
+          className: "flex items-center gap-1.5 bg-[#745940] text-white text-xs uppercase tracking-widest font-medium px-4 py-2.5 hover:bg-[#8a6d4e] transition-colors",
+          children: [
+            /* @__PURE__ */ jsxDEV(Plus, { className: "w-3.5 h-3.5" }, void 0, false, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 182,
+              columnNumber: 11
+            }, this),
+            "New Workshop"
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 178,
+          columnNumber: 9
+        },
+        this
+      )
+    ] }, void 0, true, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+      lineNumber: 173,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "flex flex-wrap gap-3 items-center", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "relative flex-1 min-w-48", children: [
+        /* @__PURE__ */ jsxDEV(Search, { className: "absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#9a9590]" }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 190,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(
+          "input",
+          {
+            type: "text",
+            placeholder: "Search workshops…",
+            value: search,
+            onChange: (e) => setSearch(e.target.value),
+            className: "w-full pl-8 pr-3 py-2 bg-white border border-[#e6e2db] text-sm font-sans text-[#1c1c18] placeholder-[#c5c0bb] focus:outline-none focus:border-[#745940] transition-colors"
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 191,
+            columnNumber: 11
+          },
+          this
+        )
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+        lineNumber: 189,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-2 flex-wrap", children: [
+        /* @__PURE__ */ jsxDEV(Filter, { className: "w-3.5 h-3.5 text-[#9a9590]" }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 200,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(
+          "select",
+          {
+            value: typeFilter,
+            onChange: (e) => setTypeFilter(e.target.value),
+            className: "bg-white border border-[#e6e2db] text-xs font-sans text-[#605b55] px-2 py-2 focus:outline-none focus:border-[#745940] transition-colors",
+            children: TYPE_OPTIONS.map((o) => /* @__PURE__ */ jsxDEV("option", { value: o.value, children: o.label }, o.value, false, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 206,
+              columnNumber: 38
+            }, this))
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 201,
+            columnNumber: 11
+          },
+          this
+        ),
+        /* @__PURE__ */ jsxDEV(
+          "select",
+          {
+            value: statusFilter,
+            onChange: (e) => setStatusFilter(e.target.value),
+            className: "bg-white border border-[#e6e2db] text-xs font-sans text-[#605b55] px-2 py-2 focus:outline-none focus:border-[#745940] transition-colors",
+            children: STATUS_OPTIONS.map((o) => /* @__PURE__ */ jsxDEV("option", { value: o.value, children: o.label }, o.value, false, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 213,
+              columnNumber: 40
+            }, this))
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 208,
+            columnNumber: 11
+          },
+          this
+        ),
+        /* @__PURE__ */ jsxDEV(
+          "select",
+          {
+            value: featuredFilter,
+            onChange: (e) => setFeaturedFilter(e.target.value),
+            className: "bg-white border border-[#e6e2db] text-xs font-sans text-[#605b55] px-2 py-2 focus:outline-none focus:border-[#745940] transition-colors",
+            children: [
+              /* @__PURE__ */ jsxDEV("option", { value: "all", children: "All Items" }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 220,
+                columnNumber: 13
+              }, this),
+              /* @__PURE__ */ jsxDEV("option", { value: "featured", children: "Featured Only" }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 221,
+                columnNumber: 13
+              }, this)
+            ]
+          },
+          void 0,
+          true,
+          {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 215,
+            columnNumber: 11
+          },
+          this
+        ),
+        hasFilters && /* @__PURE__ */ jsxDEV(
+          "button",
+          {
+            onClick: () => {
+              setSearch("");
+              setTypeFilter("all");
+              setStatusFilter("all");
+              setFeaturedFilter("all");
+            },
+            className: "text-xs text-[#9a9590] hover:text-red-500 transition-colors",
+            children: "Clear"
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 224,
+            columnNumber: 11
+          },
+          this
+        )
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+        lineNumber: 199,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+      lineNumber: 188,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "bg-white border border-[#e6e2db] overflow-hidden", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "hidden md:block overflow-x-auto", children: /* @__PURE__ */ jsxDEV("table", { className: "w-full", children: [
+        /* @__PURE__ */ jsxDEV("thead", { children: /* @__PURE__ */ jsxDEV("tr", { className: "border-b border-[#f1ede6] bg-[#f7f3ec]", children: [
+          /* @__PURE__ */ jsxDEV("th", { className: "px-4 py-3 text-left text-[10px] uppercase tracking-widest text-[#9a9590] font-semibold w-16", children: "Order" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 240,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { className: "px-4 py-3 text-left text-[10px] uppercase tracking-widest text-[#9a9590] font-semibold", children: "Workshop" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 241,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { className: "px-4 py-3 text-left text-[10px] uppercase tracking-widest text-[#9a9590] font-semibold", children: "Type" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 242,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { className: "px-4 py-3 text-left text-[10px] uppercase tracking-widest text-[#9a9590] font-semibold", children: "Format" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 243,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { className: "px-4 py-3 text-left text-[10px] uppercase tracking-widest text-[#9a9590] font-semibold", children: "Status" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 244,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { className: "px-4 py-3 text-left text-[10px] uppercase tracking-widest text-[#9a9590] font-semibold", children: "Featured" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 245,
+            columnNumber: 17
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { className: "px-4 py-3 text-right text-[10px] uppercase tracking-widest text-[#9a9590] font-semibold", children: "Actions" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 246,
+            columnNumber: 17
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 239,
+          columnNumber: 15
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 238,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("tbody", { className: "divide-y divide-[#f7f3ec]", children: [
+          filtered.length === 0 && /* @__PURE__ */ jsxDEV("tr", { children: /* @__PURE__ */ jsxDEV("td", { colSpan: 7, className: "px-4 py-12 text-center text-sm text-[#9a9590]", children: hasFilters ? "No results match your filters." : "No workshops yet. Add your first one." }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 252,
+            columnNumber: 19
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 251,
+            columnNumber: 15
+          }, this),
+          filtered.map(
+            (item, idx) => /* @__PURE__ */ jsxDEV("tr", { className: "group hover:bg-[#faf8f4] transition-colors", children: [
+              /* @__PURE__ */ jsxDEV("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxDEV("div", { className: "flex flex-col gap-0.5 items-center", children: [
+                /* @__PURE__ */ jsxDEV("button", { onClick: () => handleMoveUp(item.id), disabled: idx === 0 || busyId === item.id, className: "text-[#9a9590] hover:text-[#745940] disabled:opacity-30 disabled:cursor-not-allowed", children: /* @__PURE__ */ jsxDEV(ChevronUp, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 262,
+                  columnNumber: 25
+                }, this) }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 261,
+                  columnNumber: 23
+                }, this),
+                /* @__PURE__ */ jsxDEV("span", { className: "text-xs text-[#9a9590] tabular-nums", children: item.sortOrder }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 264,
+                  columnNumber: 23
+                }, this),
+                /* @__PURE__ */ jsxDEV("button", { onClick: () => handleMoveDown(item.id), disabled: idx === filtered.length - 1 || busyId === item.id, className: "text-[#9a9590] hover:text-[#745940] disabled:opacity-30 disabled:cursor-not-allowed", children: /* @__PURE__ */ jsxDEV(ChevronDown, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 266,
+                  columnNumber: 25
+                }, this) }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 265,
+                  columnNumber: 23
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 260,
+                columnNumber: 21
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 259,
+                columnNumber: 19
+              }, this),
+              /* @__PURE__ */ jsxDEV("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-3", children: [
+                /* @__PURE__ */ jsxDEV("div", { className: "w-10 h-10 bg-[#f7f3ec] shrink-0 overflow-hidden border border-[#f1ede6]", children: item.coverImage && /* @__PURE__ */ jsxDEV("img", { src: item.coverImage, alt: "", className: "w-full h-full object-cover" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 273,
+                  columnNumber: 45
+                }, this) }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 272,
+                  columnNumber: 23
+                }, this),
+                /* @__PURE__ */ jsxDEV("div", { className: "min-w-0", children: [
+                  /* @__PURE__ */ jsxDEV("p", { className: "text-sm font-medium text-[#1c1c18] truncate", children: item.title.en }, void 0, false, {
+                    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                    lineNumber: 276,
+                    columnNumber: 25
+                  }, this),
+                  /* @__PURE__ */ jsxDEV("p", { className: "text-xs text-[#9a9590] truncate", children: item.title.ar }, void 0, false, {
+                    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                    lineNumber: 277,
+                    columnNumber: 25
+                  }, this)
+                ] }, void 0, true, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 275,
+                  columnNumber: 23
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 271,
+                columnNumber: 21
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 270,
+                columnNumber: 19
+              }, this),
+              /* @__PURE__ */ jsxDEV("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxDEV(StatusBadge, { status: item.workshopType }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 282,
+                columnNumber: 21
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 281,
+                columnNumber: 19
+              }, this),
+              /* @__PURE__ */ jsxDEV("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxDEV("span", { className: "text-xs text-[#605b55]", children: item.format.en }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 285,
+                columnNumber: 21
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 284,
+                columnNumber: 19
+              }, this),
+              /* @__PURE__ */ jsxDEV("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxDEV(StatusBadge, { status: item.status }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 288,
+                columnNumber: 21
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 287,
+                columnNumber: 19
+              }, this),
+              /* @__PURE__ */ jsxDEV("td", { className: "px-4 py-3", children: item.featured && /* @__PURE__ */ jsxDEV(StatusBadge, { status: "featured" }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 291,
+                columnNumber: 39
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 290,
+                columnNumber: 19
+              }, this),
+              /* @__PURE__ */ jsxDEV("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxDEV("div", { className: "flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity", children: [
+                /* @__PURE__ */ jsxDEV("button", { onClick: () => handleToggleStatus(item.id), title: item.status === "published" ? "Set to Draft" : "Publish", className: "p-1.5 text-[#9a9590] hover:text-[#745940] hover:bg-[#f7f3ec] transition-colors", children: item.status === "published" ? /* @__PURE__ */ jsxDEV(EyeOff, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 296,
+                  columnNumber: 56
+                }, this) : /* @__PURE__ */ jsxDEV(Eye, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 296,
+                  columnNumber: 93
+                }, this) }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 295,
+                  columnNumber: 23
+                }, this),
+                /* @__PURE__ */ jsxDEV("button", { onClick: () => handleToggleFeatured(item.id), title: "Toggle Featured", className: "p-1.5 text-[#9a9590] hover:text-amber-500 hover:bg-[#f7f3ec] transition-colors", children: item.featured ? /* @__PURE__ */ jsxDEV(StarOff, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 299,
+                  columnNumber: 42
+                }, this) : /* @__PURE__ */ jsxDEV(Star, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 299,
+                  columnNumber: 80
+                }, this) }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 298,
+                  columnNumber: 23
+                }, this),
+                /* @__PURE__ */ jsxDEV("button", { onClick: () => onNavigate("workshops-edit", item.id), title: "Edit", className: "p-1.5 text-[#9a9590] hover:text-[#745940] hover:bg-[#f7f3ec] transition-colors", children: /* @__PURE__ */ jsxDEV(Pencil, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 302,
+                  columnNumber: 25
+                }, this) }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 301,
+                  columnNumber: 23
+                }, this),
+                /* @__PURE__ */ jsxDEV("button", { onClick: () => setDeleteId(item.id), title: "Delete", className: "p-1.5 text-[#9a9590] hover:text-red-500 hover:bg-[#f7f3ec] transition-colors", children: /* @__PURE__ */ jsxDEV(Trash2, { className: "w-3.5 h-3.5" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 305,
+                  columnNumber: 25
+                }, this) }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 304,
+                  columnNumber: 23
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 294,
+                columnNumber: 21
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 293,
+                columnNumber: 19
+              }, this)
+            ] }, item.id, true, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 258,
+              columnNumber: 15
+            }, this)
+          )
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 249,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+        lineNumber: 237,
+        columnNumber: 11
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+        lineNumber: 236,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "md:hidden divide-y divide-[#f7f3ec]", children: [
+        filtered.length === 0 && /* @__PURE__ */ jsxDEV("div", { className: "px-4 py-10 text-center text-sm text-[#9a9590]", children: hasFilters ? "No results." : "No workshops yet." }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+          lineNumber: 318,
+          columnNumber: 11
+        }, this),
+        filtered.map(
+          (item) => /* @__PURE__ */ jsxDEV("div", { className: "flex items-start gap-3 px-4 py-4", children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "w-12 h-12 bg-[#f7f3ec] shrink-0 overflow-hidden", children: item.coverImage && /* @__PURE__ */ jsxDEV("img", { src: item.coverImage, alt: "", className: "w-full h-full object-cover" }, void 0, false, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 325,
+              columnNumber: 37
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 324,
+              columnNumber: 15
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "flex-1 min-w-0", children: [
+              /* @__PURE__ */ jsxDEV("p", { className: "text-sm font-medium text-[#1c1c18] truncate", children: item.title.en }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 328,
+                columnNumber: 17
+              }, this),
+              /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-2 mt-1 flex-wrap", children: [
+                /* @__PURE__ */ jsxDEV(StatusBadge, { status: item.status }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 330,
+                  columnNumber: 19
+                }, this),
+                item.featured && /* @__PURE__ */ jsxDEV(StatusBadge, { status: "featured" }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 331,
+                  columnNumber: 37
+                }, this),
+                /* @__PURE__ */ jsxDEV(StatusBadge, { status: item.workshopType }, void 0, false, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                  lineNumber: 332,
+                  columnNumber: 19
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 329,
+                columnNumber: 17
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 327,
+              columnNumber: 15
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "flex gap-1 shrink-0", children: [
+              /* @__PURE__ */ jsxDEV("button", { onClick: () => onNavigate("workshops-edit", item.id), className: "p-1.5 text-[#9a9590] hover:text-[#745940]", children: /* @__PURE__ */ jsxDEV(Pencil, { className: "w-4 h-4" }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 336,
+                columnNumber: 133
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 336,
+                columnNumber: 17
+              }, this),
+              /* @__PURE__ */ jsxDEV("button", { onClick: () => setDeleteId(item.id), className: "p-1.5 text-[#9a9590] hover:text-red-500", children: /* @__PURE__ */ jsxDEV(Trash2, { className: "w-4 h-4" }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 337,
+                columnNumber: 114
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+                lineNumber: 337,
+                columnNumber: 17
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+              lineNumber: 335,
+              columnNumber: 15
+            }, this)
+          ] }, item.id, true, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+            lineNumber: 323,
+            columnNumber: 11
+          }, this)
+        )
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+        lineNumber: 316,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+      lineNumber: 235,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV(
+      ConfirmDialog,
+      {
+        open: !!deleteId,
+        title: "Delete Workshop",
+        message: "This will permanently remove this workshop from the dashboard and the public site.",
+        confirmLabel: "Delete Workshop",
+        onConfirm: handleDelete,
+        onCancel: () => setDeleteId(null)
+      },
+      void 0,
+      false,
+      {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+        lineNumber: 344,
+        columnNumber: 7
+      },
+      this
+    )
+  ] }, void 0, true, {
+    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx",
+    lineNumber: 171,
+    columnNumber: 5
+  }, this);
+}
+_s(WorkshopListPage, "JWg4poxOIAzPf8/vxlECfj5QBCw=");
+_c = WorkshopListPage;
+var _c;
+$RefreshReg$(_c, "WorkshopListPage");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/pages/WorkshopListPage.tsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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LFFBQ1gsVUFBVSxNQUFNM0MsWUFBWSxJQUFJO0FBQUE7QUFBQSxNQU5sQztBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsSUFNb0M7QUFBQSxPQW5MdEM7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQXFMQTtBQUVKO0FBQUNaLEdBelR1QkYsa0JBQWdCO0FBQUEsS0FBaEJBO0FBQWdCLElBQUFxRTtBQUFBLGFBQUFBLElBQUEiLCJuYW1lcyI6WyJ1c2VFZmZlY3QiLCJ1c2VTdGF0ZSIsIndvcmtzaG9wU2VydmljZSIsIkNvbmZpcm1EaWFsb2ciLCJTdGF0dXNCYWRnZSIsInRvYXN0IiwiUGx1cyIsIlNlYXJjaCIsIkNoZXZyb25VcCIsIkNoZXZyb25Eb3duIiwiUGVuY2lsIiwiVHJhc2gyIiwiRXllIiwiRXllT2ZmIiwiU3RhciIsIlN0YXJPZmYiLCJGaWx0ZXIiLCJUWVBFX09QVElPTlMiLCJ2YWx1ZSIsImxhYmVsIiwiU1RBVFVTX09QVElPTlMiLCJXb3Jrc2hvcExpc3RQYWdlIiwib25OYXZpZ2F0ZSIsIl9zIiwiaXRlbXMiLCJzZXRJdGVtcyIsInNlYXJjaCIsInNldFNlYXJjaCIsInR5cGVGaWx0ZXIiLCJzZXRUeXBlRmlsdGVyIiwic3RhdHVzRmlsdGVyIiwic2V0U3RhdHVzRmlsdGVyIiwiZmVhdHVyZWRGaWx0ZXIiLCJzZXRGZWF0dXJlZEZpbHRlciIsImRlbGV0ZUlkIiwic2V0RGVsZXRlSWQiLCJsb2FkaW5nIiwic2V0TG9hZGluZyIsImJ1c3lJZCIsInNldEJ1c3lJZCIsImVycm9yIiwic2V0RXJyb3IiLCJyZWZyZXNoIiwibmV4dEl0ZW1zIiwiZ2V0QWxsIiwiY2FuY2VsbGVkIiwibG9hZCIsImVyciIsIkVycm9yIiwibWVzc2FnZSIsImZpbHRlcmVkIiwiZmlsdGVyIiwiaXRlbSIsInEiLCJ0b0xvd2VyQ2FzZSIsIm1hdGNoU2VhcmNoIiwidGl0bGUiLCJlbiIsImluY2x1ZGVzIiwiYXIiLCJzbHVnIiwibWF0Y2hUeXBlIiwid29ya3Nob3BUeXBlIiwibWF0Y2hTdGF0dXMiLCJzdGF0dXMiLCJtYXRjaEZlYXR1cmVkIiwiZmVhdHVyZWQiLCJoYXNGaWx0ZXJzIiwiaGFuZGxlVG9nZ2xlU3RhdHVzIiwiaWQiLCJ0b2dnbGVTdGF0dXMiLCJzdWNjZXNzIiwiaGFuZGxlVG9nZ2xlRmVhdHVyZWQiLCJ0b2dnbGVGZWF0dXJlZCIsImhhbmRsZU1vdmVVcCIsIm1vdmVVcCIsImhhbmRsZU1vdmVEb3duIiwibW92ZURvd24iLCJoYW5kbGVEZWxldGUiLCJyZW1vdmUiLCJsZW5ndGgiLCJpIiwiZSIsInRhcmdldCIsIm1hcCIsIm8iLCJpZHgiLCJzb3J0T3JkZXIiLCJjb3ZlckltYWdlIiwiZm9ybWF0IiwiX2MiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiV29ya3Nob3BMaXN0UGFnZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgdXNlRWZmZWN0LCB1c2VTdGF0ZSB9IGZyb20gXCJyZWFjdFwiO1xyXG5pbXBvcnQgeyB3b3Jrc2hvcFNlcnZpY2UgfSBmcm9tIFwiLi4vZGF0YS93b3Jrc2hvcFNlcnZpY2VcIjtcclxuaW1wb3J0IHR5cGUgeyBXb3Jrc2hvcEl0ZW0sIFdvcmtzaG9wVHlwZSwgUHVibGlzaFN0YXR1cyB9IGZyb20gXCIuLi9kYXRhL3R5cGVzXCI7XHJcbmltcG9ydCB0eXBlIHsgQWRtaW5QYWdlIH0gZnJvbSBcIi4uL2NvbXBvbmVudHMvQWRtaW5MYXlvdXRcIjtcclxuaW1wb3J0IENvbmZpcm1EaWFsb2cgZnJvbSBcIi4uL2NvbXBvbmVudHMvQ29uZmlybURpYWxvZ1wiO1xyXG5pbXBvcnQgU3RhdHVzQmFkZ2UgZnJvbSBcIi4uL2NvbXBvbmVudHMvU3RhdHVzQmFkZ2VcIjtcclxuaW1wb3J0IHsgdG9hc3QgfSBmcm9tIFwiLi4vY29tcG9uZW50cy9Ub2FzdFwiO1xyXG5pbXBvcnQge1xyXG4gIFBsdXMsXHJcbiAgU2VhcmNoLFxyXG4gIENoZXZyb25VcCxcclxuICBDaGV2cm9uRG93bixcclxuICBQZW5jaWwsXHJcbiAgVHJhc2gyLFxyXG4gIEV5ZSxcclxuICBFeWVPZmYsXHJcbiAgU3RhcixcclxuICBTdGFyT2ZmLFxyXG4gIEZpbHRlcixcclxufSBmcm9tIFwibHVjaWRlLXJlYWN0XCI7XHJcblxyXG5pbnRlcmZhY2UgV29ya3Nob3BMaXN0UGFnZVByb3BzIHtcclxuICBvbk5hdmlnYXRlOiAocGFnZTogQWRtaW5QYWdlLCBpZD86IHN0cmluZykgPT4gdm9pZDtcclxufVxyXG5cclxuY29uc3QgVFlQRV9PUFRJT05TOiB7IHZhbHVlOiBcImFsbFwiIHwgV29ya3Nob3BUeXBlOyBsYWJlbDogc3RyaW5nIH1bXSA9IFtcclxuICB7IHZhbHVlOiBcImFsbFwiLCBsYWJlbDogXCJBbGwgVHlwZXNcIiB9LFxyXG4gIHsgdmFsdWU6IFwicHJpdmF0ZVwiLCBsYWJlbDogXCJQcml2YXRlXCIgfSxcclxuICB7IHZhbHVlOiBcImdyb3VwXCIsIGxhYmVsOiBcIkdyb3VwXCIgfSxcclxuICB7IHZhbHVlOiBcImJlZ2lubmVyXCIsIGxhYmVsOiBcIkJlZ2lubmVyXCIgfSxcclxuICB7IHZhbHVlOiBcImFkdmFuY2VkXCIsIGxhYmVsOiBcIkFkdmFuY2VkXCIgfSxcclxuICB7IHZhbHVlOiBcImN1c3RvbVwiLCBsYWJlbDogXCJDdXN0b21cIiB9LFxyXG5dO1xyXG5cclxuY29uc3QgU1RBVFVTX09QVElPTlM6IHsgdmFsdWU6IFwiYWxsXCIgfCBQdWJsaXNoU3RhdHVzOyBsYWJlbDogc3RyaW5nIH1bXSA9IFtcclxuICB7IHZhbHVlOiBcImFsbFwiLCBsYWJlbDogXCJBbGwgU3RhdHVzXCIgfSxcclxuICB7IHZhbHVlOiBcInB1Ymxpc2hlZFwiLCBsYWJlbDogXCJQdWJsaXNoZWRcIiB9LFxyXG4gIHsgdmFsdWU6IFwiZHJhZnRcIiwgbGFiZWw6IFwiRHJhZnRcIiB9LFxyXG5dO1xyXG5cclxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gV29ya3Nob3BMaXN0UGFnZSh7IG9uTmF2aWdhdGUgfTogV29ya3Nob3BMaXN0UGFnZVByb3BzKSB7XHJcbiAgY29uc3QgW2l0ZW1zLCBzZXRJdGVtc10gPSB1c2VTdGF0ZTxXb3Jrc2hvcEl0ZW1bXT4oW10pO1xyXG4gIGNvbnN0IFtzZWFyY2gsIHNldFNlYXJjaF0gPSB1c2VTdGF0ZShcIlwiKTtcclxuICBjb25zdCBbdHlwZUZpbHRlciwgc2V0VHlwZUZpbHRlcl0gPSB1c2VTdGF0ZTxcImFsbFwiIHwgV29ya3Nob3BUeXBlPihcImFsbFwiKTtcclxuICBjb25zdCBbc3RhdHVzRmlsdGVyLCBzZXRTdGF0dXNGaWx0ZXJdID0gdXNlU3RhdGU8XCJhbGxcIiB8IFB1Ymxpc2hTdGF0dXM+KFwiYWxsXCIpO1xyXG4gIGNvbnN0IFtmZWF0dXJlZEZpbHRlciwgc2V0RmVhdHVyZWRGaWx0ZXJdID0gdXNlU3RhdGU8XCJhbGxcIiB8IFwiZmVhdHVyZWRcIj4oXCJhbGxcIik7XHJcbiAgY29uc3QgW2RlbGV0ZUlkLCBzZXREZWxldGVJZF0gPSB1c2VTdGF0ZTxzdHJpbmcgfCBudWxsPihudWxsKTtcclxuICBjb25zdCBbbG9hZGluZywgc2V0TG9hZGluZ10gPSB1c2VTdGF0ZSh0cnVlKTtcclxuICBjb25zdCBbYnVzeUlkLCBzZXRCdXN5SWRdID0gdXNlU3RhdGU8c3RyaW5nIHwgbnVsbD4obnVsbCk7XHJcbiAgY29uc3QgW2Vycm9yLCBzZXRFcnJvcl0gPSB1c2VTdGF0ZShcIlwiKTtcclxuXHJcbiAgYXN5bmMgZnVuY3Rpb24gcmVmcmVzaCgpIHtcclxuICAgIGNvbnN0IG5leHRJdGVtcyA9IGF3YWl0IHdvcmtzaG9wU2VydmljZS5nZXRBbGwoKTtcclxuICAgIHNldEl0ZW1zKG5leHRJdGVtcyk7XHJcbiAgfVxyXG5cclxuICB1c2VFZmZlY3QoKCkgPT4ge1xyXG4gICAgbGV0IGNhbmNlbGxlZCA9IGZhbHNlO1xyXG5cclxuICAgIGFzeW5jIGZ1bmN0aW9uIGxvYWQoKSB7XHJcbiAgICAgIHRyeSB7XHJcbiAgICAgICAgc2V0TG9hZGluZyh0cnVlKTtcclxuICAgICAgICBzZXRFcnJvcihcIlwiKTtcclxuICAgICAgICBjb25zdCBuZXh0SXRlbXMgPSBhd2FpdCB3b3Jrc2hvcFNlcnZpY2UuZ2V0QWxsKCk7XHJcbiAgICAgICAgaWYgKCFjYW5jZWxsZWQpIHtcclxuICAgICAgICAgIHNldEl0ZW1zKG5leHRJdGVtcyk7XHJcbiAgICAgICAgfVxyXG4gICAgICB9IGNhdGNoIChlcnIpIHtcclxuICAgICAgICBpZiAoIWNhbmNlbGxlZCkge1xyXG4gICAgICAgICAgc2V0RXJyb3IoZXJyIGluc3RhbmNlb2YgRXJyb3IgPyBlcnIubWVzc2FnZSA6IFwiRmFpbGVkIHRvIGxvYWQgd29ya3Nob3BzLlwiKTtcclxuICAgICAgICB9XHJcbiAgICAgIH0gZmluYWxseSB7XHJcbiAgICAgICAgaWYgKCFjYW5jZWxsZWQpIHtcclxuICAgICAgICAgIHNldExvYWRpbmcoZmFsc2UpO1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfVxyXG5cclxuICAgIGxvYWQoKTtcclxuXHJcbiAgICByZXR1cm4gKCkgPT4ge1xyXG4gICAgICBjYW5jZWxsZWQgPSB0cnVlO1xyXG4gICAgfTtcclxuICB9LCBbXSk7XHJcblxyXG4gIGNvbnN0IGZpbHRlcmVkID0gaXRlbXMuZmlsdGVyKChpdGVtKSA9PiB7XHJcbiAgICBjb25zdCBxID0gc2VhcmNoLnRvTG93ZXJDYXNlKCk7XHJcbiAgICBjb25zdCBtYXRjaFNlYXJjaCA9ICFxIHx8IGl0ZW0udGl0bGUuZW4udG9Mb3dlckNhc2UoKS5pbmNsdWRlcyhxKSB8fCBpdGVtLnRpdGxlLmFyLmluY2x1ZGVzKHEpIHx8IGl0ZW0uc2x1Zy5pbmNsdWRlcyhxKTtcclxuICAgIGNvbnN0IG1hdGNoVHlwZSA9IHR5cGVGaWx0ZXIgPT09IFwiYWxsXCIgfHwgaXRlbS53b3Jrc2hvcFR5cGUgPT09IHR5cGVGaWx0ZXI7XHJcbiAgICBjb25zdCBtYXRjaFN0YXR1cyA9IHN0YXR1c0ZpbHRlciA9PT0gXCJhbGxcIiB8fCBpdGVtLnN0YXR1cyA9PT0gc3RhdHVzRmlsdGVyO1xyXG4gICAgY29uc3QgbWF0Y2hGZWF0dXJlZCA9IGZlYXR1cmVkRmlsdGVyID09PSBcImFsbFwiIHx8IChmZWF0dXJlZEZpbHRlciA9PT0gXCJmZWF0dXJlZFwiICYmIGl0ZW0uZmVhdHVyZWQpO1xyXG4gICAgcmV0dXJuIG1hdGNoU2VhcmNoICYmIG1hdGNoVHlwZSAmJiBtYXRjaFN0YXR1cyAmJiBtYXRjaEZlYXR1cmVkO1xyXG4gIH0pO1xyXG5cclxuICBjb25zdCBoYXNGaWx0ZXJzID0gc2VhcmNoIHx8IHR5cGVGaWx0ZXIgIT09IFwiYWxsXCIgfHwgc3RhdHVzRmlsdGVyICE9PSBcImFsbFwiIHx8IGZlYXR1cmVkRmlsdGVyICE9PSBcImFsbFwiO1xyXG5cclxuICBhc3luYyBmdW5jdGlvbiBoYW5kbGVUb2dnbGVTdGF0dXMoaWQ6IHN0cmluZykge1xyXG4gICAgdHJ5IHtcclxuICAgICAgc2V0QnVzeUlkKGlkKTtcclxuICAgICAgYXdhaXQgd29ya3Nob3BTZXJ2aWNlLnRvZ2dsZVN0YXR1cyhpZCk7XHJcbiAgICAgIGF3YWl0IHJlZnJlc2goKTtcclxuICAgICAgdG9hc3Quc3VjY2VzcyhcIlN0YXR1cyB1cGRhdGVkLlwiKTtcclxuICAgIH0gY2F0Y2ggKGVycikge1xyXG4gICAgICB0b2FzdC5lcnJvcihlcnIgaW5zdGFuY2VvZiBFcnJvciA/IGVyci5tZXNzYWdlIDogXCJGYWlsZWQgdG8gdXBkYXRlIHN0YXR1cy5cIik7XHJcbiAgICB9IGZpbmFsbHkge1xyXG4gICAgICBzZXRCdXN5SWQobnVsbCk7XHJcbiAgICB9XHJcbiAgfVxyXG5cclxuICBhc3luYyBmdW5jdGlvbiBoYW5kbGVUb2dnbGVGZWF0dXJlZChpZDogc3RyaW5nKSB7XHJcbiAgICB0cnkge1xyXG4gICAgICBzZXRCdXN5SWQoaWQpO1xyXG4gICAgICBhd2FpdCB3b3Jrc2hvcFNlcnZpY2UudG9nZ2xlRmVhdHVyZWQoaWQpO1xyXG4gICAgICBhd2FpdCByZWZyZXNoKCk7XHJcbiAgICAgIHRvYXN0LnN1Y2Nlc3MoXCJGZWF0dXJlZCBzdGF0dXMgdXBkYXRlZC5cIik7XHJcbiAgICB9IGNhdGNoIChlcnIpIHtcclxuICAgICAgdG9hc3QuZXJyb3IoZXJyIGluc3RhbmNlb2YgRXJyb3IgPyBlcnIubWVzc2FnZSA6IFwiRmFpbGVkIHRvIHVwZGF0ZSBmZWF0dXJlZCBzdGF0dXMuXCIpO1xyXG4gICAgfSBmaW5hbGx5IHtcclxuICAgICAgc2V0QnVzeUlkKG51bGwpO1xyXG4gICAgfVxyXG4gIH1cclxuXHJcbiAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlTW92ZVVwKGlkOiBzdHJpbmcpIHtcclxuICAgIHRyeSB7XHJcbiAgICAgIHNldEJ1c3lJZChpZCk7XHJcbiAgICAgIGF3YWl0IHdvcmtzaG9wU2VydmljZS5tb3ZlVXAoaWQpO1xyXG4gICAgICBhd2FpdCByZWZyZXNoKCk7XHJcbiAgICB9IGNhdGNoIChlcnIpIHtcclxuICAgICAgdG9hc3QuZXJyb3IoZXJyIGluc3RhbmNlb2YgRXJyb3IgPyBlcnIubWVzc2FnZSA6IFwiRmFpbGVkIHRvIG1vdmUgd29ya3Nob3AuXCIpO1xyXG4gICAgfSBmaW5hbGx5IHtcclxuICAgICAgc2V0QnVzeUlkKG51bGwpO1xyXG4gICAgfVxyXG4gIH1cclxuXHJcbiAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlTW92ZURvd24oaWQ6IHN0cmluZykge1xyXG4gICAgdHJ5IHtcclxuICAgICAgc2V0QnVzeUlkKGlkKTtcclxuICAgICAgYXdhaXQgd29ya3Nob3BTZXJ2aWNlLm1vdmVEb3duKGlkKTtcclxuICAgICAgYXdhaXQgcmVmcmVzaCgpO1xyXG4gICAgfSBjYXRjaCAoZXJyKSB7XHJcbiAgICAgIHRvYXN0LmVycm9yKGVyciBpbnN0YW5jZW9mIEVycm9yID8gZXJyLm1lc3NhZ2UgOiBcIkZhaWxlZCB0byBtb3ZlIHdvcmtzaG9wLlwiKTtcclxuICAgIH0gZmluYWxseSB7XHJcbiAgICAgIHNldEJ1c3lJZChudWxsKTtcclxuICAgIH1cclxuICB9XHJcblxyXG4gIGFzeW5jIGZ1bmN0aW9uIGhhbmRsZURlbGV0ZSgpIHtcclxuICAgIGlmICghZGVsZXRlSWQpIHJldHVybjtcclxuICAgIHRyeSB7XHJcbiAgICAgIHNldEJ1c3lJZChkZWxldGVJZCk7XHJcbiAgICAgIGF3YWl0IHdvcmtzaG9wU2VydmljZS5yZW1vdmUoZGVsZXRlSWQpO1xyXG4gICAgICBhd2FpdCByZWZyZXNoKCk7XHJcbiAgICAgIHNldERlbGV0ZUlkKG51bGwpO1xyXG4gICAgICB0b2FzdC5zdWNjZXNzKFwiV29ya3Nob3AgZGVsZXRlZC5cIik7XHJcbiAgICB9IGNhdGNoIChlcnIpIHtcclxuICAgICAgdG9hc3QuZXJyb3IoZXJyIGluc3RhbmNlb2YgRXJyb3IgPyBlcnIubWVzc2FnZSA6IFwiRmFpbGVkIHRvIGRlbGV0ZSB3b3Jrc2hvcC5cIik7XHJcbiAgICB9IGZpbmFsbHkge1xyXG4gICAgICBzZXRCdXN5SWQobnVsbCk7XHJcbiAgICB9XHJcbiAgfVxyXG5cclxuICBpZiAobG9hZGluZykge1xyXG4gICAgcmV0dXJuIDxkaXYgY2xhc3NOYW1lPVwidGV4dC1zbSB0ZXh0LVsjOWE5NTkwXVwiPkxvYWRpbmcgd29ya3Nob3BzLi4uPC9kaXY+O1xyXG4gIH1cclxuXHJcbiAgaWYgKGVycm9yKSB7XHJcbiAgICByZXR1cm4gPGRpdiBjbGFzc05hbWU9XCJib3JkZXIgYm9yZGVyLXJlZC0yMDAgYmctcmVkLTUwIHB4LTQgcHktMyB0ZXh0LXNtIHRleHQtcmVkLTcwMFwiPntlcnJvcn08L2Rpdj47XHJcbiAgfVxyXG5cclxuICByZXR1cm4gKFxyXG4gICAgPGRpdiBjbGFzc05hbWU9XCJzcGFjZS15LTVcIj5cclxuICAgICAgey8qIEhlYWRlciAqL31cclxuICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gZ2FwLTQgZmxleC13cmFwXCI+XHJcbiAgICAgICAgPGRpdj5cclxuICAgICAgICAgIDxoMiBjbGFzc05hbWU9XCJ0ZXh0LWJhc2UgZm9udC1zZW1pYm9sZCB0ZXh0LVsjMWMxYzE4XVwiPldvcmtzaG9wczwvaDI+XHJcbiAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXhzIHRleHQtWyM5YTk1OTBdIG10LTAuNVwiPntpdGVtcy5sZW5ndGh9IHRvdGFsIMK3IHtpdGVtcy5maWx0ZXIoKGkpID0+IGkuc3RhdHVzID09PSBcInB1Ymxpc2hlZFwiKS5sZW5ndGh9IHB1Ymxpc2hlZDwvcD5cclxuICAgICAgICA8L2Rpdj5cclxuICAgICAgICA8YnV0dG9uXHJcbiAgICAgICAgICBvbkNsaWNrPXsoKSA9PiBvbk5hdmlnYXRlKFwid29ya3Nob3BzLW5ld1wiKX1cclxuICAgICAgICAgIGNsYXNzTmFtZT1cImZsZXggaXRlbXMtY2VudGVyIGdhcC0xLjUgYmctWyM3NDU5NDBdIHRleHQtd2hpdGUgdGV4dC14cyB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXN0IGZvbnQtbWVkaXVtIHB4LTQgcHktMi41IGhvdmVyOmJnLVsjOGE2ZDRlXSB0cmFuc2l0aW9uLWNvbG9yc1wiXHJcbiAgICAgICAgPlxyXG4gICAgICAgICAgPFBsdXMgY2xhc3NOYW1lPVwidy0zLjUgaC0zLjVcIiAvPlxyXG4gICAgICAgICAgTmV3IFdvcmtzaG9wXHJcbiAgICAgICAgPC9idXR0b24+XHJcbiAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgey8qIEZpbHRlcnMgKi99XHJcbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBmbGV4LXdyYXAgZ2FwLTMgaXRlbXMtY2VudGVyXCI+XHJcbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJyZWxhdGl2ZSBmbGV4LTEgbWluLXctNDhcIj5cclxuICAgICAgICAgIDxTZWFyY2ggY2xhc3NOYW1lPVwiYWJzb2x1dGUgbGVmdC0zIHRvcC0xLzIgLXRyYW5zbGF0ZS15LTEvMiB3LTMuNSBoLTMuNSB0ZXh0LVsjOWE5NTkwXVwiIC8+XHJcbiAgICAgICAgICA8aW5wdXRcclxuICAgICAgICAgICAgdHlwZT1cInRleHRcIlxyXG4gICAgICAgICAgICBwbGFjZWhvbGRlcj1cIlNlYXJjaCB3b3Jrc2hvcHPigKZcIlxyXG4gICAgICAgICAgICB2YWx1ZT17c2VhcmNofVxyXG4gICAgICAgICAgICBvbkNoYW5nZT17KGUpID0+IHNldFNlYXJjaChlLnRhcmdldC52YWx1ZSl9XHJcbiAgICAgICAgICAgIGNsYXNzTmFtZT1cInctZnVsbCBwbC04IHByLTMgcHktMiBiZy13aGl0ZSBib3JkZXIgYm9yZGVyLVsjZTZlMmRiXSB0ZXh0LXNtIGZvbnQtc2FucyB0ZXh0LVsjMWMxYzE4XSBwbGFjZWhvbGRlci1bI2M1YzBiYl0gZm9jdXM6b3V0bGluZS1ub25lIGZvY3VzOmJvcmRlci1bIzc0NTk0MF0gdHJhbnNpdGlvbi1jb2xvcnNcIlxyXG4gICAgICAgICAgLz5cclxuICAgICAgICA8L2Rpdj5cclxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggaXRlbXMtY2VudGVyIGdhcC0yIGZsZXgtd3JhcFwiPlxyXG4gICAgICAgICAgPEZpbHRlciBjbGFzc05hbWU9XCJ3LTMuNSBoLTMuNSB0ZXh0LVsjOWE5NTkwXVwiIC8+XHJcbiAgICAgICAgICA8c2VsZWN0XHJcbiAgICAgICAgICAgIHZhbHVlPXt0eXBlRmlsdGVyfVxyXG4gICAgICAgICAgICBvbkNoYW5nZT17KGUpID0+IHNldFR5cGVGaWx0ZXIoZS50YXJnZXQudmFsdWUgYXMgYW55KX1cclxuICAgICAgICAgICAgY2xhc3NOYW1lPVwiYmctd2hpdGUgYm9yZGVyIGJvcmRlci1bI2U2ZTJkYl0gdGV4dC14cyBmb250LXNhbnMgdGV4dC1bIzYwNWI1NV0gcHgtMiBweS0yIGZvY3VzOm91dGxpbmUtbm9uZSBmb2N1czpib3JkZXItWyM3NDU5NDBdIHRyYW5zaXRpb24tY29sb3JzXCJcclxuICAgICAgICAgID5cclxuICAgICAgICAgICAge1RZUEVfT1BUSU9OUy5tYXAoKG8pID0+IDxvcHRpb24ga2V5PXtvLnZhbHVlfSB2YWx1ZT17by52YWx1ZX0+e28ubGFiZWx9PC9vcHRpb24+KX1cclxuICAgICAgICAgIDwvc2VsZWN0PlxyXG4gICAgICAgICAgPHNlbGVjdFxyXG4gICAgICAgICAgICB2YWx1ZT17c3RhdHVzRmlsdGVyfVxyXG4gICAgICAgICAgICBvbkNoYW5nZT17KGUpID0+IHNldFN0YXR1c0ZpbHRlcihlLnRhcmdldC52YWx1ZSBhcyBhbnkpfVxyXG4gICAgICAgICAgICBjbGFzc05hbWU9XCJiZy13aGl0ZSBib3JkZXIgYm9yZGVyLVsjZTZlMmRiXSB0ZXh0LXhzIGZvbnQtc2FucyB0ZXh0LVsjNjA1YjU1XSBweC0yIHB5LTIgZm9jdXM6b3V0bGluZS1ub25lIGZvY3VzOmJvcmRlci1bIzc0NTk0MF0gdHJhbnNpdGlvbi1jb2xvcnNcIlxyXG4gICAgICAgICAgPlxyXG4gICAgICAgICAgICB7U1RBVFVTX09QVElPTlMubWFwKChvKSA9PiA8b3B0aW9uIGtleT17by52YWx1ZX0gdmFsdWU9e28udmFsdWV9PntvLmxhYmVsfTwvb3B0aW9uPil9XHJcbiAgICAgICAgICA8L3NlbGVjdD5cclxuICAgICAgICAgIDxzZWxlY3RcclxuICAgICAgICAgICAgdmFsdWU9e2ZlYXR1cmVkRmlsdGVyfVxyXG4gICAgICAgICAgICBvbkNoYW5nZT17KGUpID0+IHNldEZlYXR1cmVkRmlsdGVyKGUudGFyZ2V0LnZhbHVlIGFzIGFueSl9XHJcbiAgICAgICAgICAgIGNsYXNzTmFtZT1cImJnLXdoaXRlIGJvcmRlciBib3JkZXItWyNlNmUyZGJdIHRleHQteHMgZm9udC1zYW5zIHRleHQtWyM2MDViNTVdIHB4LTIgcHktMiBmb2N1czpvdXRsaW5lLW5vbmUgZm9jdXM6Ym9yZGVyLVsjNzQ1OTQwXSB0cmFuc2l0aW9uLWNvbG9yc1wiXHJcbiAgICAgICAgICA+XHJcbiAgICAgICAgICAgIDxvcHRpb24gdmFsdWU9XCJhbGxcIj5BbGwgSXRlbXM8L29wdGlvbj5cclxuICAgICAgICAgICAgPG9wdGlvbiB2YWx1ZT1cImZlYXR1cmVkXCI+RmVhdHVyZWQgT25seTwvb3B0aW9uPlxyXG4gICAgICAgICAgPC9zZWxlY3Q+XHJcbiAgICAgICAgICB7aGFzRmlsdGVycyAmJiAoXHJcbiAgICAgICAgICAgIDxidXR0b25cclxuICAgICAgICAgICAgICBvbkNsaWNrPXsoKSA9PiB7IHNldFNlYXJjaChcIlwiKTsgc2V0VHlwZUZpbHRlcihcImFsbFwiKTsgc2V0U3RhdHVzRmlsdGVyKFwiYWxsXCIpOyBzZXRGZWF0dXJlZEZpbHRlcihcImFsbFwiKTsgfX1cclxuICAgICAgICAgICAgICBjbGFzc05hbWU9XCJ0ZXh0LXhzIHRleHQtWyM5YTk1OTBdIGhvdmVyOnRleHQtcmVkLTUwMCB0cmFuc2l0aW9uLWNvbG9yc1wiXHJcbiAgICAgICAgICAgID5cclxuICAgICAgICAgICAgICBDbGVhclxyXG4gICAgICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgICAgICl9XHJcbiAgICAgICAgPC9kaXY+XHJcbiAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgey8qIFRhYmxlIOKAlCBEZXNrdG9wICovfVxyXG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cImJnLXdoaXRlIGJvcmRlciBib3JkZXItWyNlNmUyZGJdIG92ZXJmbG93LWhpZGRlblwiPlxyXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaGlkZGVuIG1kOmJsb2NrIG92ZXJmbG93LXgtYXV0b1wiPlxyXG4gICAgICAgICAgPHRhYmxlIGNsYXNzTmFtZT1cInctZnVsbFwiPlxyXG4gICAgICAgICAgICA8dGhlYWQ+XHJcbiAgICAgICAgICAgICAgPHRyIGNsYXNzTmFtZT1cImJvcmRlci1iIGJvcmRlci1bI2YxZWRlNl0gYmctWyNmN2YzZWNdXCI+XHJcbiAgICAgICAgICAgICAgICA8dGggY2xhc3NOYW1lPVwicHgtNCBweS0zIHRleHQtbGVmdCB0ZXh0LVsxMHB4XSB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXN0IHRleHQtWyM5YTk1OTBdIGZvbnQtc2VtaWJvbGQgdy0xNlwiPk9yZGVyPC90aD5cclxuICAgICAgICAgICAgICAgIDx0aCBjbGFzc05hbWU9XCJweC00IHB5LTMgdGV4dC1sZWZ0IHRleHQtWzEwcHhdIHVwcGVyY2FzZSB0cmFja2luZy13aWRlc3QgdGV4dC1bIzlhOTU5MF0gZm9udC1zZW1pYm9sZFwiPldvcmtzaG9wPC90aD5cclxuICAgICAgICAgICAgICAgIDx0aCBjbGFzc05hbWU9XCJweC00IHB5LTMgdGV4dC1sZWZ0IHRleHQtWzEwcHhdIHVwcGVyY2FzZSB0cmFja2luZy13aWRlc3QgdGV4dC1bIzlhOTU5MF0gZm9udC1zZW1pYm9sZFwiPlR5cGU8L3RoPlxyXG4gICAgICAgICAgICAgICAgPHRoIGNsYXNzTmFtZT1cInB4LTQgcHktMyB0ZXh0LWxlZnQgdGV4dC1bMTBweF0gdXBwZXJjYXNlIHRyYWNraW5nLXdpZGVzdCB0ZXh0LVsjOWE5NTkwXSBmb250LXNlbWlib2xkXCI+Rm9ybWF0PC90aD5cclxuICAgICAgICAgICAgICAgIDx0aCBjbGFzc05hbWU9XCJweC00IHB5LTMgdGV4dC1sZWZ0IHRleHQtWzEwcHhdIHVwcGVyY2FzZSB0cmFja2luZy13aWRlc3QgdGV4dC1bIzlhOTU5MF0gZm9udC1zZW1pYm9sZFwiPlN0YXR1czwvdGg+XHJcbiAgICAgICAgICAgICAgICA8dGggY2xhc3NOYW1lPVwicHgtNCBweS0zIHRleHQtbGVmdCB0ZXh0LVsxMHB4XSB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXN0IHRleHQtWyM5YTk1OTBdIGZvbnQtc2VtaWJvbGRcIj5GZWF0dXJlZDwvdGg+XHJcbiAgICAgICAgICAgICAgICA8dGggY2xhc3NOYW1lPVwicHgtNCBweS0zIHRleHQtcmlnaHQgdGV4dC1bMTBweF0gdXBwZXJjYXNlIHRyYWNraW5nLXdpZGVzdCB0ZXh0LVsjOWE5NTkwXSBmb250LXNlbWlib2xkXCI+QWN0aW9uczwvdGg+XHJcbiAgICAgICAgICAgICAgPC90cj5cclxuICAgICAgICAgICAgPC90aGVhZD5cclxuICAgICAgICAgICAgPHRib2R5IGNsYXNzTmFtZT1cImRpdmlkZS15IGRpdmlkZS1bI2Y3ZjNlY11cIj5cclxuICAgICAgICAgICAgICB7ZmlsdGVyZWQubGVuZ3RoID09PSAwICYmIChcclxuICAgICAgICAgICAgICAgIDx0cj5cclxuICAgICAgICAgICAgICAgICAgPHRkIGNvbFNwYW49ezd9IGNsYXNzTmFtZT1cInB4LTQgcHktMTIgdGV4dC1jZW50ZXIgdGV4dC1zbSB0ZXh0LVsjOWE5NTkwXVwiPlxyXG4gICAgICAgICAgICAgICAgICAgIHtoYXNGaWx0ZXJzID8gXCJObyByZXN1bHRzIG1hdGNoIHlvdXIgZmlsdGVycy5cIiA6IFwiTm8gd29ya3Nob3BzIHlldC4gQWRkIHlvdXIgZmlyc3Qgb25lLlwifVxyXG4gICAgICAgICAgICAgICAgICA8L3RkPlxyXG4gICAgICAgICAgICAgICAgPC90cj5cclxuICAgICAgICAgICAgICApfVxyXG4gICAgICAgICAgICAgIHtmaWx0ZXJlZC5tYXAoKGl0ZW0sIGlkeCkgPT4gKFxyXG4gICAgICAgICAgICAgICAgPHRyIGtleT17aXRlbS5pZH0gY2xhc3NOYW1lPVwiZ3JvdXAgaG92ZXI6YmctWyNmYWY4ZjRdIHRyYW5zaXRpb24tY29sb3JzXCI+XHJcbiAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJweC00IHB5LTNcIj5cclxuICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggZmxleC1jb2wgZ2FwLTAuNSBpdGVtcy1jZW50ZXJcIj5cclxuICAgICAgICAgICAgICAgICAgICAgIDxidXR0b24gb25DbGljaz17KCkgPT4gaGFuZGxlTW92ZVVwKGl0ZW0uaWQpfSBkaXNhYmxlZD17aWR4ID09PSAwIHx8IGJ1c3lJZCA9PT0gaXRlbS5pZH0gY2xhc3NOYW1lPVwidGV4dC1bIzlhOTU5MF0gaG92ZXI6dGV4dC1bIzc0NTk0MF0gZGlzYWJsZWQ6b3BhY2l0eS0zMCBkaXNhYmxlZDpjdXJzb3Itbm90LWFsbG93ZWRcIj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPENoZXZyb25VcCBjbGFzc05hbWU9XCJ3LTMuNSBoLTMuNVwiIC8+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cInRleHQteHMgdGV4dC1bIzlhOTU5MF0gdGFidWxhci1udW1zXCI+e2l0ZW0uc29ydE9yZGVyfTwvc3Bhbj5cclxuICAgICAgICAgICAgICAgICAgICAgIDxidXR0b24gb25DbGljaz17KCkgPT4gaGFuZGxlTW92ZURvd24oaXRlbS5pZCl9IGRpc2FibGVkPXtpZHggPT09IGZpbHRlcmVkLmxlbmd0aCAtIDEgfHwgYnVzeUlkID09PSBpdGVtLmlkfSBjbGFzc05hbWU9XCJ0ZXh0LVsjOWE5NTkwXSBob3Zlcjp0ZXh0LVsjNzQ1OTQwXSBkaXNhYmxlZDpvcGFjaXR5LTMwIGRpc2FibGVkOmN1cnNvci1ub3QtYWxsb3dlZFwiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8Q2hldnJvbkRvd24gY2xhc3NOYW1lPVwidy0zLjUgaC0zLjVcIiAvPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XHJcbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICAgIDwvdGQ+XHJcbiAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJweC00IHB5LTNcIj5cclxuICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggaXRlbXMtY2VudGVyIGdhcC0zXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInctMTAgaC0xMCBiZy1bI2Y3ZjNlY10gc2hyaW5rLTAgb3ZlcmZsb3ctaGlkZGVuIGJvcmRlciBib3JkZXItWyNmMWVkZTZdXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIHtpdGVtLmNvdmVySW1hZ2UgJiYgPGltZyBzcmM9e2l0ZW0uY292ZXJJbWFnZX0gYWx0PVwiXCIgY2xhc3NOYW1lPVwidy1mdWxsIGgtZnVsbCBvYmplY3QtY292ZXJcIiAvPn1cclxuICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtaW4tdy0wXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtc20gZm9udC1tZWRpdW0gdGV4dC1bIzFjMWMxOF0gdHJ1bmNhdGVcIj57aXRlbS50aXRsZS5lbn08L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQteHMgdGV4dC1bIzlhOTU5MF0gdHJ1bmNhdGVcIj57aXRlbS50aXRsZS5hcn08L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgPC90ZD5cclxuICAgICAgICAgICAgICAgICAgPHRkIGNsYXNzTmFtZT1cInB4LTQgcHktM1wiPlxyXG4gICAgICAgICAgICAgICAgICAgIDxTdGF0dXNCYWRnZSBzdGF0dXM9e2l0ZW0ud29ya3Nob3BUeXBlIGFzIGFueX0gLz5cclxuICAgICAgICAgICAgICAgICAgPC90ZD5cclxuICAgICAgICAgICAgICAgICAgPHRkIGNsYXNzTmFtZT1cInB4LTQgcHktM1wiPlxyXG4gICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cInRleHQteHMgdGV4dC1bIzYwNWI1NV1cIj57aXRlbS5mb3JtYXQuZW59PC9zcGFuPlxyXG4gICAgICAgICAgICAgICAgICA8L3RkPlxyXG4gICAgICAgICAgICAgICAgICA8dGQgY2xhc3NOYW1lPVwicHgtNCBweS0zXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgPFN0YXR1c0JhZGdlIHN0YXR1cz17aXRlbS5zdGF0dXN9IC8+XHJcbiAgICAgICAgICAgICAgICAgIDwvdGQ+XHJcbiAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJweC00IHB5LTNcIj5cclxuICAgICAgICAgICAgICAgICAgICB7aXRlbS5mZWF0dXJlZCAmJiA8U3RhdHVzQmFkZ2Ugc3RhdHVzPVwiZmVhdHVyZWRcIiAvPn1cclxuICAgICAgICAgICAgICAgICAgPC90ZD5cclxuICAgICAgICAgICAgICAgICAgPHRkIGNsYXNzTmFtZT1cInB4LTQgcHktM1wiPlxyXG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1lbmQgZ2FwLTEuNSBvcGFjaXR5LTAgZ3JvdXAtaG92ZXI6b3BhY2l0eS0xMDAgdHJhbnNpdGlvbi1vcGFjaXR5XCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IGhhbmRsZVRvZ2dsZVN0YXR1cyhpdGVtLmlkKX0gdGl0bGU9e2l0ZW0uc3RhdHVzID09PSBcInB1Ymxpc2hlZFwiID8gXCJTZXQgdG8gRHJhZnRcIiA6IFwiUHVibGlzaFwifSBjbGFzc05hbWU9XCJwLTEuNSB0ZXh0LVsjOWE5NTkwXSBob3Zlcjp0ZXh0LVsjNzQ1OTQwXSBob3ZlcjpiZy1bI2Y3ZjNlY10gdHJhbnNpdGlvbi1jb2xvcnNcIj5cclxuICAgICAgICAgICAgICAgICAgICAgICAge2l0ZW0uc3RhdHVzID09PSBcInB1Ymxpc2hlZFwiID8gPEV5ZU9mZiBjbGFzc05hbWU9XCJ3LTMuNSBoLTMuNVwiIC8+IDogPEV5ZSBjbGFzc05hbWU9XCJ3LTMuNSBoLTMuNVwiIC8+fVxyXG4gICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IGhhbmRsZVRvZ2dsZUZlYXR1cmVkKGl0ZW0uaWQpfSB0aXRsZT1cIlRvZ2dsZSBGZWF0dXJlZFwiIGNsYXNzTmFtZT1cInAtMS41IHRleHQtWyM5YTk1OTBdIGhvdmVyOnRleHQtYW1iZXItNTAwIGhvdmVyOmJnLVsjZjdmM2VjXSB0cmFuc2l0aW9uLWNvbG9yc1wiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICB7aXRlbS5mZWF0dXJlZCA/IDxTdGFyT2ZmIGNsYXNzTmFtZT1cInctMy41IGgtMy41XCIgLz4gOiA8U3RhciBjbGFzc05hbWU9XCJ3LTMuNSBoLTMuNVwiIC8+fVxyXG4gICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IG9uTmF2aWdhdGUoXCJ3b3Jrc2hvcHMtZWRpdFwiLCBpdGVtLmlkKX0gdGl0bGU9XCJFZGl0XCIgY2xhc3NOYW1lPVwicC0xLjUgdGV4dC1bIzlhOTU5MF0gaG92ZXI6dGV4dC1bIzc0NTk0MF0gaG92ZXI6YmctWyNmN2YzZWNdIHRyYW5zaXRpb24tY29sb3JzXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxQZW5jaWwgY2xhc3NOYW1lPVwidy0zLjUgaC0zLjVcIiAvPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IHNldERlbGV0ZUlkKGl0ZW0uaWQpfSB0aXRsZT1cIkRlbGV0ZVwiIGNsYXNzTmFtZT1cInAtMS41IHRleHQtWyM5YTk1OTBdIGhvdmVyOnRleHQtcmVkLTUwMCBob3ZlcjpiZy1bI2Y3ZjNlY10gdHJhbnNpdGlvbi1jb2xvcnNcIj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPFRyYXNoMiBjbGFzc05hbWU9XCJ3LTMuNSBoLTMuNVwiIC8+XHJcbiAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgPC90ZD5cclxuICAgICAgICAgICAgICAgIDwvdHI+XHJcbiAgICAgICAgICAgICAgKSl9XHJcbiAgICAgICAgICAgIDwvdGJvZHk+XHJcbiAgICAgICAgICA8L3RhYmxlPlxyXG4gICAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgICB7LyogTW9iaWxlIGNhcmRzICovfVxyXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibWQ6aGlkZGVuIGRpdmlkZS15IGRpdmlkZS1bI2Y3ZjNlY11cIj5cclxuICAgICAgICAgIHtmaWx0ZXJlZC5sZW5ndGggPT09IDAgJiYgKFxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInB4LTQgcHktMTAgdGV4dC1jZW50ZXIgdGV4dC1zbSB0ZXh0LVsjOWE5NTkwXVwiPlxyXG4gICAgICAgICAgICAgIHtoYXNGaWx0ZXJzID8gXCJObyByZXN1bHRzLlwiIDogXCJObyB3b3Jrc2hvcHMgeWV0LlwifVxyXG4gICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICl9XHJcbiAgICAgICAgICB7ZmlsdGVyZWQubWFwKChpdGVtKSA9PiAoXHJcbiAgICAgICAgICAgIDxkaXYga2V5PXtpdGVtLmlkfSBjbGFzc05hbWU9XCJmbGV4IGl0ZW1zLXN0YXJ0IGdhcC0zIHB4LTQgcHktNFwiPlxyXG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidy0xMiBoLTEyIGJnLVsjZjdmM2VjXSBzaHJpbmstMCBvdmVyZmxvdy1oaWRkZW5cIj5cclxuICAgICAgICAgICAgICAgIHtpdGVtLmNvdmVySW1hZ2UgJiYgPGltZyBzcmM9e2l0ZW0uY292ZXJJbWFnZX0gYWx0PVwiXCIgY2xhc3NOYW1lPVwidy1mdWxsIGgtZnVsbCBvYmplY3QtY292ZXJcIiAvPn1cclxuICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXgtMSBtaW4tdy0wXCI+XHJcbiAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXNtIGZvbnQtbWVkaXVtIHRleHQtWyMxYzFjMThdIHRydW5jYXRlXCI+e2l0ZW0udGl0bGUuZW59PC9wPlxyXG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiBtdC0xIGZsZXgtd3JhcFwiPlxyXG4gICAgICAgICAgICAgICAgICA8U3RhdHVzQmFkZ2Ugc3RhdHVzPXtpdGVtLnN0YXR1c30gLz5cclxuICAgICAgICAgICAgICAgICAge2l0ZW0uZmVhdHVyZWQgJiYgPFN0YXR1c0JhZGdlIHN0YXR1cz1cImZlYXR1cmVkXCIgLz59XHJcbiAgICAgICAgICAgICAgICAgIDxTdGF0dXNCYWRnZSBzdGF0dXM9e2l0ZW0ud29ya3Nob3BUeXBlIGFzIGFueX0gLz5cclxuICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBnYXAtMSBzaHJpbmstMFwiPlxyXG4gICAgICAgICAgICAgICAgPGJ1dHRvbiBvbkNsaWNrPXsoKSA9PiBvbk5hdmlnYXRlKFwid29ya3Nob3BzLWVkaXRcIiwgaXRlbS5pZCl9IGNsYXNzTmFtZT1cInAtMS41IHRleHQtWyM5YTk1OTBdIGhvdmVyOnRleHQtWyM3NDU5NDBdXCI+PFBlbmNpbCBjbGFzc05hbWU9XCJ3LTQgaC00XCIgLz48L2J1dHRvbj5cclxuICAgICAgICAgICAgICAgIDxidXR0b24gb25DbGljaz17KCkgPT4gc2V0RGVsZXRlSWQoaXRlbS5pZCl9IGNsYXNzTmFtZT1cInAtMS41IHRleHQtWyM5YTk1OTBdIGhvdmVyOnRleHQtcmVkLTUwMFwiPjxUcmFzaDIgY2xhc3NOYW1lPVwidy00IGgtNFwiIC8+PC9idXR0b24+XHJcbiAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgKSl9XHJcbiAgICAgICAgPC9kaXY+XHJcbiAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgPENvbmZpcm1EaWFsb2dcclxuICAgICAgICBvcGVuPXshIWRlbGV0ZUlkfVxyXG4gICAgICAgIHRpdGxlPVwiRGVsZXRlIFdvcmtzaG9wXCJcclxuICAgICAgICBtZXNzYWdlPVwiVGhpcyB3aWxsIHBlcm1hbmVudGx5IHJlbW92ZSB0aGlzIHdvcmtzaG9wIGZyb20gdGhlIGRhc2hib2FyZCBhbmQgdGhlIHB1YmxpYyBzaXRlLlwiXHJcbiAgICAgICAgY29uZmlybUxhYmVsPVwiRGVsZXRlIFdvcmtzaG9wXCJcclxuICAgICAgICBvbkNvbmZpcm09e2hhbmRsZURlbGV0ZX1cclxuICAgICAgICBvbkNhbmNlbD17KCkgPT4gc2V0RGVsZXRlSWQobnVsbCl9XHJcbiAgICAgIC8+XHJcbiAgICA8L2Rpdj5cclxuICApO1xyXG59XHJcbiJdLCJmaWxlIjoiQzovVXNlcnMvemVrYTEvRGVza3RvcC9wcm9qZWN0cy9kZW1hL2RlZW1hMS9zcmMvYWRtaW4vcGFnZXMvV29ya3Nob3BMaXN0UGFnZS50c3gifQ==

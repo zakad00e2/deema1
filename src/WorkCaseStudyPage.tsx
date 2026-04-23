@@ -659,7 +659,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
               <p className="hero-element text-sm uppercase tracking-[0.3em] text-brand-secondary">
                 {categoryLabelText} / {project.year}
               </p>
-              <h1 className="hero-element max-w-5xl font-serif text-4xl leading-[0.95] tracking-[-0.04em] text-brand-dark md:text-5xl lg:text-6xl">
+              <h1 className="arabic-hero-title hero-element max-w-5xl font-serif text-4xl leading-[0.95] tracking-[-0.04em] text-brand-dark md:text-5xl lg:text-6xl">
                 {projectTitle}
               </h1>
               {projectHeroTitle && projectHeroTitle !== `projects.${slug}.heroTitle` && (

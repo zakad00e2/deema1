@@ -1,0 +1,244 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/admin/components/LoginGate.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=315e57ad"; const Fragment = __vite__cjsImport0_react_jsxDevRuntime["Fragment"]; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$();
+import __vite__cjsImport1_react from "/node_modules/.vite/deps/react.js?v=315e57ad"; const useState = __vite__cjsImport1_react["useState"];
+import { authService } from "/src/admin/data/authService.ts";
+export default function LoginGate({ children }) {
+  _s();
+  const [authenticated, setAuthenticated] = useState(() => authService.isAuthenticated());
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  if (authenticated) return /* @__PURE__ */ jsxDEV(Fragment, { children }, void 0, false, {
+    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+    lineNumber: 14,
+    columnNumber: 29
+  }, this);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    const ok = await authService.login(password);
+    setLoading(false);
+    if (ok) {
+      setAuthenticated(true);
+    } else {
+      setError("Incorrect password.");
+      setPassword("");
+    }
+  }
+  return /* @__PURE__ */ jsxDEV("div", { className: "min-h-screen bg-[#1c1c18] flex items-center justify-center px-4", children: [
+    /* @__PURE__ */ jsxDEV(
+      "div",
+      {
+        className: "absolute inset-0 opacity-[0.02] pointer-events-none",
+        style: {
+          backgroundImage: "radial-gradient(circle at 1px 1px, #f7f3ec 1px, transparent 0)",
+          backgroundSize: "40px 40px"
+        }
+      },
+      void 0,
+      false,
+      {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+        lineNumber: 34,
+        columnNumber: 7
+      },
+      this
+    ),
+    /* @__PURE__ */ jsxDEV("div", { className: "relative w-full max-w-sm", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "text-center mb-10", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "inline-flex items-center justify-center w-12 h-12 bg-[#745940] mb-6", children: /* @__PURE__ */ jsxDEV("svg", { width: "20", height: "20", viewBox: "0 0 20 20", fill: "none", children: [
+          /* @__PURE__ */ jsxDEV("rect", { x: "2", y: "2", width: "7", height: "7", fill: "white", opacity: "0.9" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+            lineNumber: 46,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("rect", { x: "11", y: "2", width: "7", height: "7", fill: "white", opacity: "0.5" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+            lineNumber: 47,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("rect", { x: "2", y: "11", width: "7", height: "7", fill: "white", opacity: "0.5" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+            lineNumber: 48,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("rect", { x: "11", y: "11", width: "7", height: "7", fill: "white", opacity: "0.9" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+            lineNumber: 49,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 45,
+          columnNumber: 13
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 44,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("h1", { className: "text-white font-sans text-xl font-semibold tracking-tight", children: "Athr Admin" }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 52,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { className: "text-[#605b55] text-sm mt-1 font-sans", children: "Content Management" }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 53,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+        lineNumber: 43,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "bg-[#242420] border border-[#2e2e2a]", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "p-6", children: /* @__PURE__ */ jsxDEV("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("label", { htmlFor: "admin-password", className: "block text-xs uppercase tracking-widest text-[#9a9590] mb-2 font-sans", children: "Password" }, void 0, false, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+              lineNumber: 60,
+              columnNumber: 17
+            }, this),
+            /* @__PURE__ */ jsxDEV(
+              "input",
+              {
+                id: "admin-password",
+                type: "password",
+                value: password,
+                onChange: (e) => setPassword(e.target.value),
+                placeholder: "Enter admin password",
+                className: "w-full bg-[#1c1c18] border border-[#2e2e2a] text-[#fdf9f2] text-sm font-sans px-4 py-3 placeholder-[#4a4844] focus:outline-none focus:border-[#745940] transition-colors",
+                autoComplete: "current-password",
+                required: true
+              },
+              void 0,
+              false,
+              {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+                lineNumber: 63,
+                columnNumber: 17
+              },
+              this
+            ),
+            error && /* @__PURE__ */ jsxDEV("p", { className: "mt-2 text-xs text-red-400 font-sans", children: error }, void 0, false, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+              lineNumber: 73,
+              columnNumber: 27
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+            lineNumber: 59,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV(
+            "button",
+            {
+              type: "submit",
+              disabled: loading || !password,
+              className: "w-full bg-[#745940] text-white text-xs uppercase tracking-widest font-sans font-medium py-3 px-6 hover:bg-[#8a6d4e] disabled:opacity-50 disabled:cursor-not-allowed transition-colors",
+              children: loading ? /* @__PURE__ */ jsxDEV("span", { className: "flex items-center justify-center gap-2", children: [
+                /* @__PURE__ */ jsxDEV("svg", { className: "animate-spin w-4 h-4", viewBox: "0 0 24 24", fill: "none", children: [
+                  /* @__PURE__ */ jsxDEV("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }, void 0, false, {
+                    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+                    lineNumber: 84,
+                    columnNumber: 23
+                  }, this),
+                  /* @__PURE__ */ jsxDEV("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" }, void 0, false, {
+                    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+                    lineNumber: 85,
+                    columnNumber: 23
+                  }, this)
+                ] }, void 0, true, {
+                  fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+                  lineNumber: 83,
+                  columnNumber: 21
+                }, this),
+                "Verifying..."
+              ] }, void 0, true, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+                lineNumber: 82,
+                columnNumber: 17
+              }, this) : "Enter Dashboard"
+            },
+            void 0,
+            false,
+            {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+              lineNumber: 76,
+              columnNumber: 15
+            },
+            this
+          )
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 58,
+          columnNumber: 13
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 57,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "px-6 py-4 border-t border-[#2e2e2a]", children: /* @__PURE__ */ jsxDEV("p", { className: "text-[#4a4844] text-xs font-sans text-center", children: "Session expires when browser tab is closed" }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 95,
+          columnNumber: 13
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+          lineNumber: 94,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+        lineNumber: 56,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { className: "text-center text-[#4a4844] text-xs mt-6 font-sans", children: /* @__PURE__ */ jsxDEV("a", { href: "/", className: "hover:text-[#9a9590] transition-colors", children: "Return to public site" }, void 0, false, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+        lineNumber: 102,
+        columnNumber: 11
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+        lineNumber: 101,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+      lineNumber: 42,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx",
+    lineNumber: 33,
+    columnNumber: 5
+  }, this);
+}
+_s(LoginGate, "ZMNh9rKG6rZMps4vZVCfgEPhK1E=");
+_c = LoginGate;
+var _c;
+$RefreshReg$(_c, "LoginGate");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/zeka1/Desktop/projects/dema/deema1/src/admin/components/LoginGate.tsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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QSxLQWxDRjtBQUFBO0FBQUE7QUFBQTtBQUFBLGVBbUNBO0FBQUEsUUFFQSx1QkFBQyxTQUFJLFdBQVUsdUNBQ2IsaUNBQUMsT0FBRSxXQUFVLGdEQUErQywwREFBNUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxlQUVBLEtBSEY7QUFBQTtBQUFBO0FBQUE7QUFBQSxlQUlBO0FBQUEsV0ExQ0Y7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQTJDQTtBQUFBLE1BRUEsdUJBQUMsT0FBRSxXQUFVLHFEQUNYLGlDQUFDLE9BQUUsTUFBSyxLQUFJLFdBQVUsMENBQXlDLHFDQUEvRDtBQUFBO0FBQUE7QUFBQTtBQUFBLGFBQW9GLEtBRHRGO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFFQTtBQUFBLFNBN0RGO0FBQUE7QUFBQTtBQUFBO0FBQUEsV0E4REE7QUFBQSxPQXZFRjtBQUFBO0FBQUE7QUFBQTtBQUFBLFNBd0VBO0FBRUo7QUFBQ1IsR0FuR3VCRixXQUFTO0FBQUEsS0FBVEE7QUFBUyxJQUFBcUI7QUFBQSxhQUFBQSxJQUFBIiwibmFtZXMiOlsidXNlU3RhdGUiLCJhdXRoU2VydmljZSIsIkxvZ2luR2F0ZSIsImNoaWxkcmVuIiwiX3MiLCJhdXRoZW50aWNhdGVkIiwic2V0QXV0aGVudGljYXRlZCIsImlzQXV0aGVudGljYXRlZCIsInBhc3N3b3JkIiwic2V0UGFzc3dvcmQiLCJlcnJvciIsInNldEVycm9yIiwibG9hZGluZyIsInNldExvYWRpbmciLCJoYW5kbGVTdWJtaXQiLCJlIiwicHJldmVudERlZmF1bHQiLCJvayIsImxvZ2luIiwiYmFja2dyb3VuZEltYWdlIiwiYmFja2dyb3VuZFNpemUiLCJ0YXJnZXQiLCJ2YWx1ZSIsIl9jIl0sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIkxvZ2luR2F0ZS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tIFwicmVhY3RcIjtcclxuaW1wb3J0IHsgYXV0aFNlcnZpY2UgfSBmcm9tIFwiLi4vZGF0YS9hdXRoU2VydmljZVwiO1xyXG5cclxuaW50ZXJmYWNlIExvZ2luR2F0ZVByb3BzIHtcclxuICBjaGlsZHJlbjogUmVhY3QuUmVhY3ROb2RlO1xyXG59XHJcblxyXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBMb2dpbkdhdGUoeyBjaGlsZHJlbiB9OiBMb2dpbkdhdGVQcm9wcykge1xyXG4gIGNvbnN0IFthdXRoZW50aWNhdGVkLCBzZXRBdXRoZW50aWNhdGVkXSA9IHVzZVN0YXRlKCgpID0+IGF1dGhTZXJ2aWNlLmlzQXV0aGVudGljYXRlZCgpKTtcclxuICBjb25zdCBbcGFzc3dvcmQsIHNldFBhc3N3b3JkXSA9IHVzZVN0YXRlKFwiXCIpO1xyXG4gIGNvbnN0IFtlcnJvciwgc2V0RXJyb3JdID0gdXNlU3RhdGUoXCJcIik7XHJcbiAgY29uc3QgW2xvYWRpbmcsIHNldExvYWRpbmddID0gdXNlU3RhdGUoZmFsc2UpO1xyXG5cclxuICBpZiAoYXV0aGVudGljYXRlZCkgcmV0dXJuIDw+e2NoaWxkcmVufTwvPjtcclxuXHJcbiAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlU3VibWl0KGU6IFJlYWN0LkZvcm1FdmVudCkge1xyXG4gICAgZS5wcmV2ZW50RGVmYXVsdCgpO1xyXG4gICAgc2V0RXJyb3IoXCJcIik7XHJcbiAgICBzZXRMb2FkaW5nKHRydWUpO1xyXG5cclxuICAgIGNvbnN0IG9rID0gYXdhaXQgYXV0aFNlcnZpY2UubG9naW4ocGFzc3dvcmQpO1xyXG4gICAgc2V0TG9hZGluZyhmYWxzZSk7XHJcblxyXG4gICAgaWYgKG9rKSB7XHJcbiAgICAgIHNldEF1dGhlbnRpY2F0ZWQodHJ1ZSk7XHJcbiAgICB9IGVsc2Uge1xyXG4gICAgICBzZXRFcnJvcihcIkluY29ycmVjdCBwYXNzd29yZC5cIik7XHJcbiAgICAgIHNldFBhc3N3b3JkKFwiXCIpO1xyXG4gICAgfVxyXG4gIH1cclxuXHJcbiAgcmV0dXJuIChcclxuICAgIDxkaXYgY2xhc3NOYW1lPVwibWluLWgtc2NyZWVuIGJnLVsjMWMxYzE4XSBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBweC00XCI+XHJcbiAgICAgIDxkaXZcclxuICAgICAgICBjbGFzc05hbWU9XCJhYnNvbHV0ZSBpbnNldC0wIG9wYWNpdHktWzAuMDJdIHBvaW50ZXItZXZlbnRzLW5vbmVcIlxyXG4gICAgICAgIHN0eWxlPXt7XHJcbiAgICAgICAgICBiYWNrZ3JvdW5kSW1hZ2U6IFwicmFkaWFsLWdyYWRpZW50KGNpcmNsZSBhdCAxcHggMXB4LCAjZjdmM2VjIDFweCwgdHJhbnNwYXJlbnQgMClcIixcclxuICAgICAgICAgIGJhY2tncm91bmRTaXplOiBcIjQwcHggNDBweFwiLFxyXG4gICAgICAgIH19XHJcbiAgICAgIC8+XHJcblxyXG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cInJlbGF0aXZlIHctZnVsbCBtYXgtdy1zbVwiPlxyXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGV4dC1jZW50ZXIgbWItMTBcIj5cclxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaW5saW5lLWZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIHctMTIgaC0xMiBiZy1bIzc0NTk0MF0gbWItNlwiPlxyXG4gICAgICAgICAgICA8c3ZnIHdpZHRoPVwiMjBcIiBoZWlnaHQ9XCIyMFwiIHZpZXdCb3g9XCIwIDAgMjAgMjBcIiBmaWxsPVwibm9uZVwiPlxyXG4gICAgICAgICAgICAgIDxyZWN0IHg9XCIyXCIgeT1cIjJcIiB3aWR0aD1cIjdcIiBoZWlnaHQ9XCI3XCIgZmlsbD1cIndoaXRlXCIgb3BhY2l0eT1cIjAuOVwiIC8+XHJcbiAgICAgICAgICAgICAgPHJlY3QgeD1cIjExXCIgeT1cIjJcIiB3aWR0aD1cIjdcIiBoZWlnaHQ9XCI3XCIgZmlsbD1cIndoaXRlXCIgb3BhY2l0eT1cIjAuNVwiIC8+XHJcbiAgICAgICAgICAgICAgPHJlY3QgeD1cIjJcIiB5PVwiMTFcIiB3aWR0aD1cIjdcIiBoZWlnaHQ9XCI3XCIgZmlsbD1cIndoaXRlXCIgb3BhY2l0eT1cIjAuNVwiIC8+XHJcbiAgICAgICAgICAgICAgPHJlY3QgeD1cIjExXCIgeT1cIjExXCIgd2lkdGg9XCI3XCIgaGVpZ2h0PVwiN1wiIGZpbGw9XCJ3aGl0ZVwiIG9wYWNpdHk9XCIwLjlcIiAvPlxyXG4gICAgICAgICAgICA8L3N2Zz5cclxuICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgPGgxIGNsYXNzTmFtZT1cInRleHQtd2hpdGUgZm9udC1zYW5zIHRleHQteGwgZm9udC1zZW1pYm9sZCB0cmFja2luZy10aWdodFwiPkF0aHIgQWRtaW48L2gxPlxyXG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1bIzYwNWI1NV0gdGV4dC1zbSBtdC0xIGZvbnQtc2Fuc1wiPkNvbnRlbnQgTWFuYWdlbWVudDwvcD5cclxuICAgICAgICA8L2Rpdj5cclxuXHJcbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJiZy1bIzI0MjQyMF0gYm9yZGVyIGJvcmRlci1bIzJlMmUyYV1cIj5cclxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicC02XCI+XHJcbiAgICAgICAgICAgIDxmb3JtIG9uU3VibWl0PXtoYW5kbGVTdWJtaXR9IGNsYXNzTmFtZT1cInNwYWNlLXktNFwiPlxyXG4gICAgICAgICAgICAgIDxkaXY+XHJcbiAgICAgICAgICAgICAgICA8bGFiZWwgaHRtbEZvcj1cImFkbWluLXBhc3N3b3JkXCIgY2xhc3NOYW1lPVwiYmxvY2sgdGV4dC14cyB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXN0IHRleHQtWyM5YTk1OTBdIG1iLTIgZm9udC1zYW5zXCI+XHJcbiAgICAgICAgICAgICAgICAgIFBhc3N3b3JkXHJcbiAgICAgICAgICAgICAgICA8L2xhYmVsPlxyXG4gICAgICAgICAgICAgICAgPGlucHV0XHJcbiAgICAgICAgICAgICAgICAgIGlkPVwiYWRtaW4tcGFzc3dvcmRcIlxyXG4gICAgICAgICAgICAgICAgICB0eXBlPVwicGFzc3dvcmRcIlxyXG4gICAgICAgICAgICAgICAgICB2YWx1ZT17cGFzc3dvcmR9XHJcbiAgICAgICAgICAgICAgICAgIG9uQ2hhbmdlPXsoZSkgPT4gc2V0UGFzc3dvcmQoZS50YXJnZXQudmFsdWUpfVxyXG4gICAgICAgICAgICAgICAgICBwbGFjZWhvbGRlcj1cIkVudGVyIGFkbWluIHBhc3N3b3JkXCJcclxuICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwidy1mdWxsIGJnLVsjMWMxYzE4XSBib3JkZXIgYm9yZGVyLVsjMmUyZTJhXSB0ZXh0LVsjZmRmOWYyXSB0ZXh0LXNtIGZvbnQtc2FucyBweC00IHB5LTMgcGxhY2Vob2xkZXItWyM0YTQ4NDRdIGZvY3VzOm91dGxpbmUtbm9uZSBmb2N1czpib3JkZXItWyM3NDU5NDBdIHRyYW5zaXRpb24tY29sb3JzXCJcclxuICAgICAgICAgICAgICAgICAgYXV0b0NvbXBsZXRlPVwiY3VycmVudC1wYXNzd29yZFwiXHJcbiAgICAgICAgICAgICAgICAgIHJlcXVpcmVkXHJcbiAgICAgICAgICAgICAgICAvPlxyXG4gICAgICAgICAgICAgICAge2Vycm9yICYmIDxwIGNsYXNzTmFtZT1cIm10LTIgdGV4dC14cyB0ZXh0LXJlZC00MDAgZm9udC1zYW5zXCI+e2Vycm9yfTwvcD59XHJcbiAgICAgICAgICAgICAgPC9kaXY+XHJcblxyXG4gICAgICAgICAgICAgIDxidXR0b25cclxuICAgICAgICAgICAgICAgIHR5cGU9XCJzdWJtaXRcIlxyXG4gICAgICAgICAgICAgICAgZGlzYWJsZWQ9e2xvYWRpbmcgfHwgIXBhc3N3b3JkfVxyXG4gICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwidy1mdWxsIGJnLVsjNzQ1OTQwXSB0ZXh0LXdoaXRlIHRleHQteHMgdXBwZXJjYXNlIHRyYWNraW5nLXdpZGVzdCBmb250LXNhbnMgZm9udC1tZWRpdW0gcHktMyBweC02IGhvdmVyOmJnLVsjOGE2ZDRlXSBkaXNhYmxlZDpvcGFjaXR5LTUwIGRpc2FibGVkOmN1cnNvci1ub3QtYWxsb3dlZCB0cmFuc2l0aW9uLWNvbG9yc1wiXHJcbiAgICAgICAgICAgICAgPlxyXG4gICAgICAgICAgICAgICAge2xvYWRpbmcgPyAoXHJcbiAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIGdhcC0yXCI+XHJcbiAgICAgICAgICAgICAgICAgICAgPHN2ZyBjbGFzc05hbWU9XCJhbmltYXRlLXNwaW4gdy00IGgtNFwiIHZpZXdCb3g9XCIwIDAgMjQgMjRcIiBmaWxsPVwibm9uZVwiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPGNpcmNsZSBjbGFzc05hbWU9XCJvcGFjaXR5LTI1XCIgY3g9XCIxMlwiIGN5PVwiMTJcIiByPVwiMTBcIiBzdHJva2U9XCJjdXJyZW50Q29sb3JcIiBzdHJva2VXaWR0aD1cIjRcIiAvPlxyXG4gICAgICAgICAgICAgICAgICAgICAgPHBhdGggY2xhc3NOYW1lPVwib3BhY2l0eS03NVwiIGZpbGw9XCJjdXJyZW50Q29sb3JcIiBkPVwiTTQgMTJhOCA4IDAgMDE4LThWMEM1LjM3MyAwIDAgNS4zNzMgMCAxMmg0elwiIC8+XHJcbiAgICAgICAgICAgICAgICAgICAgPC9zdmc+XHJcbiAgICAgICAgICAgICAgICAgICAgVmVyaWZ5aW5nLi4uXHJcbiAgICAgICAgICAgICAgICAgIDwvc3Bhbj5cclxuICAgICAgICAgICAgICAgICkgOiBcIkVudGVyIERhc2hib2FyZFwifVxyXG4gICAgICAgICAgICAgIDwvYnV0dG9uPlxyXG4gICAgICAgICAgICA8L2Zvcm0+XHJcbiAgICAgICAgICA8L2Rpdj5cclxuXHJcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInB4LTYgcHktNCBib3JkZXItdCBib3JkZXItWyMyZTJlMmFdXCI+XHJcbiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtWyM0YTQ4NDRdIHRleHQteHMgZm9udC1zYW5zIHRleHQtY2VudGVyXCI+XHJcbiAgICAgICAgICAgICAgU2Vzc2lvbiBleHBpcmVzIHdoZW4gYnJvd3NlciB0YWIgaXMgY2xvc2VkXHJcbiAgICAgICAgICAgIDwvcD5cclxuICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LWNlbnRlciB0ZXh0LVsjNGE0ODQ0XSB0ZXh0LXhzIG10LTYgZm9udC1zYW5zXCI+XHJcbiAgICAgICAgICA8YSBocmVmPVwiL1wiIGNsYXNzTmFtZT1cImhvdmVyOnRleHQtWyM5YTk1OTBdIHRyYW5zaXRpb24tY29sb3JzXCI+UmV0dXJuIHRvIHB1YmxpYyBzaXRlPC9hPlxyXG4gICAgICAgIDwvcD5cclxuICAgICAgPC9kaXY+XHJcbiAgICA8L2Rpdj5cclxuICApO1xyXG59XHJcbiJdLCJmaWxlIjoiQzovVXNlcnMvemVrYTEvRGVza3RvcC9wcm9qZWN0cy9kZW1hL2RlZW1hMS9zcmMvYWRtaW4vY29tcG9uZW50cy9Mb2dpbkdhdGUudHN4In0=

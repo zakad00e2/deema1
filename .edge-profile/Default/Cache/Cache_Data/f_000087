@@ -1,0 +1,220 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/SharedFooter.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=315e57ad"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$();
+import { Instagram, Linkedin } from "/node_modules/.vite/deps/lucide-react.js?v=315e57ad";
+import { useLanguage } from "/src/i18n/LanguageContext.tsx";
+import { getBrandLogoSrc } from "/src/brandLogo.ts";
+export default function SharedFooter() {
+  _s();
+  const { t, isRTL, locale } = useLanguage();
+  const brandLogoSrc = getBrandLogoSrc(locale);
+  const addressLines = t("footer.address").split("\n");
+  return /* @__PURE__ */ jsxDEV("footer", { id: "contact", className: "border-t border-white/8 bg-brand-dark pt-24 pb-8", children: [
+    /* @__PURE__ */ jsxDEV("div", { className: "mx-auto grid max-w-360 gap-12 px-6 md:px-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)]", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "max-w-sm", children: [
+        /* @__PURE__ */ jsxDEV("a", { href: "/", "aria-label": "Go to home page", className: "inline-block", children: /* @__PURE__ */ jsxDEV("img", { src: brandLogoSrc, alt: "Athr Logo", className: "mb-6 h-12 md:h-16" }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+          lineNumber: 16,
+          columnNumber: 13
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+          lineNumber: 15,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { className: "mb-8 text-sm font-light leading-relaxed text-white/62", children: t("footer.tagline") }, void 0, false, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+          lineNumber: 18,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "flex gap-6", children: [
+          /* @__PURE__ */ jsxDEV("a", { href: "/", className: "text-white/45 transition-colors hover:text-brand-secondary", "aria-label": "Instagram", children: /* @__PURE__ */ jsxDEV(Instagram, { className: "h-5 w-5" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 23,
+            columnNumber: 15
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 22,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("a", { href: "/", className: "text-white/45 transition-colors hover:text-brand-secondary", "aria-label": "LinkedIn", children: /* @__PURE__ */ jsxDEV(Linkedin, { className: "h-5 w-5" }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 26,
+            columnNumber: 15
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 25,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+          lineNumber: 21,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+        lineNumber: 14,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: `grid gap-10 sm:grid-cols-2 ${isRTL ? "sm:pr-8 lg:pr-10" : "sm:pl-8 lg:pl-10"}`, children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "flex flex-col gap-4", children: [
+          /* @__PURE__ */ jsxDEV("p", { className: "text-[0.6rem] font-bold uppercase tracking-widest text-brand-secondary", children: t("footer.explore") }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 33,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("a", { href: "/", className: "text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary", children: t("nav.home") }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 34,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("a", { href: "/work", className: "text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary", children: t("nav.portfolio") }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 37,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("a", { href: "/workshops", className: "text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary", children: t("nav.workshops") }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 40,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("a", { href: "/contact", className: "text-xs uppercase tracking-widest text-white/62 transition-colors hover:text-brand-secondary", children: t("nav.contact") }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 43,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+          lineNumber: 32,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "flex flex-col gap-6", children: [
+          /* @__PURE__ */ jsxDEV("p", { className: "text-[0.6rem] font-bold uppercase tracking-widest text-brand-secondary", children: t("footer.contactLabel") }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 49,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { className: `flex w-full flex-col gap-2 ${isRTL ? "items-end" : "items-start"}`, children: [
+            /* @__PURE__ */ jsxDEV(
+              "a",
+              {
+                href: "mailto:Leaveanathr@gmail.com",
+                className: `ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "ltr-content-rtl-start text-right" : "text-left"}`,
+                children: "Leaveanathr@gmail.com"
+              },
+              void 0,
+              false,
+              {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+                lineNumber: 51,
+                columnNumber: 15
+              },
+              this
+            ),
+            /* @__PURE__ */ jsxDEV(
+              "a",
+              {
+                href: "tel:+97143411367",
+                className: `ltr-content block w-full text-xs tracking-widest text-white/62 transition-colors hover:text-brand-secondary ${isRTL ? "ltr-content-rtl-start text-right" : "text-left"}`,
+                children: "+971 (0) 4 341 1367"
+              },
+              void 0,
+              false,
+              {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+                lineNumber: 59,
+                columnNumber: 15
+              },
+              this
+            )
+          ] }, void 0, true, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 50,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("p", { className: "text-xs leading-relaxed tracking-widest text-white/62", children: addressLines.map(
+            (line, i) => /* @__PURE__ */ jsxDEV("span", { children: [
+              line,
+              i < addressLines.length - 1 && /* @__PURE__ */ jsxDEV("br", {}, void 0, false, {
+                fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+                lineNumber: 72,
+                columnNumber: 51
+              }, this)
+            ] }, i, true, {
+              fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+              lineNumber: 70,
+              columnNumber: 15
+            }, this)
+          ) }, void 0, false, {
+            fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+            lineNumber: 68,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+          lineNumber: 48,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+        lineNumber: 31,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+      lineNumber: 13,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "mt-24 w-full border-t border-white/5" }, void 0, false, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+      lineNumber: 80,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "mx-auto mt-8 max-w-360 px-6 md:px-12", children: /* @__PURE__ */ jsxDEV("div", { className: "flex justify-center text-center text-[0.62rem] uppercase tracking-[0.35em] text-white/28 md:text-[0.72rem]", children: /* @__PURE__ */ jsxDEV("p", { className: isRTL ? "text-[0.7rem] md:text-[0.8rem]" : void 0, children: t("footer.copyright") }, void 0, false, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+      lineNumber: 83,
+      columnNumber: 11
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+      lineNumber: 82,
+      columnNumber: 9
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+      lineNumber: 81,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx",
+    lineNumber: 12,
+    columnNumber: 5
+  }, this);
+}
+_s(SharedFooter, "CUajuHrqJ0e8TSM9yn2a0Bf6ggU=", false, function() {
+  return [useLanguage];
+});
+_c = SharedFooter;
+var _c;
+$RefreshReg$(_c, "SharedFooter");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/zeka1/Desktop/projects/dema/deema1/src/SharedFooter.tsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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QUFBIiwibmFtZXMiOlsiSW5zdGFncmFtIiwiTGlua2VkaW4iLCJ1c2VMYW5ndWFnZSIsImdldEJyYW5kTG9nb1NyYyIsIlNoYXJlZEZvb3RlciIsIl9zIiwidCIsImlzUlRMIiwibG9jYWxlIiwiYnJhbmRMb2dvU3JjIiwiYWRkcmVzc0xpbmVzIiwic3BsaXQiLCJtYXAiLCJsaW5lIiwiaSIsImxlbmd0aCIsInVuZGVmaW5lZCIsIl9jIl0sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIlNoYXJlZEZvb3Rlci50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgSW5zdGFncmFtLCBMaW5rZWRpbiB9IGZyb20gXCJsdWNpZGUtcmVhY3RcIjtcbmltcG9ydCB7IHVzZUxhbmd1YWdlIH0gZnJvbSBcIi4vaTE4bi9MYW5ndWFnZUNvbnRleHRcIjtcbmltcG9ydCB7IGdldEJyYW5kTG9nb1NyYyB9IGZyb20gXCIuL2JyYW5kTG9nb1wiO1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBTaGFyZWRGb290ZXIoKSB7XG4gIGNvbnN0IHsgdCwgaXNSVEwsIGxvY2FsZSB9ID0gdXNlTGFuZ3VhZ2UoKTtcbiAgY29uc3QgYnJhbmRMb2dvU3JjID0gZ2V0QnJhbmRMb2dvU3JjKGxvY2FsZSk7XG5cbiAgY29uc3QgYWRkcmVzc0xpbmVzID0gdChcImZvb3Rlci5hZGRyZXNzXCIpLnNwbGl0KFwiXFxuXCIpO1xuXG4gIHJldHVybiAoXG4gICAgPGZvb3RlciBpZD1cImNvbnRhY3RcIiBjbGFzc05hbWU9XCJib3JkZXItdCBib3JkZXItd2hpdGUvOCBiZy1icmFuZC1kYXJrIHB0LTI0IHBiLThcIj5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXgtYXV0byBncmlkIG1heC13LTM2MCBnYXAtMTIgcHgtNiBtZDpweC0xMiBsZzpncmlkLWNvbHMtW21pbm1heCgwLDEuMDVmcilfbWlubWF4KDAsMS40NWZyKV1cIj5cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtYXgtdy1zbVwiPlxuICAgICAgICAgIDxhIGhyZWY9XCIvXCIgYXJpYS1sYWJlbD1cIkdvIHRvIGhvbWUgcGFnZVwiIGNsYXNzTmFtZT1cImlubGluZS1ibG9ja1wiPlxuICAgICAgICAgICAgPGltZyBzcmM9e2JyYW5kTG9nb1NyY30gYWx0PVwiQXRociBMb2dvXCIgY2xhc3NOYW1lPVwibWItNiBoLTEyIG1kOmgtMTZcIiAvPlxuICAgICAgICAgIDwvYT5cbiAgICAgICAgICA8cCBjbGFzc05hbWU9XCJtYi04IHRleHQtc20gZm9udC1saWdodCBsZWFkaW5nLXJlbGF4ZWQgdGV4dC13aGl0ZS82MlwiPlxuICAgICAgICAgICAge3QoXCJmb290ZXIudGFnbGluZVwiKX1cbiAgICAgICAgICA8L3A+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGdhcC02XCI+XG4gICAgICAgICAgICA8YSBocmVmPVwiL1wiIGNsYXNzTmFtZT1cInRleHQtd2hpdGUvNDUgdHJhbnNpdGlvbi1jb2xvcnMgaG92ZXI6dGV4dC1icmFuZC1zZWNvbmRhcnlcIiBhcmlhLWxhYmVsPVwiSW5zdGFncmFtXCI+XG4gICAgICAgICAgICAgIDxJbnN0YWdyYW0gY2xhc3NOYW1lPVwiaC01IHctNVwiIC8+XG4gICAgICAgICAgICA8L2E+XG4gICAgICAgICAgICA8YSBocmVmPVwiL1wiIGNsYXNzTmFtZT1cInRleHQtd2hpdGUvNDUgdHJhbnNpdGlvbi1jb2xvcnMgaG92ZXI6dGV4dC1icmFuZC1zZWNvbmRhcnlcIiBhcmlhLWxhYmVsPVwiTGlua2VkSW5cIj5cbiAgICAgICAgICAgICAgPExpbmtlZGluIGNsYXNzTmFtZT1cImgtNSB3LTVcIiAvPlxuICAgICAgICAgICAgPC9hPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cblxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT17YGdyaWQgZ2FwLTEwIHNtOmdyaWQtY29scy0yICR7aXNSVEwgPyBcInNtOnByLTggbGc6cHItMTBcIiA6IFwic206cGwtOCBsZzpwbC0xMFwifWB9PlxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBmbGV4LWNvbCBnYXAtNFwiPlxuICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1bMC42cmVtXSBmb250LWJvbGQgdXBwZXJjYXNlIHRyYWNraW5nLXdpZGVzdCB0ZXh0LWJyYW5kLXNlY29uZGFyeVwiPnt0KFwiZm9vdGVyLmV4cGxvcmVcIil9PC9wPlxuICAgICAgICAgICAgPGEgaHJlZj1cIi9cIiBjbGFzc05hbWU9XCJ0ZXh0LXhzIHVwcGVyY2FzZSB0cmFja2luZy13aWRlc3QgdGV4dC13aGl0ZS82MiB0cmFuc2l0aW9uLWNvbG9ycyBob3Zlcjp0ZXh0LWJyYW5kLXNlY29uZGFyeVwiPlxuICAgICAgICAgICAgICB7dChcIm5hdi5ob21lXCIpfVxuICAgICAgICAgICAgPC9hPlxuICAgICAgICAgICAgPGEgaHJlZj1cIi93b3JrXCIgY2xhc3NOYW1lPVwidGV4dC14cyB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXN0IHRleHQtd2hpdGUvNjIgdHJhbnNpdGlvbi1jb2xvcnMgaG92ZXI6dGV4dC1icmFuZC1zZWNvbmRhcnlcIj5cbiAgICAgICAgICAgICAge3QoXCJuYXYucG9ydGZvbGlvXCIpfVxuICAgICAgICAgICAgPC9hPlxuICAgICAgICAgICAgPGEgaHJlZj1cIi93b3Jrc2hvcHNcIiBjbGFzc05hbWU9XCJ0ZXh0LXhzIHVwcGVyY2FzZSB0cmFja2luZy13aWRlc3QgdGV4dC13aGl0ZS82MiB0cmFuc2l0aW9uLWNvbG9ycyBob3Zlcjp0ZXh0LWJyYW5kLXNlY29uZGFyeVwiPlxuICAgICAgICAgICAgICB7dChcIm5hdi53b3Jrc2hvcHNcIil9XG4gICAgICAgICAgICA8L2E+XG4gICAgICAgICAgICA8YSBocmVmPVwiL2NvbnRhY3RcIiBjbGFzc05hbWU9XCJ0ZXh0LXhzIHVwcGVyY2FzZSB0cmFja2luZy13aWRlc3QgdGV4dC13aGl0ZS82MiB0cmFuc2l0aW9uLWNvbG9ycyBob3Zlcjp0ZXh0LWJyYW5kLXNlY29uZGFyeVwiPlxuICAgICAgICAgICAgICB7dChcIm5hdi5jb250YWN0XCIpfVxuICAgICAgICAgICAgPC9hPlxuICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGZsZXgtY29sIGdhcC02XCI+XG4gICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LVswLjZyZW1dIGZvbnQtYm9sZCB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXN0IHRleHQtYnJhbmQtc2Vjb25kYXJ5XCI+e3QoXCJmb290ZXIuY29udGFjdExhYmVsXCIpfTwvcD5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPXtgZmxleCB3LWZ1bGwgZmxleC1jb2wgZ2FwLTIgJHtpc1JUTCA/IFwiaXRlbXMtZW5kXCIgOiBcIml0ZW1zLXN0YXJ0XCJ9YH0+XG4gICAgICAgICAgICAgIDxhXG4gICAgICAgICAgICAgICAgaHJlZj1cIm1haWx0bzpMZWF2ZWFuYXRockBnbWFpbC5jb21cIlxuICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YGx0ci1jb250ZW50IGJsb2NrIHctZnVsbCB0ZXh0LXhzIHRyYWNraW5nLXdpZGVzdCB0ZXh0LXdoaXRlLzYyIHRyYW5zaXRpb24tY29sb3JzIGhvdmVyOnRleHQtYnJhbmQtc2Vjb25kYXJ5ICR7XG4gICAgICAgICAgICAgICAgICBpc1JUTCA/IFwibHRyLWNvbnRlbnQtcnRsLXN0YXJ0IHRleHQtcmlnaHRcIiA6IFwidGV4dC1sZWZ0XCJcbiAgICAgICAgICAgICAgICB9YH1cbiAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgIExlYXZlYW5hdGhyQGdtYWlsLmNvbVxuICAgICAgICAgICAgICA8L2E+XG4gICAgICAgICAgICAgIDxhXG4gICAgICAgICAgICAgICAgaHJlZj1cInRlbDorOTcxNDM0MTEzNjdcIlxuICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YGx0ci1jb250ZW50IGJsb2NrIHctZnVsbCB0ZXh0LXhzIHRyYWNraW5nLXdpZGVzdCB0ZXh0LXdoaXRlLzYyIHRyYW5zaXRpb24tY29sb3JzIGhvdmVyOnRleHQtYnJhbmQtc2Vjb25kYXJ5ICR7XG4gICAgICAgICAgICAgICAgICBpc1JUTCA/IFwibHRyLWNvbnRlbnQtcnRsLXN0YXJ0IHRleHQtcmlnaHRcIiA6IFwidGV4dC1sZWZ0XCJcbiAgICAgICAgICAgICAgICB9YH1cbiAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICs5NzEgKDApIDQgMzQxIDEzNjdcbiAgICAgICAgICAgICAgPC9hPlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXhzIGxlYWRpbmctcmVsYXhlZCB0cmFja2luZy13aWRlc3QgdGV4dC13aGl0ZS82MlwiPlxuICAgICAgICAgICAgICB7YWRkcmVzc0xpbmVzLm1hcCgobGluZSwgaSkgPT4gKFxuICAgICAgICAgICAgICAgIDxzcGFuIGtleT17aX0+XG4gICAgICAgICAgICAgICAgICB7bGluZX1cbiAgICAgICAgICAgICAgICAgIHtpIDwgYWRkcmVzc0xpbmVzLmxlbmd0aCAtIDEgJiYgPGJyIC8+fVxuICAgICAgICAgICAgICAgIDwvc3Bhbj5cbiAgICAgICAgICAgICAgKSl9XG4gICAgICAgICAgICA8L3A+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgIDwvZGl2PlxuICAgICAgPC9kaXY+XG5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXQtMjQgdy1mdWxsIGJvcmRlci10IGJvcmRlci13aGl0ZS81XCIgLz5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXgtYXV0byBtdC04IG1heC13LTM2MCBweC02IG1kOnB4LTEyXCI+XG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBqdXN0aWZ5LWNlbnRlciB0ZXh0LWNlbnRlciB0ZXh0LVswLjYycmVtXSB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMzVlbV0gdGV4dC13aGl0ZS8yOCBtZDp0ZXh0LVswLjcycmVtXVwiPlxuICAgICAgICAgIDxwIGNsYXNzTmFtZT17aXNSVEwgPyBcInRleHQtWzAuN3JlbV0gbWQ6dGV4dC1bMC44cmVtXVwiIDogdW5kZWZpbmVkfT57dChcImZvb3Rlci5jb3B5cmlnaHRcIil9PC9wPlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvZGl2PlxuICAgIDwvZm9vdGVyPlxuICApO1xufVxuIl0sImZpbGUiOiJDOi9Vc2Vycy96ZWthMS9EZXNrdG9wL3Byb2plY3RzL2RlbWEvZGVlbWExL3NyYy9TaGFyZWRGb290ZXIudHN4In0=

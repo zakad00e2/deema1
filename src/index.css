@@ -1,10 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,300&family=Manrope:wght@200;300;400;500;600&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;0,700;1,300&family=Manrope:wght@200;300;400;500;600&display=swap');
 @import "tailwindcss";
+
+
+@font-face {
+  font-family: "ThmanyahArabicText";
+  src: url("/fonts/thmanyahsans-Regular.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: "ThmanyahArabicHeading";
+  src: url("/fonts/thmanyahsans-Medium.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+  font-family: "thmanyahserifdisplay-Bold";
+  src: url("/fonts/thmanyahserifdisplay-Bold.woff2?v=20260423-force-hero-display") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
 
 @theme {
   --font-serif: "Noto Serif", serif;
   --font-sans: "Manrope", sans-serif;
-  --font-arabic: "IBM Plex Sans Arabic", sans-serif;
+  --font-arabic: "ThmanyahArabicText", "Manrope", sans-serif;
+  --font-arabic-display: "thmanyahserifdisplay-Bold", "Manrope", sans-serif;
 
   --color-brand-bg: #fdf9f2;
   --color-brand-primary: #605b55;
@@ -30,12 +59,14 @@
 
   [dir="rtl"] body,
   [dir="rtl"] {
-    font-family: "IBM Plex Sans Arabic", sans-serif !important;
+    font-family: "ThmanyahArabicText", "Manrope", sans-serif !important;
     font-weight: 500;
+    font-synthesis: none;
   }
 
   [dir="rtl"] * {
-    font-family: "IBM Plex Sans Arabic", sans-serif !important;
+    font-family: "ThmanyahArabicText", "Manrope", sans-serif !important;
+    font-synthesis: none;
   }
 
   [dir="rtl"] h1,
@@ -44,8 +75,35 @@
   [dir="rtl"] h4,
   [dir="rtl"] h5,
   [dir="rtl"] h6 {
-    font-family: "IBM Plex Sans Arabic", sans-serif !important;
-    font-weight: 600;
+    font-family: "ThmanyahArabicHeading", "Manrope", sans-serif !important;
+    font-weight: 700;
+  }
+
+  [dir="rtl"] h1 *,
+  [dir="rtl"] h2 *,
+  [dir="rtl"] h3 *,
+  [dir="rtl"] h4 *,
+  [dir="rtl"] h5 *,
+  [dir="rtl"] h6 * {
+    font-family: "ThmanyahArabicHeading", "Manrope", sans-serif !important;
+  }
+
+  [dir="rtl"] .arabic-hero-title,
+  [dir="rtl"] .arabic-hero-title *,
+  [dir="rtl"] .athr-hero-display,
+  [dir="rtl"] .athr-hero-display *,
+  [dir="rtl"] #athr-main-hero-title,
+  [dir="rtl"] #athr-main-hero-title *,
+  [dir="rtl"] h1.works-header-element,
+  [dir="rtl"] h1.works-header-element *,
+  [dir="rtl"] .ws-hero h1,
+  [dir="rtl"] .ws-hero h1 *,
+  [dir="rtl"] .contact-hero-line,
+  [dir="rtl"] h1.hero-element,
+  [dir="rtl"] h1.hero-element * {
+    font-family: "thmanyahserifdisplay-Bold", "Manrope", sans-serif !important;
+    font-weight: 700 !important;
+    font-synthesis: none;
   }
 
   [dir="rtl"] .font-light {
@@ -67,6 +125,59 @@
 
 .editorial-shadow {
   box-shadow: 0 20px 40px rgba(80, 75, 69, 0.06);
+}
+
+[dir="rtl"] .arabic-hero-title,
+[dir="rtl"] .arabic-hero-title *,
+[dir="rtl"] .athr-hero-display,
+[dir="rtl"] .athr-hero-display *,
+[dir="rtl"] h1.works-header-element,
+[dir="rtl"] h1.works-header-element *,
+[dir="rtl"] .ws-hero h1,
+[dir="rtl"] .ws-hero h1 *,
+[dir="rtl"] .contact-hero-line,
+[dir="rtl"] h1.hero-element,
+[dir="rtl"] h1.hero-element * {
+  font-family: "thmanyahserifdisplay-Bold", "Manrope", sans-serif !important;
+  font-weight: 700 !important;
+  font-synthesis: none;
+}
+
+[dir="rtl"] .athr-hero-subtitle {
+  font-weight: 300 !important;
+  color: rgb(255 255 255 / 0.78);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.athr-hero-display,
+.athr-hero-display * {
+  font-family: "thmanyahserifdisplay-Bold", "Manrope", sans-serif !important;
+  font-weight: 700 !important;
+  font-synthesis: none;
+}
+
+html body #athr-main-hero-title,
+html body #athr-main-hero-title * {
+  font-family: "thmanyahserifdisplay-Bold", "Manrope", sans-serif !important;
+  font-weight: 700 !important;
+  font-synthesis: none;
+}
+
+.arabic-kashida-features {
+  font-feature-settings: "liga" 1, "calt" 1;
+  font-variant-ligatures: contextual common-ligatures;
+}
+
+.about-kashida-label {
+  font-family: "ThmanyahArabicHeading", "Manrope", sans-serif !important;
+  letter-spacing: 0;
+}
+
+[dir="rtl"] h2.about-title-soft {
+  font-family: "ThmanyahArabicText", "Manrope", sans-serif !important;
+  font-weight: 400 !important;
+  font-synthesis: none;
 }
 
 @keyframes skeleton-shimmer {
@@ -152,8 +263,9 @@
   text-align: left !important;
 }
 
-[dir="rtl"] .ltr-content-rtl-start {
+[dir="rtl"] .ltr-content.ltr-content-rtl-start {
   text-align: right !important;
+  margin-inline-start: auto;
 }
 
 /* Language switcher */

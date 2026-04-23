@@ -148,7 +148,7 @@ export default function ContactPage() {
 
   const contactHeroTitleClass =
     locale === "ar"
-      ? "font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tighter text-brand-dark mb-8"
+      ? "arabic-hero-title font-serif text-4xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tighter text-brand-dark mb-8"
       : "contact-hero-line font-serif text-5xl leading-[1.05] tracking-[-0.04em] text-brand-primary md:text-7xl lg:text-[5.5rem]";
   const contactHeroLineWrapClass =
     locale === "ar" ? "overflow-hidden py-2 -my-2" : "overflow-hidden";
