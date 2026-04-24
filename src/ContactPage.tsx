@@ -511,6 +511,11 @@ export default function ContactPage() {
                   src="/unnamed%20(3).png"
                   alt="Minimalist interior studio"
                   className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width={512}
+                  height={512}
+                  sizes="(min-width: 1024px) 42vw, 100vw"
                 />
               </div>
             </div>

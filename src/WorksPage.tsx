@@ -176,6 +176,11 @@ function ProjectCard({ project }: { project: Project }) {
               alt={projectTitle}
               src={project.image}
               referrerPolicy="no-referrer"
+              loading="lazy"
+              decoding="async"
+              width={1200}
+              height={900}
+              sizes="(min-width: 768px) 50vw, 100vw"
             />
           </div>
           <div

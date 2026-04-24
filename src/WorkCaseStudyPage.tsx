@@ -93,6 +93,11 @@ function ImageCarousel({ images, label }: { images: string[]; label: string }) {
                   alt={`${label} ${isRTL ? total - i : i + 1}`}
                   className="h-full w-full object-cover"
                   referrerPolicy="no-referrer"
+                  loading={i === trackIndex ? "eager" : "lazy"}
+                  decoding="async"
+                  width={1200}
+                  height={750}
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
               </div>
             </div>
@@ -679,6 +684,12 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
               alt={projectTitle}
               className={`h-full w-full object-cover ${project.desktopImage ? "hidden md:block" : ""}`}
               referrerPolicy="no-referrer"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              width={1600}
+              height={700}
+              sizes="100vw"
             />
             {project.desktopImage && (
               <img
@@ -686,6 +697,12 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
                 alt={projectTitle}
                 className="h-full w-full object-cover md:hidden absolute inset-0"
                 referrerPolicy="no-referrer"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                width={900}
+                height={675}
+                sizes="100vw"
               />
             )}
             <div className="absolute inset-x-0 bottom-0 hidden h-2/3 bg-gradient-to-t from-brand-dark/82 via-brand-dark/30 to-transparent lg:block" />
@@ -909,17 +926,17 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
               <div className="md:col-span-7 overflow-hidden bg-brand-surface-low">
                 <div className="aspect-4/3 overflow-hidden">
-                  <img src={project.gallery[0]} alt={`${projectTitle} gallery 1`} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={project.gallery[0]} alt={`${projectTitle} gallery 1`} className="h-full w-full object-cover" referrerPolicy="no-referrer" loading="lazy" decoding="async" width={1200} height={900} sizes="(min-width: 768px) 58vw, 100vw" />
                 </div>
               </div>
               <div className="md:col-span-5 overflow-hidden bg-brand-surface-low">
                 <div className="aspect-3/4 overflow-hidden">
-                  <img src={project.gallery[1]} alt={`${projectTitle} gallery 2`} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={project.gallery[1]} alt={`${projectTitle} gallery 2`} className="h-full w-full object-cover" referrerPolicy="no-referrer" loading="lazy" decoding="async" width={900} height={1200} sizes="(min-width: 768px) 42vw, 100vw" />
                 </div>
               </div>
               <div className="md:col-span-12 overflow-hidden bg-brand-surface-low">
                 <div className="aspect-16/8 overflow-hidden">
-                  <img src={project.gallery[2]} alt={`${projectTitle} gallery 3`} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={project.gallery[2]} alt={`${projectTitle} gallery 3`} className="h-full w-full object-cover" referrerPolicy="no-referrer" loading="lazy" decoding="async" width={1600} height={800} sizes="100vw" />
                 </div>
               </div>
             </div>

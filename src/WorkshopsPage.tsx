@@ -272,6 +272,12 @@ export default function WorkshopsPage() {
               alt=""
               className="ws-hero-texture w-full h-full object-cover scale-110 rotate-1"
               referrerPolicy="no-referrer"
+              loading="lazy"
+              decoding="async"
+              fetchPriority="low"
+              width={1920}
+              height={1080}
+              sizes="100vw"
             />
           </div>
           <div className="max-w-360 mx-auto px-6 md:px-12 relative z-10">
@@ -301,6 +307,11 @@ export default function WorkshopsPage() {
                     alt={t("workshopsPage.featuredTitle")}
                     className="ws-featured-photo w-full h-full object-cover"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
+                    decoding="async"
+                    width={800}
+                    height={1000}
+                    sizes="(min-width: 1024px) 38vw, 100vw"
                   />
                 </div>
                 <div className={`ws-featured-frame absolute -top-6 ${isRTL ? "-right-6" : "-left-6"} w-32 h-32 border border-brand-secondary/10 hidden md:block`} />
@@ -358,7 +369,7 @@ export default function WorkshopsPage() {
                 >
                   <span className="relative z-10">{t("workshopsPage.enquireNow")}</span>
                   <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
-                    <img src="/athr.png" alt="" className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700" />
+                    <img src="/athr.png" alt="" className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700" loading="lazy" decoding="async" width={547} height={232} />
                   </div>
                 </a>
               </div>
@@ -387,6 +398,11 @@ export default function WorkshopsPage() {
                       alt={ws.title}
                       className="ws-group-photo w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                       referrerPolicy="no-referrer"
+                      loading="lazy"
+                      decoding="async"
+                      width={800}
+                      height={600}
+                      sizes="(min-width: 768px) 50vw, 100vw"
                     />
                     <div className={`absolute top-4 ${isRTL ? "right-4" : "left-4"} bg-white/90 px-3 py-1.5 text-[0.6rem] uppercase tracking-widest font-bold text-brand-secondary`}>
                       {ws.level}

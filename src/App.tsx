@@ -1,12 +1,7 @@
-import { Fragment, useState, useEffect, useRef } from "react";
-import AdminApp from "./admin/AdminApp";
+import { Fragment, lazy, Suspense, useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import WorkCaseStudyPage from "./WorkCaseStudyPage";
-import WorksPage from "./WorksPage";
-import WorkshopsPage from "./WorkshopsPage";
-import ContactPage from "./ContactPage";
 import SharedFooter from "./SharedFooter";
 import { useGroupWorkshops } from "./api/workshops";
 import { useLanguage } from "./i18n/LanguageContext";
@@ -23,6 +18,16 @@ import {
 } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const AdminApp = lazy(() => import("./admin/AdminApp"));
+const WorkCaseStudyPage = lazy(() => import("./WorkCaseStudyPage"));
+const WorksPage = lazy(() => import("./WorksPage"));
+const WorkshopsPage = lazy(() => import("./WorkshopsPage"));
+const ContactPage = lazy(() => import("./ContactPage"));
+
+function RouteFallback() {
+  return <div className="min-h-screen bg-brand-bg" aria-busy="true" />;
+}
 
 const renderSlantedKashidaText = (text: string) => {
   const parts = text.match(/ـ+|[^ـ]+/g) ?? [text];
@@ -110,6 +115,10 @@ const Navbar = () => {
                 src="/athr.png" 
                 alt="" 
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
+                loading="lazy"
+                decoding="async"
+                width={547}
+                height={232}
               />
             </div>
           </a>
@@ -146,6 +155,10 @@ const Navbar = () => {
                 src="/athr.png" 
                 alt="" 
                 className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
+                loading="lazy"
+                decoding="async"
+                width={547}
+                height={232}
               />
             </div>
           </a>
@@ -217,6 +230,10 @@ const Hero = () => {
                       src="/athr.png" 
                       alt="" 
                       className="w-[200%] h-[200%] max-w-none object-contain scale-150 group-hover:scale-125 transition-transform duration-700"
+                      loading="lazy"
+                      decoding="async"
+                      width={547}
+                      height={232}
                     />
                   </div>
                 </a>
@@ -292,6 +309,11 @@ const About = () => {
               alt="dima - Professional portrait" 
               className="about-img w-[96%] md:w-[80%] mx-auto h-[32rem] md:h-[34rem] block object-cover object-top editorial-shadow"
               referrerPolicy="no-referrer"
+              loading="lazy"
+              decoding="async"
+              width={841}
+              height={1051}
+              sizes="(min-width: 768px) 40vw, 96vw"
             />
             <div className={`about-badge absolute bottom-5 md:bottom-7 ${isRTL ? "right-[5%] md:right-[13%]" : "left-[5%] md:left-[13%]"}`}>
               <div
@@ -675,6 +697,11 @@ const CaseStudy = () => {
               alt="Besan Khalaily – Spring Launch" 
               className="case-image w-full h-full object-cover opacity-80 transition-transform duration-[2s] will-change-transform"
               referrerPolicy="no-referrer"
+              loading="lazy"
+              decoding="async"
+              width={1600}
+              height={900}
+              sizes="100vw"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#1c1c18]/30 via-transparent to-[#f4e5d4]/10 opacity-70 transition-opacity duration-700 group-hover:opacity-100" />
           </div>
@@ -752,6 +779,11 @@ const WorkshopsHome = () => {
                   alt={item.title} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
+                  width={800}
+                  height={800}
+                  sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
                 />
                 <div className={`absolute top-4 ${isRTL ? "left-4" : "right-4"} bg-white/90 px-3 py-1 text-[0.6rem] uppercase tracking-widest font-bold text-brand-secondary`}>
                   {item.level}
@@ -806,11 +838,11 @@ const OpeningVideo = () => {
     <div className={`opening-film ${isClosing ? "opening-film--closing" : ""}`} aria-hidden="true">
       <div className="opening-film__paper" />
       <div className="opening-film__feather opening-film__feather--large">
-        <img src="/athr.png" alt="" />
+        <img src="/athr.png" alt="" width={547} height={232} decoding="async" />
       </div>
       <div className="opening-film__lockup">
         <div className="opening-film__wordmark" aria-label="Athr">
-          <img src="/athr-wordmark.png" alt="" />
+          <img src="/athr-wordmark.png" alt="" width={896} height={387} decoding="async" />
         </div>
         <p className="opening-film__tagline" aria-label={openingTagline}>
           {Array.from(openingTagline).map((char, index) => (
@@ -857,6 +889,11 @@ const Product = () => {
                   alt="The Athr Planner" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
+                  width={1000}
+                  height={1000}
+                  sizes="(min-width: 1024px) 58vw, 100vw"
                 />
               </div>
               <div className={`absolute -top-6 ${isRTL ? "-left-6" : "-right-6"} w-32 h-32 border border-brand-secondary/10 hidden md:block`}></div>
@@ -891,7 +928,11 @@ export default function App() {
 
   // ── Admin Dashboard ──────────────────────────────────────────────────────────
   if (pathname.startsWith("/admin")) {
-    return <AdminApp />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <AdminApp />
+      </Suspense>
+    );
   }
 
   const isWorksPage = pathname === "/work";
@@ -900,19 +941,35 @@ export default function App() {
   const workSlug = pathname.startsWith("/work/") ? pathname.slice("/work/".length) : null;
 
   if (isWorksPage) {
-    return <WorksPage />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <WorksPage />
+      </Suspense>
+    );
   }
 
   if (isWorkshopsPage) {
-    return <WorkshopsPage />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <WorkshopsPage />
+      </Suspense>
+    );
   }
 
   if (isContactPage) {
-    return <ContactPage />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <ContactPage />
+      </Suspense>
+    );
   }
 
   if (workSlug) {
-    return <WorkCaseStudyPage slug={workSlug} />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <WorkCaseStudyPage slug={workSlug} />
+      </Suspense>
+    );
   }
 
   return <HomePage />;

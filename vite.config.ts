@@ -90,5 +90,18 @@ export default defineConfig(({mode}) => {
         },
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return undefined;
+            if (id.includes('react') || id.includes('react-dom')) return 'vendor-react';
+            if (id.includes('gsap') || id.includes('motion')) return 'vendor-animation';
+            if (id.includes('lucide-react')) return 'vendor-icons';
+            return 'vendor';
+          },
+        },
+      },
+    },
   };
 });

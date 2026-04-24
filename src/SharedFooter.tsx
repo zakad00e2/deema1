@@ -13,7 +13,15 @@ export default function SharedFooter() {
       <div className="mx-auto grid max-w-360 gap-12 px-6 md:px-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.45fr)]">
         <div className="max-w-sm">
           <a href="/" aria-label="Go to home page" className="inline-block">
-            <img src={brandLogoSrc} alt="Athr Logo" className="mb-6 h-12 md:h-16" />
+            <img
+              src={brandLogoSrc}
+              alt="Athr Logo"
+              className="mb-6 h-12 md:h-16"
+              loading="lazy"
+              decoding="async"
+              width={300}
+              height={218}
+            />
           </a>
           <p className={`mb-8 font-light leading-relaxed text-white/62 ${isRTL ? "text-[0.95rem]" : "text-sm"}`}>
             {t("footer.tagline")}
