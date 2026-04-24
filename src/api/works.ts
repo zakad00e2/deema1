@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
+import {
+  apiCacheTtl,
+  buildStrapiUrl,
+  fetchFirstJson,
+  readApiCache,
+  resolveStrapiMediaUrl,
+} from "./client";
 import type { Locale } from "../i18n/LanguageContext";
 import type { Project, ProjectCategory } from "../workData";
 
-const STRAPI_ORIGIN = "https://jubilant-basketball-030ed19cd1.strapiapp.com";
-// Requests go through a same-origin proxy (Vite dev server + Vercel rewrite)
-// to avoid CORS. Media URLs returned in the payload stay absolute.
-const API_BASE = "/strapi";
 const WORKS_PATH = "/api/works";
+const WORKS_CACHE_PREFIX = "works";
 
 type StrapiImage = {
   url?: string | null;
@@ -65,15 +69,96 @@ type StrapiResponse = {
   data?: StrapiWork[] | null;
 };
 
-function buildWorksUrl(locale: Locale): string {
-  const params = new URLSearchParams({ populate: "*", locale });
-  return `${API_BASE}${WORKS_PATH}?${params.toString()}`;
+function appendFields(params: URLSearchParams, fields: string[]): void {
+  fields.forEach((field, index) => {
+    params.append(`fields[${index}]`, field);
+  });
 }
 
 function resolveMediaUrl(raw: string | null | undefined): string {
-  if (!raw) return "";
-  if (/^https?:\/\//i.test(raw)) return raw;
-  return `${STRAPI_ORIGIN}${raw.startsWith("/") ? raw : `/${raw}`}`;
+  return resolveStrapiMediaUrl(raw);
+}
+
+function worksCacheKey(locale: Locale): string {
+  return `${WORKS_CACHE_PREFIX}:${locale}`;
+}
+
+function buildOptimizedWorksParams(locale: Locale): URLSearchParams {
+  const params = new URLSearchParams({ locale });
+  appendFields(params, [
+    "title",
+    "slug",
+    "shortDescription",
+    "clientName",
+    "clientType",
+    "location",
+    "displayOrder",
+    "publishedAt",
+    "locale",
+    "documentId",
+  ]);
+  params.set("pagination[pageSize]", "50");
+  params.append("sort[0]", "displayOrder:asc");
+
+  [
+    "mainImage",
+    "gallery",
+    "galleryImages",
+    "preEventImages",
+    "preEventMarketingImages",
+    "postEventImages",
+    "postEventMarketingImages",
+  ].forEach((field) => {
+    params.append(`populate[${field}][fields][0]`, "url");
+  });
+
+  [
+    "preEventMarketingPoints",
+    "postEventMarketingPoints",
+    "launchEventExperiencePoints",
+    "campaignImpactPoints",
+    "services",
+  ].forEach((field) => {
+    params.append(`populate[${field}][populate]`, "*");
+  });
+
+  return params;
+}
+
+function buildLegacyWorksParams(locale: Locale): URLSearchParams {
+  const params = new URLSearchParams({ populate: "*", locale });
+  params.set("pagination[pageSize]", "50");
+  params.append("sort[0]", "displayOrder:asc");
+  return params;
+}
+
+function buildWorksCandidates(locale: Locale) {
+  const optimized = buildOptimizedWorksParams(locale);
+  const legacy = buildLegacyWorksParams(locale);
+  const cacheKey = worksCacheKey(locale);
+
+  return [
+    {
+      label: "optimized proxy",
+      url: buildStrapiUrl(WORKS_PATH, optimized, "proxy"),
+      cacheKey,
+    },
+    {
+      label: "optimized direct",
+      url: buildStrapiUrl(WORKS_PATH, optimized, "direct"),
+      cacheKey,
+    },
+    {
+      label: "legacy proxy",
+      url: buildStrapiUrl(WORKS_PATH, legacy, "proxy"),
+      cacheKey,
+    },
+    {
+      label: "legacy direct",
+      url: buildStrapiUrl(WORKS_PATH, legacy, "direct"),
+      cacheKey,
+    },
+  ];
 }
 
 function mapCategory(clientType: string | null | undefined): ProjectCategory {
@@ -202,42 +287,32 @@ function mapStrapiWorkToProject(
   };
 }
 
-async function fetchFrom(url: string, signal?: AbortSignal): Promise<StrapiResponse> {
-  const response = await fetch(url, { signal });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status} from ${url}`);
-  }
-  return (await response.json()) as StrapiResponse;
-}
-
 export async function fetchProjects(
   locale: Locale,
   signal?: AbortSignal,
 ): Promise<Project[]> {
-  const params = new URLSearchParams({ populate: "*", locale });
-  const proxyUrl = `${API_BASE}${WORKS_PATH}?${params.toString()}`;
-  const directUrl = `${STRAPI_ORIGIN}${WORKS_PATH}?${params.toString()}`;
-
-  let payload: StrapiResponse;
-  try {
-    payload = await fetchFrom(proxyUrl, signal);
-  } catch (proxyErr) {
-    if (signal?.aborted) throw proxyErr;
-    // Fallback to the direct origin (works only if the Strapi server allows CORS).
-    try {
-      payload = await fetchFrom(directUrl, signal);
-    } catch (directErr) {
-      console.error("[portfolio] proxy fetch failed:", proxyErr);
-      console.error("[portfolio] direct fetch failed:", directErr);
-      const hint =
-        directErr instanceof TypeError
-          ? "Network/CORS blocked the request. Restart the dev server so the Vite proxy loads, or configure Strapi CORS."
-          : directErr instanceof Error
-            ? directErr.message
-            : "Unknown error";
-      throw new Error(hint);
-    }
+  if (signal?.aborted) {
+    throw new DOMException("Portfolio request aborted.", "AbortError");
   }
+
+  const payload = await fetchFirstJson<StrapiResponse>(buildWorksCandidates(locale), {
+    ttlMs: apiCacheTtl.works,
+  });
+
+  if (signal?.aborted) {
+    throw new DOMException("Portfolio request aborted.", "AbortError");
+  }
+
+  const items = payload.data ?? [];
+  const ordered = [...items].sort(
+    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
+  );
+  return ordered.map((item, index, arr) => mapStrapiWorkToProject(item, index, arr));
+}
+
+export function getCachedProjects(locale: Locale): Project[] | null {
+  const payload = readApiCache<StrapiResponse>(worksCacheKey(locale));
+  if (!payload) return null;
 
   const items = payload.data ?? [];
   const ordered = [...items].sort(
@@ -253,27 +328,40 @@ type UseProjectsResult = {
 };
 
 export function useProjects(locale: Locale): UseProjectsResult {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<Project[]>(() => getCachedProjects(locale) ?? []);
+  const [loading, setLoading] = useState(() => !getCachedProjects(locale));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
+    const cached = getCachedProjects(locale);
+    if (cached) {
+      setProjects(cached);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    let active = true;
     setLoading(true);
     setError(null);
-    fetchProjects(locale, controller.signal)
+    fetchProjects(locale)
       .then((data) => {
+        if (!active) return;
         setProjects(data);
       })
       .catch((err: unknown) => {
         if (err instanceof DOMException && err.name === "AbortError") return;
         const message = err instanceof Error ? err.message : "Unable to load portfolio.";
+        if (!active) return;
         setError(message);
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (active) setLoading(false);
       });
-    return () => controller.abort();
+
+    return () => {
+      active = false;
+    };
   }, [locale]);
 
   return { projects, loading, error };

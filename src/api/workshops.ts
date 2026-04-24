@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
+import {
+  apiCacheTtl,
+  buildStrapiUrl,
+  fetchFirstJson,
+  readApiCache,
+  resolveStrapiMediaUrl,
+} from "./client";
 import ar from "../i18n/ar";
 import en from "../i18n/en";
 import type { Locale } from "../i18n/LanguageContext";
 
-const STRAPI_ORIGIN = "https://jubilant-basketball-030ed19cd1.strapiapp.com";
-const API_BASE = "/strapi";
 const WORKSHOPS_PATH = "/api/workshops";
+const WORKSHOPS_CACHE_PREFIX = "workshops";
 
 const FALLBACK_IMAGES = [
   "https://images.unsplash.com/photo-1581335967005-7f1c1f7addf9?w=800&auto=format&fit=crop&q=60",
@@ -59,9 +65,70 @@ function buildWorkshopUrl(locale: Locale): string {
 }
 
 function resolveMediaUrl(raw: string | null | undefined): string {
-  if (!raw) return "";
-  if (/^https?:\/\//i.test(raw)) return raw;
-  return `${STRAPI_ORIGIN}${raw.startsWith("/") ? raw : `/${raw}`}`;
+  return resolveStrapiMediaUrl(raw);
+}
+
+function appendFields(params: URLSearchParams, fields: string[]): void {
+  fields.forEach((field, index) => {
+    params.append(`fields[${index}]`, field);
+  });
+}
+
+function workshopsCacheKey(locale: Locale): string {
+  return `${WORKSHOPS_CACHE_PREFIX}:${locale}`;
+}
+
+function buildOptimizedWorkshopParams(locale: Locale): URLSearchParams {
+  const params = new URLSearchParams({ locale });
+  appendFields(params, [
+    "title",
+    "shortDescription",
+    "formatDetails",
+    "datesDetails",
+    "workshopType",
+    "displayOrder",
+  ]);
+  params.set("pagination[pageSize]", "20");
+  params.append("sort[0]", "displayOrder:asc");
+  params.append("populate[mainImage][fields][0]", "url");
+  params.append("populate[whatYouWillLearnPoints][populate]", "*");
+  return params;
+}
+
+function buildLegacyWorkshopParams(locale: Locale): URLSearchParams {
+  const params = new URLSearchParams({ populate: "*", locale });
+  params.set("pagination[pageSize]", "20");
+  params.append("sort[0]", "displayOrder:asc");
+  return params;
+}
+
+function buildWorkshopCandidates(locale: Locale) {
+  const optimized = buildOptimizedWorkshopParams(locale);
+  const legacy = buildLegacyWorkshopParams(locale);
+  const cacheKey = workshopsCacheKey(locale);
+
+  return [
+    {
+      label: "optimized proxy",
+      url: buildStrapiUrl(WORKSHOPS_PATH, optimized, "proxy"),
+      cacheKey,
+    },
+    {
+      label: "optimized direct",
+      url: buildStrapiUrl(WORKSHOPS_PATH, optimized, "direct"),
+      cacheKey,
+    },
+    {
+      label: "legacy proxy",
+      url: buildStrapiUrl(WORKSHOPS_PATH, legacy, "proxy"),
+      cacheKey,
+    },
+    {
+      label: "legacy direct",
+      url: buildStrapiUrl(WORKSHOPS_PATH, legacy, "direct"),
+      cacheKey,
+    },
+  ];
 }
 
 function toRecord(value: unknown): UnknownRecord | null {
@@ -177,36 +244,21 @@ function extractGroupWorkshops(
     .filter((item): item is GroupWorkshopContent => item !== null);
 }
 
-async function fetchFrom(url: string, signal?: AbortSignal): Promise<StrapiDocument> {
-  const response = await fetch(url, { signal });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status} from ${url}`);
-  }
-  return (await response.json()) as StrapiDocument;
-}
-
 export async function fetchGroupWorkshops(
   locale: Locale,
   signal?: AbortSignal,
 ): Promise<GroupWorkshopContent[]> {
   async function fetchLocale(targetLocale: Locale): Promise<GroupWorkshopContent[]> {
-    const relativeUrl = buildWorkshopUrl(targetLocale);
-    const proxyUrl = `${API_BASE}${relativeUrl}`;
-    const directUrl = `${STRAPI_ORIGIN}${relativeUrl}`;
+    if (signal?.aborted) {
+      throw new DOMException("Workshop request aborted.", "AbortError");
+    }
 
-    let payload: StrapiDocument;
-    try {
-      payload = await fetchFrom(proxyUrl, signal);
-    } catch (proxyErr) {
-      if (signal?.aborted) throw proxyErr;
+    const payload = await fetchFirstJson<StrapiDocument>(buildWorkshopCandidates(targetLocale), {
+      ttlMs: apiCacheTtl.workshops,
+    });
 
-      try {
-        payload = await fetchFrom(directUrl, signal);
-      } catch (directErr) {
-        console.error("[workshops] proxy fetch failed:", proxyErr);
-        console.error("[workshops] direct fetch failed:", directErr);
-        throw directErr;
-      }
+    if (signal?.aborted) {
+      throw new DOMException("Workshop request aborted.", "AbortError");
     }
 
     return extractGroupWorkshops(payload, targetLocale);
@@ -218,6 +270,15 @@ export async function fetchGroupWorkshops(
   return items;
 }
 
+export function getCachedGroupWorkshops(locale: Locale): GroupWorkshopContent[] | null {
+  const payload = readApiCache<StrapiDocument>(workshopsCacheKey(locale));
+  if (!payload) return null;
+
+  const items = extractGroupWorkshops(payload, locale);
+  if (items.length > 0) return items;
+  return null;
+}
+
 type UseGroupWorkshopsResult = {
   workshops: GroupWorkshopContent[];
   loading: boolean;
@@ -226,21 +287,30 @@ type UseGroupWorkshopsResult = {
 
 export function useGroupWorkshops(locale: Locale): UseGroupWorkshopsResult {
   const [workshops, setWorkshops] = useState<GroupWorkshopContent[]>(() =>
-    fallbackGroupWorkshops(locale),
+    getCachedGroupWorkshops(locale) ?? fallbackGroupWorkshops(locale),
   );
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !getCachedGroupWorkshops(locale));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
+    const cached = getCachedGroupWorkshops(locale);
     const fallback = fallbackGroupWorkshops(locale);
 
+    if (cached) {
+      setWorkshops(cached);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    let active = true;
     setWorkshops(fallback);
     setLoading(true);
     setError(null);
 
-    fetchGroupWorkshops(locale, controller.signal)
+    fetchGroupWorkshops(locale)
       .then((items) => {
+        if (!active) return;
         if (items.length > 0) {
           setWorkshops(items);
         }
@@ -249,14 +319,17 @@ export function useGroupWorkshops(locale: Locale): UseGroupWorkshopsResult {
         if (err instanceof DOMException && err.name === "AbortError") return;
         const message = err instanceof Error ? err.message : "Unable to load workshops.";
         console.error("[workshops] using fallback content:", message);
+        if (!active) return;
         setError(message);
         setWorkshops(fallback);
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (active) setLoading(false);
       });
 
-    return () => controller.abort();
+    return () => {
+      active = false;
+    };
   }, [locale]);
 
   return { workshops, loading, error };
