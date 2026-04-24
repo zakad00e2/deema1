@@ -772,6 +772,63 @@ const WorkshopsHome = () => {
 
 const CTA = () => null;
 
+const openingTagline = "Leave an Athr";
+
+const OpeningVideo = () => {
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
+  const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    if (!isVisible) {
+      return;
+    }
+
+    const closeTimer = window.setTimeout(() => setIsClosing(true), 3600);
+    const removeTimer = window.setTimeout(() => setIsVisible(false), 4350);
+
+    return () => {
+      window.clearTimeout(closeTimer);
+      window.clearTimeout(removeTimer);
+    };
+  }, [isVisible]);
+
+  if (!isVisible) {
+    return null;
+  }
+
+  return (
+    <div className={`opening-film ${isClosing ? "opening-film--closing" : ""}`} aria-hidden="true">
+      <div className="opening-film__paper" />
+      <div className="opening-film__feather opening-film__feather--large">
+        <img src="/athr.png" alt="" />
+      </div>
+      <div className="opening-film__lockup">
+        <div className="opening-film__wordmark" aria-label="Athr">
+          <img src="/athr-wordmark.png" alt="" />
+        </div>
+        <p className="opening-film__tagline" aria-label={openingTagline}>
+          {Array.from(openingTagline).map((char, index) => (
+            <span
+              key={`${char}-${index}`}
+              className="opening-film__tagline-letter"
+              style={{ animationDelay: `${2.55 + index * 0.045}s` }}
+              aria-hidden="true"
+            >
+              {char === " " ? "\u00A0" : char}
+            </span>
+          ))}
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const Product = () => {
   const { t, isRTL } = useLanguage();
 
@@ -815,6 +872,7 @@ const Product = () => {
 function HomePage() {
   return (
     <div id="top" className="min-h-screen">
+      <OpeningVideo />
       <Navbar />
       <Hero />
       <About />
