@@ -46,25 +46,32 @@ const renderSlantedKashidaText = (text: string) => {
 export function LanguageSwitcher({
   className = "",
   tone = "brand",
+  compact = false,
 }: {
   className?: string;
   tone?: "brand" | "light";
+  compact?: boolean;
 }) {
   const { locale, setLocale, t } = useLanguage();
   const toneClass =
     tone === "light"
-      ? "text-white hover:text-white/75"
-      : "text-brand-primary hover:text-brand-secondary";
+      ? compact
+        ? "border-white/35 bg-transparent text-white hover:border-white/65"
+        : "text-white hover:text-white/75"
+      : compact
+        ? "border-brand-secondary/25 bg-transparent text-brand-secondary hover:border-brand-secondary/55"
+        : "text-brand-primary hover:text-brand-secondary";
+  const nextLocale = locale === "en" ? "ar" : "en";
 
   return (
     <button
       type="button"
-      onClick={() => setLocale(locale === "en" ? "ar" : "en")}
-      className={`lang-switch flex items-center gap-1.5 text-xs font-medium transition-colors ${toneClass} ${className}`}
+      onClick={() => setLocale(nextLocale)}
+      className={`lang-switch flex items-center gap-1.5 text-xs font-medium transition-colors ${toneClass} ${compact ? "h-8 min-w-9 cursor-pointer justify-center rounded-sm border px-2 text-[0.8rem] uppercase tracking-[0.08em] active:scale-95" : ""} ${className}`}
       aria-label="Switch language"
     >
-      <Globe className="w-4 h-4" />
-      <span>{t("langSwitch.label")}</span>
+      {!compact && <Globe className="w-4 h-4" />}
+      <span>{compact ? nextLocale : t("langSwitch.label")}</span>
     </button>
   );
 }
@@ -108,6 +115,11 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-4 md:gap-6">
           <LanguageSwitcher className="hidden md:flex" tone={isScrolled ? "brand" : "light"} />
+          <LanguageSwitcher
+            compact
+            className="md:hidden"
+            tone={isScrolled ? "brand" : "light"}
+          />
           <a href="/contact#contact-form" className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
             <span className="relative z-10">{t("nav.letsTalk")}</span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
@@ -145,7 +157,6 @@ const Navbar = () => {
           <a href="/work" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.portfolio")}</a>
           <a href="/workshops" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.workshops")}</a>
           <a href="/contact" className="text-brand-primary hover:text-brand-secondary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.contact")}</a>
-          <LanguageSwitcher className="justify-center text-lg" />
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
           <a href="/contact#contact-form" className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center">
@@ -208,7 +219,7 @@ const Hero = () => {
         <div className={`hero-text max-w-xl pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-20 lg:max-w-2xl lg:pb-24 ${isRTL ? "ml-auto text-right" : "mr-auto text-left"}`}>
           <h1
             id="athr-main-hero-title"
-            className={`text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-white font-serif  tracking-tighter mb-6 ${isRTL ? "arabic-hero-title athr-hero-display" : ""}`}
+            className={`${isRTL ? "text-4xl md:text-5xl lg:text-6xl arabic-hero-title athr-hero-display tracking-tighter" : "text-5xl md:text-6xl lg:text-7xl"} leading-[1.05] text-white font-serif mb-3`}
             style={isRTL ? { fontFamily: '"thmanyahserifdisplay-Bold", "Manrope", sans-serif' } : undefined}
           >
             {t("hero.titlePart1")} <span className={`text-white ${isRTL ? "arabic-kashida-features" : ""}`}>{t("hero.titleHighlight")}</span>
@@ -330,7 +341,7 @@ const About = () => {
             <span className={`${isRTL ? "about-kashida-label arabic-kashida-features text-base" : "text-xs tracking-[0.4em] uppercase"} text-brand-secondary font-bold block mb-6`}>
               {t("about.label")}
             </span>
-            <h2 className={`${isRTL ? "about-title-soft arabic-kashida-features text-3xl md:text-4xl" : "text-4xl md:text-5xl"} font-serif text-brand-primary mb-8 leading-tight`}>{t("about.title")}</h2>
+            <h2 className={`${isRTL ? "about-title-soft arabic-kashida-features text-3xl md:text-4xl" : "text-[1.85rem] md:text-[2.35rem]"} font-serif text-brand-primary mb-8 leading-tight`}>{t("about.title")}</h2>
             <div className="space-y-6 text-brand-primary/80 font-light leading-relaxed text-lg">
               <p>{t("about.bio")}</p>
             </div>
@@ -360,6 +371,8 @@ const Specialisms = () => {
     let mm = gsap.matchMedia();
 
     mm.add("(min-width: 768px)", () => {
+      gsap.set(".spec-copy > *", { opacity: 0, y: 18 });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -379,7 +392,11 @@ const Specialisms = () => {
       .fromTo(".spec-icon", 
         { opacity: 0, scale: 0, rotation: -45 }, 
         { opacity: 1, scale: 1, rotation: 0, duration: 0.6, stagger: 0.1, ease: "back.out(2)" }, 
-        "-=0.8"
+        "-=0.2"
+      )
+      .to(".spec-copy > *",
+        { opacity: 1, y: 0, duration: 0.55, stagger: 0.08, ease: "power2.out" },
+        "-=0.15"
       );
     });
 
@@ -398,6 +415,8 @@ const Specialisms = () => {
       const cards = gsap.utils.toArray(".spec-card");
       cards.forEach((card: any) => {
         const icon = card.querySelector(".spec-icon");
+        const copy = card.querySelectorAll(".spec-copy > *");
+        gsap.set(copy, { opacity: 0, y: 18 });
         
         const tlCard = gsap.timeline({
           scrollTrigger: {
@@ -412,7 +431,10 @@ const Specialisms = () => {
         ).fromTo(icon,
           { opacity: 0, scale: 0, rotation: -45 }, 
           { opacity: 1, scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2)" },
-          "-=0.4"
+          "-=0.15"
+        ).to(copy,
+          { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "power2.out" },
+          "-=0.05"
         );
       });
     });
@@ -538,16 +560,18 @@ const Specialisms = () => {
             return (
               <div 
                 key={key} 
-                className={`spec-card ${idx < 2 ? 'md:col-span-3' : 'md:col-span-2'} bg-brand-surface-low p-12 flex flex-col justify-between group hover:bg-brand-secondary transition-all duration-500`}
+                className={`spec-card ${idx < 2 ? 'md:col-span-3' : 'md:col-span-2'} bg-brand-surface-low p-12 flex flex-col justify-between`}
               >
                 <div>
                   <div className="spec-icon inline-block mb-8">
                     <div className={isRTL ? "[transform:scaleX(-1)]" : ""}>
-                      <Icon className="w-12 h-12 text-brand-secondary group-hover:text-white transition-colors" />
+                      <Icon className="w-12 h-12 text-brand-secondary" />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-serif text-brand-primary mb-4 group-hover:text-white transition-colors">{t(`specialisms.services.${key}.title`)}</h3>
-                  <p className="text-brand-primary/70 group-hover:text-white/80 font-light transition-colors">{t(`specialisms.services.${key}.desc`)}</p>
+                  <div className="spec-copy">
+                    <h3 className="text-2xl font-serif text-brand-primary mb-4">{t(`specialisms.services.${key}.title`)}</h3>
+                    <p className="text-brand-primary/70 font-light">{t(`specialisms.services.${key}.desc`)}</p>
+                  </div>
                 </div>
               </div>
             );

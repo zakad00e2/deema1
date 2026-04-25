@@ -157,8 +157,16 @@
   font-synthesis: none;
 }
 
-html body #athr-main-hero-title,
-html body #athr-main-hero-title * {
+html[dir="ltr"] body #athr-main-hero-title,
+html[dir="ltr"] body #athr-main-hero-title * {
+  font-family: "Noto Serif", serif !important;
+  font-weight: 300 !important;
+  font-synthesis: none;
+  letter-spacing: 0 !important;
+}
+
+html[dir="rtl"] body #athr-main-hero-title,
+html[dir="rtl"] body #athr-main-hero-title * {
   font-family: "thmanyahserifdisplay-Bold", "Manrope", sans-serif !important;
   font-weight: 700 !important;
   font-synthesis: none;

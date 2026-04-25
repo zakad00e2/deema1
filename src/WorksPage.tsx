@@ -82,6 +82,7 @@ export function WorksNavbar({
         </div>
         <div className="flex items-center gap-4 md:gap-6">
           <LanguageSwitcher className="hidden md:flex" tone="brand" />
+          <LanguageSwitcher compact className="md:hidden" tone="brand" />
           <a
             href="/contact#contact-form"
             className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden"
@@ -133,7 +134,6 @@ export function WorksNavbar({
           >
             {t("nav.contact")}
           </a>
-          <LanguageSwitcher className="justify-center text-lg" />
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-6">
           <a
