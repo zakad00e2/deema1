@@ -106,7 +106,7 @@ const en = {
     explore: "Explore",
     contactLabel: "Contact",
     address: "482 Al Serkal Avenue\nAl Quoz 1, Dubai\nUnited Arab Emirates",
-    copyright: "© 2024 Athr. All rights reserved.",
+    copyright: "© 2026 Athr. All rights reserved.",
     designedWith: "Designed with Intent",
   },
 
@@ -118,7 +118,6 @@ const en = {
       "Whether it's a new project, a creative collaboration, or a simple hello — every great partnership starts with a conversation.",
     scrollCue: "Scroll to connect",
     formLabel: "Send a message",
-    formTitle: "Tell us about your vision",
     nameLabel: "Name",
     namePlaceholder: "Your full name",
     emailLabel: "Email",

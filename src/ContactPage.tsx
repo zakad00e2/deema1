@@ -383,9 +383,6 @@ export default function ContactPage() {
                   <span className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-secondary">
                     {t("contact.formLabel")}
                   </span>
-                  <h2 className="mt-4 font-serif text-3xl leading-tight text-brand-primary md:text-4xl">
-                    {t("contact.formTitle")}
-                  </h2>
                 </div>
 
                 <form className="space-y-10" onSubmit={handleSubmit}>

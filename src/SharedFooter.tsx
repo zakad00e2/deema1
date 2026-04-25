@@ -1,10 +1,10 @@
 import { Instagram, Linkedin } from "lucide-react";
 import { useLanguage } from "./i18n/LanguageContext";
-import { getBrandLogoSrc } from "./brandLogo";
+import { getBrandLogoWhiteSrc } from "./brandLogo";
 
 export default function SharedFooter() {
   const { t, isRTL, locale } = useLanguage();
-  const brandLogoSrc = getBrandLogoSrc(locale);
+  const brandLogoSrc = getBrandLogoWhiteSrc(locale);
 
   const addressLines = t("footer.address").split("\n");
 
@@ -16,11 +16,11 @@ export default function SharedFooter() {
             <img
               src={brandLogoSrc}
               alt="Athr Logo"
-              className="mb-6 h-12 md:h-16"
+              className="mb-1 h-20 w-auto object-contain opacity-95 md:h-24"
               loading="lazy"
               decoding="async"
-              width={300}
-              height={218}
+              width={1080}
+              height={1080}
             />
           </a>
           <p className={`mb-8 font-light leading-relaxed text-white/62 ${isRTL ? "text-[0.95rem]" : "text-sm"}`}>
