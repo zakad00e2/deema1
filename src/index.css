@@ -121,6 +121,15 @@
     font-synthesis: none;
   }
 
+  [dir="rtl"] h1.work-case-title,
+  [dir="rtl"] h1.work-case-title.hero-element,
+  [dir="rtl"] h1.work-case-title *,
+  [dir="rtl"] h1.work-case-title.hero-element * {
+    font-family: "ThmanyahArabicHeroBold", "Manrope", sans-serif !important;
+    font-weight: 700 !important;
+    font-synthesis: none;
+  }
+
   [dir="rtl"] .font-light {
     font-weight: 400 !important;
   }

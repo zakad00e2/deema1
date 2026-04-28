@@ -303,7 +303,7 @@ export default function WorkshopsPage() {
               <div className="relative order-2 lg:order-1">
                 <div className="ws-featured-img aspect-4/5 bg-brand-surface-mid overflow-hidden editorial-shadow">
                   <img
-                    src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80"
+                    src="/privv.png"
                     alt={t("workshopsPage.featuredTitle")}
                     className="ws-featured-photo w-full h-full object-cover"
                     referrerPolicy="no-referrer"

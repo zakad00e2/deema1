@@ -438,7 +438,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
       { scale: 1, duration: 2.2, ease: "expo.out", delay: 0.2 }
     );
 
-    const sections = gsap.utils.toArray(".scroll-section");
+    const sections = gsap.utils.toArray(".scroll-section:not(.pre-event-section):not(.post-event-section)");
     sections.forEach((section: any) => {
       gsap.fromTo(
         section,
@@ -480,22 +480,30 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
         }
       );
 
-      gsap.utils.toArray<HTMLElement>(items).forEach((item) => {
+      const marketingItems = gsap.utils.toArray<HTMLElement>(items);
+      const bullets: Element[] = [];
+      const copies: Element[] = [];
+
+      marketingItems.forEach((item) => {
         const bullet = item.querySelector(".marketing-item-bullet");
         const copy = item.querySelector(".marketing-item-copy");
 
-        gsap.set(item, { opacity: 0.35 });
-        if (bullet) gsap.set(bullet, { scale: 0.35, opacity: 0.3 });
-        if (copy) gsap.set(copy, { y: 28, opacity: 0 });
-
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: item, start: "top 86%", end: "top 60%", scrub: 0.65 },
-        });
-
-        tl.to(item, { opacity: 1, ease: "none" }, 0)
-          .to(bullet, { scale: 1, opacity: 1, ease: "power2.out" }, 0)
-          .to(copy, { y: 0, opacity: 1, ease: "power2.out" }, 0.02);
+        if (bullet) bullets.push(bullet);
+        if (copy) copies.push(copy);
       });
+
+      gsap.set(marketingItems, { opacity: 0.35 });
+      gsap.set(bullets, { scale: 0.35, opacity: 0.3 });
+      gsap.set(copies, { y: 16, opacity: 0 });
+
+      const itemsTl = gsap.timeline({
+        scrollTrigger: { trigger: section, start: "top 88%", once: true },
+      });
+
+      itemsTl
+        .to(marketingItems, { opacity: 1, duration: 0.7, stagger: 0.06, ease: "power2.out" }, 0)
+        .to(bullets, { scale: 1, opacity: 1, duration: 0.5, stagger: 0.06, ease: "power2.out" }, 0)
+        .to(copies, { y: 0, opacity: 1, duration: 0.75, stagger: 0.06, ease: "power2.out" }, 0.02);
 
       gsap.fromTo(
         carousel,
@@ -664,7 +672,7 @@ export default function WorkCaseStudyPage({ slug }: { slug: string }) {
               <p className="hero-element text-sm uppercase tracking-[0.3em] text-brand-secondary">
                 {categoryLabelText} / {project.year}
               </p>
-              <h1 className="arabic-hero-title hero-element max-w-5xl font-serif text-4xl leading-[0.95] tracking-[-0.04em] text-brand-dark md:text-5xl lg:text-6xl">
+              <h1 className="work-case-title arabic-hero-title hero-element max-w-5xl font-serif text-4xl leading-[0.95] tracking-[-0.04em] text-brand-dark md:text-5xl lg:text-6xl">
                 {projectTitle}
               </h1>
               {projectHeroTitle && projectHeroTitle !== `projects.${slug}.heroTitle` && (

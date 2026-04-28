@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SharedFooter from "./SharedFooter";
-import { useGroupWorkshops } from "./api/workshops";
+import { useGroupWorkshops, type GroupWorkshopContent } from "./api/workshops";
 import { useLanguage } from "./i18n/LanguageContext";
 import {
   getBrandLogoGreySrc,
@@ -121,7 +121,12 @@ const Navbar = () => {
             tone={isScrolled ? "brand" : "light"}
           />
           <a href="/contact#contact-form" className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden">
-            <span className="relative z-10">{t("nav.letsTalk")}</span>
+            <span 
+              className="relative z-10"
+              style={isRTL ? { fontFeatureSettings: '"ss01", "cv11"' } : undefined}
+            >
+              {t("nav.letsTalk")}
+            </span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img 
                 src="/athr.png" 
@@ -160,7 +165,12 @@ const Navbar = () => {
         </div>
         <div className="mt-auto border-t border-brand-surface-high pt-8 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
           <a href="/contact#contact-form" className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center">
-            <span className="relative z-10">{t("nav.letsTalk")}</span>
+            <span 
+              className="relative z-10"
+              style={isRTL ? { fontFeatureSettings: '"ss01", "cv11"' } : undefined}
+            >
+              {t("nav.letsTalk")}
+            </span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img 
                 src="/athr.png" 
@@ -220,11 +230,14 @@ const Hero = () => {
           <h1
             id="athr-main-hero-title"
             className={`${isRTL ? "text-4xl md:text-5xl lg:text-6xl arabic-hero-title athr-hero-display tracking-tighter" : "text-5xl md:text-6xl lg:text-7xl"} leading-[1.05] text-white font-serif mb-3`}
-            style={isRTL ? { fontFamily: '"thmanyahserifdisplay-Bold", "Manrope", sans-serif' } : undefined}
+            style={isRTL ? { fontFamily: '"thmanyahserifdisplay-Bold", "Manrope", sans-serif', fontFeatureSettings: '"ss01", "cv11"' } : undefined}
           >
             {t("hero.titlePart1")} <span className={`text-white ${isRTL ? "arabic-kashida-features" : ""}`}>{t("hero.titleHighlight")}</span>
           </h1>
-          <p className={`athr-hero-subtitle max-w-xl text-base md:text-lg lg:text-xl text-white/85 font-light leading-relaxed ${isRTL ? "ml-auto" : "mr-auto"}`}>
+          <p 
+            className={`athr-hero-subtitle max-w-xl text-base md:text-lg lg:text-xl text-white/85 font-light leading-relaxed ${isRTL ? "ml-auto" : "mr-auto"}`}
+            style={isRTL ? { fontFeatureSettings: '"ss01", "cv11"' } : undefined}
+          >
             {t("hero.subtitle")}
           </p>
           <div className="mt-10 flex w-full flex-wrap items-center justify-start gap-5 md:gap-7">
@@ -235,7 +248,12 @@ const Hero = () => {
                   href={action.href}
                   className="relative group bg-brand-secondary text-white px-10 py-4 text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all overflow-hidden"
                 >
-                  <span className={`relative z-10 ${isRTL ? "text-sm md:text-base leading-none" : ""}`}>{action.label}</span>
+                  <span 
+                    className={`relative z-10 ${isRTL ? "text-sm md:text-base leading-none" : ""}`}
+                    style={isRTL ? { fontFeatureSettings: '"ss01", "cv11"' } : undefined}
+                  >
+                    {action.label}
+                  </span>
                   <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
                     <img 
                       src="/athr.png" 
@@ -341,19 +359,14 @@ const About = () => {
             <span className={`${isRTL ? "about-kashida-label arabic-kashida-features text-base" : "text-xs tracking-[0.4em] uppercase"} text-brand-secondary font-bold block mb-6`}>
               {t("about.label")}
             </span>
-            <h2 className={`${isRTL ? "about-title-soft arabic-kashida-features text-3xl md:text-4xl" : "text-[1.85rem] md:text-[2.35rem]"} font-serif text-brand-primary mb-8 leading-tight`}>{t("about.title")}</h2>
+            <h2 
+              className={`${isRTL ? "about-title-soft arabic-kashida-features text-3xl md:text-4xl" : "text-[1.85rem] md:text-[2.35rem]"} font-serif text-brand-primary mb-8 leading-tight`}
+              style={isRTL ? { fontFeatureSettings: '"ss01", "cv11"' } : undefined}
+            >
+              {t("about.title")}
+            </h2>
             <div className="space-y-6 text-brand-primary/80 font-light leading-relaxed text-lg">
               <p>{t("about.bio")}</p>
-            </div>
-            <div className={`mt-12 pt-1 border-t border-brand-surface-high/30 about-stats flex gap-12`}>
-              <div>
-                <p className="text-5xl md:text-5xl font-serif text-brand-secondary">{isRTL ? "+" : ""}<span className="stat-num-1">{isRTL ? "١٢٠" : "120"}</span>{isRTL ? "" : "+"}</p>
-                <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">{t("about.stat1Label")}</p>
-              </div>
-              <div>
-                <p className="text-5xl md:text-5xl font-serif text-brand-secondary"><span className="stat-num-2">{isRTL ? "١٢" : "12"}</span></p>
-                <p className="text-xs md:text-sm uppercase tracking-widest text-brand-primary/70 mt-3 font-medium">{t("about.stat2Label")}</p>
-              </div>
             </div>
           </div>
         </div>
@@ -749,8 +762,34 @@ const CaseStudy = () => {
 const WorkshopsHome = () => {
   const sectionRef = useRef(null);
   const { t, isRTL, locale } = useLanguage();
+  const arabicFeatureSettings = isRTL ? { fontFeatureSettings: "'ss01', 'cv11'" } : undefined;
 
-  const { workshops: items } = useGroupWorkshops(locale);
+  const { workshops: groupItems } = useGroupWorkshops(locale);
+  const privateWorkshopTitle = t("workshopsPage.featuredTitle");
+  const privateWorkshopDescription = t("workshopsPage.featuredDesc");
+  const privateWorkshopContactHref = "/contact?interest=private-workshop#contact-form";
+  const privateWorkshopCard: GroupWorkshopContent & { href: string; actionLabel: string } = {
+    level: t("workshopsPage.featuredBadge"),
+    title: privateWorkshopTitle,
+    description: privateWorkshopDescription,
+    learns: [],
+    format: t("workshopsPage.featuredFormat"),
+    dates: t("workshopsPage.featuredDates"),
+    image: "/privv.png",
+    href: privateWorkshopContactHref,
+    actionLabel: t("workshopsPage.enquireNow"),
+  };
+  const normalizedPrivateTitle = privateWorkshopTitle.trim().toLowerCase();
+  const items = [
+    privateWorkshopCard,
+    ...groupItems
+      .filter((item) => item.title.trim().toLowerCase() !== normalizedPrivateTitle)
+      .map((item) => ({
+        ...item,
+        href: "/workshops",
+        actionLabel: t("workshops.register"),
+      })),
+  ];
 
   function en_workshops_items() {
     return [
@@ -796,7 +835,7 @@ const WorkshopsHome = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
           {items.map((item, index) => (
-            <a href="/workshops" key={`${item.title}-${index}`} className="workshop-item group block cursor-pointer">
+            <a href={item.href} key={`${item.title}-${index}`} className="workshop-item group block cursor-pointer">
               <div className="aspect-square bg-brand-surface-low mb-6 overflow-hidden relative">
                 <img 
                   src={item.image}
@@ -814,9 +853,14 @@ const WorkshopsHome = () => {
                 </div>
               </div>
               <h3 className="text-xl font-serif text-brand-primary mb-2">{item.title}</h3>
-              <p className="text-brand-primary/70 font-light text-sm leading-relaxed mb-4">{item.description}</p>
-              <span className={`${locale === "ar" ? "text-[0.82rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-bold text-brand-secondary border-b border-brand-secondary/20 pb-1 group-hover:border-brand-secondary transition-all`}>
-                {t("workshops.register")}
+              <p className="text-brand-primary/70 font-light text-sm leading-relaxed mb-4 line-clamp-2">
+                {item.description}
+              </p>
+              <span
+                className={`${locale === "ar" ? "text-[0.82rem] tracking-[0.18em]" : "text-[0.6rem] tracking-widest"} uppercase font-bold text-brand-secondary border-b border-brand-secondary/20 pb-1 group-hover:border-brand-secondary transition-all`}
+                style={arabicFeatureSettings}
+              >
+                {item.actionLabel}
               </span>
             </a>
           ))}
@@ -829,6 +873,7 @@ const WorkshopsHome = () => {
 const CTA = () => null;
 
 const openingTagline = "Leave an Athr";
+const openingSeenStorageKey = "athr-opening-seen";
 
 const OpeningVideo = () => {
   const [isVisible, setIsVisible] = useState(() => {
@@ -836,7 +881,22 @@ const OpeningVideo = () => {
       return false;
     }
 
-    return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return false;
+    }
+
+    try {
+      const navigationEntry = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+      const isReload = navigationEntry?.type === "reload";
+
+      if (!isReload && window.sessionStorage.getItem(openingSeenStorageKey) === "true") {
+        return false;
+      }
+
+      window.sessionStorage.setItem(openingSeenStorageKey, "true");
+    } catch {}
+
+    return true;
   });
   const [isClosing, setIsClosing] = useState(false);
 
@@ -887,6 +947,7 @@ const OpeningVideo = () => {
 
 const Product = () => {
   const { t, isRTL } = useLanguage();
+  const arabicFeatureSettings = isRTL ? { fontFeatureSettings: "'ss01', 'cv11'" } : undefined;
 
   return (
     <section className="py-32 bg-brand-surface-high">
@@ -895,8 +956,18 @@ const Product = () => {
           <div className={`lg:col-span-5 ${isRTL ? "order-2 lg:order-2" : "order-2 lg:order-1"}`}>
             <div className="max-w-md">
               <span className="text-xs tracking-[0.4em] uppercase text-brand-secondary font-bold block mb-4">{t("product.label")}</span>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-dark mb-4 leading-tight whitespace-nowrap">{t("product.title")}</h2>
-              <p className="text-lg font-serif italic text-brand-primary/70 mb-6">{t("product.tagline")}</p>
+              <h2
+                className="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-dark mb-4 leading-tight whitespace-nowrap"
+                style={arabicFeatureSettings}
+              >
+                {t("product.title")}
+              </h2>
+              <p
+                className="text-lg font-serif italic text-brand-primary/70 mb-6"
+                style={arabicFeatureSettings}
+              >
+                {t("product.tagline")}
+              </p>
               <p className="text-brand-primary/80 font-light leading-relaxed mb-12">
                 {t("product.desc")}
               </p>

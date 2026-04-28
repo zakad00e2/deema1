@@ -105,7 +105,7 @@ const en = {
       "An editorial marketing and event agency dedicated to the craft of enduring experiences.",
     explore: "Explore",
     contactLabel: "Contact",
-    address: "482 Al Serkal Avenue\nAl Quoz 1, Dubai\nUnited Arab Emirates",
+    address: "Haifa, Palestine",
     copyright: "© 2026 Athr. All rights reserved.",
     designedWith: "Designed with Intent",
   },

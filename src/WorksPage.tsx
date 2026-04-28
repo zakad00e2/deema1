@@ -87,7 +87,12 @@ export function WorksNavbar({
             href="/contact#contact-form"
             className="hidden md:block relative group bg-brand-secondary text-white px-8 py-2.5 text-sm tracking-widest font-medium hover:bg-brand-dark transition-all rounded-b-xs overflow-hidden"
           >
-            <span className="relative z-10">{t("nav.letsTalk")}</span>
+            <span 
+              className="relative z-10"
+              style={isRTL ? { fontFeatureSettings: '"ss01", "cv11"' } : undefined}
+            >
+              {t("nav.letsTalk")}
+            </span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img
                 src="/athr.png"
@@ -140,7 +145,12 @@ export function WorksNavbar({
             href="/contact#contact-form"
             className="block w-full relative group bg-brand-secondary text-white py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-brand-dark transition-all rounded-sm overflow-hidden text-center"
           >
-            <span className="relative z-10">{t("nav.letsTalk")}</span>
+            <span 
+              className="relative z-10"
+              style={isRTL ? { fontFeatureSettings: '"ss01", "cv11"' } : undefined}
+            >
+              {t("nav.letsTalk")}
+            </span>
             <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-60 transition-all duration-700 pointer-events-none flex justify-center items-center">
               <img
                 src="/athr.png"

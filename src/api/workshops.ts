@@ -220,12 +220,18 @@ function normalizeGroupWorkshop(
   const record = toRecord(value) as StrapiWorkshop | null;
   if (!record) return null;
 
+  const workshopType = getString(record.workshopType);
+  const normalizedWorkshopType = workshopType.trim().toLowerCase();
+  if (normalizedWorkshopType.includes("private") || normalizedWorkshopType.includes("خاص")) {
+    return null;
+  }
+
   const title = getString(record.title);
   const description = getString(record.shortDescription);
   if (!title && !description) return null;
 
   return {
-    level: mapWorkshopTypeToLevel(getString(record.workshopType), locale),
+    level: mapWorkshopTypeToLevel(workshopType, locale),
     title,
     description,
     learns: getFirstStringList(record.whatYouWillLearnPoints),
