@@ -223,7 +223,7 @@ const Hero = () => {
         style={{ backgroundImage: "url('/ed02b462-b517-438d-b25a-932331549f62.jpg')" }}
         aria-hidden="true"
       />
-      <div className={`hero-overlay absolute inset-0 z-10 ${isRTL ? "bg-gradient-to-l" : "bg-gradient-to-r"} from-[#1c1c18]/82 via-[#1c1c18]/48 to-[#1c1c18]/10`} />
+      <div className={`hero-overlay absolute inset-0 z-10 bg-[#1c1c18]/72 md:bg-transparent ${isRTL ? "md:bg-gradient-to-l" : "md:bg-gradient-to-r"} md:from-[#1c1c18]/82 md:via-[#1c1c18]/48 md:to-[#1c1c18]/10`} />
       <div className="absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-[#1c1c18]/50 to-transparent" />
       <div className="max-w-360 mx-auto px-6 md:px-12 relative z-20 flex h-[100svh] w-full items-end md:h-[100vh]">
         <div className={`hero-text max-w-xl pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-20 lg:max-w-2xl lg:pb-24 ${isRTL ? "ml-auto text-right" : "mr-auto text-left"}`}>

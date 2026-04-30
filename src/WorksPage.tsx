@@ -369,11 +369,11 @@ export default function WorksPage() {
         <header className="mb-16 px-6 md:px-12">
           <div className="mx-auto max-w-[1920px]">
             <p className="works-header-element mb-6 text-sm uppercase tracking-[0.3em] text-brand-secondary">{t("works.label")}</p>
-            <h1 className="arabic-hero-title works-header-element max-w-4xl font-serif text-6xl leading-tight tracking-[-0.02em] text-brand-dark md:text-8xl mb-8">
+            <h1 className="arabic-hero-title works-header-element max-w-4xl font-serif text-5xl leading-tight tracking-[-0.02em] text-brand-dark md:text-7xl mb-8">
               {t("works.titleLine1")}{" "}
               <span className={locale === "ar" ? "text-brand-dark" : "font-light italic text-brand-primary"}>{t("works.titleLine2")}</span>
             </h1>
-            <p className="works-header-element text-lg md:text-xl text-brand-primary/80 font-light max-w-2xl leading-relaxed">
+            <p className="works-header-element text-base md:text-lg text-brand-primary/80 font-light max-w-2xl leading-relaxed">
               {t("works.desc")}
             </p>
           </div>
