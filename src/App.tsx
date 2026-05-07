@@ -1,4 +1,4 @@
-import { Fragment, lazy, Suspense, useState, useEffect, useRef } from "react";
+import { Fragment, lazy, Suspense, useState, useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -17,7 +17,8 @@ import {
   Globe,
 } from "lucide-react";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(useGSAP);
 
 const AdminApp = lazy(() => import("./admin/AdminApp"));
 const WorkCaseStudyPage = lazy(() => import("./WorkCaseStudyPage"));
@@ -190,7 +191,8 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLElement | null>(null);
+  const parallaxBgRef = useRef<HTMLDivElement | null>(null);
   const { t, isRTL } = useLanguage();
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
   const heroActions = [
@@ -200,6 +202,34 @@ const Hero = () => {
       label: t("hero.cta"),
     },
   ];
+
+  useLayoutEffect(() => {
+    const hero = containerRef.current;
+    const parallaxBg = parallaxBgRef.current;
+
+    if (!hero || !parallaxBg) {
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        parallaxBg,
+        { y: -60 },
+        {
+          y: 60,
+          ease: "none",
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    }, hero);
+
+    return () => ctx.revert();
+  }, []);
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -219,7 +249,8 @@ const Hero = () => {
   return (
     <section ref={containerRef} className="relative flex h-[100svh] items-end overflow-hidden bg-brand-dark pt-28 md:h-[100vh] md:pt-32 lg:pt-36">
       <div
-        className="hero-media absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-fixed"
+        ref={parallaxBgRef}
+        className="hero-media hero-parallax-bg pointer-events-none absolute inset-x-0 -inset-y-16 z-0 bg-cover bg-center bg-no-repeat will-change-transform"
         style={{ backgroundImage: "url('/ed02b462-b517-438d-b25a-932331549f62.jpg')" }}
         aria-hidden="true"
       />
