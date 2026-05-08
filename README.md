@@ -43,6 +43,5 @@ The contact page sends these template params to EmailJS:
 - `interest`
 - `message`
 
-If EmailJS variables are missing, the contact page falls back to `/api/contact`.
-To use that backend flow, configure the optional Resend variables from
-[.env.example](.env.example) in the deployment environment.
+The contact form uses EmailJS only. If any of the `VITE_EMAILJS_*` variables are
+missing from a deployment, add them in Vercel and redeploy the site.
