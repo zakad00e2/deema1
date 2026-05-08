@@ -109,6 +109,48 @@ function buildEmailTemplateParams(
   };
 }
 
+async function sendContactApiRequest(data: ContactFormState) {
+  const response = await fetch("/api/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const payload = (await response.json().catch(() => ({}))) as {
+    ok?: boolean;
+    message?: string;
+  };
+
+  if (!response.ok || payload.ok !== true) {
+    throw new Error(
+      typeof payload.message === "string" && payload.message.trim()
+        ? payload.message
+        : "Unable to send the email right now."
+    );
+  }
+}
+
+async function sendContactMessage(data: ContactFormState, locale: string) {
+  const { serviceId, templateId, publicKey } = getEmailJsConfig();
+
+  if (serviceId && templateId && publicKey) {
+    await emailjs.send(
+      serviceId,
+      templateId,
+      buildEmailTemplateParams(data, locale),
+      { publicKey }
+    );
+    return;
+  }
+
+  console.warn(
+    "[contact] Missing EmailJS client config. Falling back to /api/contact."
+  );
+  await sendContactApiRequest(data);
+}
+
 export default function ContactPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
@@ -280,22 +322,7 @@ export default function ContactPage() {
     setFeedbackMessage(copy.sending);
 
     try {
-      const { serviceId, templateId, publicKey } = getEmailJsConfig();
-
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error(
-          locale === "ar"
-            ? "خدمة الإرسال غير مهيأة بعد. أضف VITE_EMAILJS_SERVICE_ID و VITE_EMAILJS_TEMPLATE_ID و VITE_EMAILJS_PUBLIC_KEY."
-            : "EmailJS is not configured yet. Add VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_EMAILJS_PUBLIC_KEY."
-        );
-      }
-
-      await emailjs.send(
-        serviceId,
-        templateId,
-        buildEmailTemplateParams(trimmed, locale),
-        { publicKey }
-      );
+      await sendContactMessage(trimmed, locale);
 
       setSubmitState("success");
       setFeedbackMessage(copy.success);

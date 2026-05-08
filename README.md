@@ -29,6 +29,11 @@ VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
 VITE_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
 ```
 
+For Vercel deployments, add the same variables in Project Settings -> Environment
+Variables for Production and Preview, then redeploy. Vite embeds `VITE_*`
+variables at build time, so local `.env.local` values are not available in an
+already-built deployment.
+
 The contact page sends these template params to EmailJS:
 
 - `from_name`
@@ -38,4 +43,6 @@ The contact page sends these template params to EmailJS:
 - `interest`
 - `message`
 
-If you still prefer the old backend flow with `/api/contact`, keep the optional Resend variables from [.env.example](.env.example).
+If EmailJS variables are missing, the contact page falls back to `/api/contact`.
+To use that backend flow, configure the optional Resend variables from
+[.env.example](.env.example) in the deployment environment.
