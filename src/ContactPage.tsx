@@ -55,6 +55,33 @@ function getEmailJsConfig() {
   };
 }
 
+function isEmailJsConfigValue(value: string | undefined) {
+  if (!value) return false;
+
+  const normalized = value.trim().toLowerCase();
+  return ![
+    "...",
+    "service_xxxxxxx",
+    "template_xxxxxxx",
+    "your_emailjs_public_key",
+  ].includes(normalized);
+}
+
+function getEmailJsErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+
+  if (typeof error === "object" && error !== null && "text" in error) {
+    const text = (error as { text?: unknown }).text;
+    if (typeof text === "string" && text.trim()) {
+      return text;
+    }
+  }
+
+  return fallback;
+}
+
 function escapeHtml(value: string) {
   return value
     .replace(/&/g, "&amp;")
@@ -112,7 +139,11 @@ function buildEmailTemplateParams(
 async function sendContactMessage(data: ContactFormState, locale: string) {
   const { serviceId, templateId, publicKey } = getEmailJsConfig();
 
-  if (!serviceId || !templateId || !publicKey) {
+  if (
+    !isEmailJsConfigValue(serviceId) ||
+    !isEmailJsConfigValue(templateId) ||
+    !isEmailJsConfigValue(publicKey)
+  ) {
     throw new Error(
       locale === "ar"
         ? "خدمة الإرسال غير مهيأة بعد. أضف VITE_EMAILJS_SERVICE_ID و VITE_EMAILJS_TEMPLATE_ID و VITE_EMAILJS_PUBLIC_KEY."
@@ -312,9 +343,7 @@ export default function ContactPage() {
     } catch (error) {
       console.error("[contact] EmailJS send failed:", error);
       setSubmitState("error");
-      setFeedbackMessage(
-        error instanceof Error && error.message ? error.message : copy.error
-      );
+      setFeedbackMessage(getEmailJsErrorMessage(error, copy.error));
     }
   }
 
